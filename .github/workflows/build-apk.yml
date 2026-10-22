@@ -51,6 +51,14 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
 
+      - name: Vérifier le contenu de l'APK
+        run: |
+          APK=android/android/app/build/outputs/apk/debug/app-debug.apk
+          unzip -l "$APK" | grep -E "assets/public/(index.html|js/app.bundle.js|sw.js)" | tee /tmp/assets.txt
+          test "$(wc -l < /tmp/assets.txt)" -ge 3 || (echo "Fichiers web manquants dans l'APK" && exit 1)
+          AAPT=$(ls $ANDROID_HOME/build-tools/*/aapt | tail -1)
+          "$AAPT" dump permissions "$APK" | grep -E "CAMERA|INTERNET" || true
+
       - name: Renommer l'APK
         run: cp android/android/app/build/outputs/apk/debug/app-debug.apk TennisCoachIA.apk
 
