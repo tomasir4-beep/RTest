@@ -1,0 +1,7 @@
+{
+  "appId": "fr.tennis.coachia",
+  "appName": "Tennis Coach IA",
+  "webDir": "../web",
+  "server": { "androidScheme": "https" },
+  "android": { "allowMixedContent": false }
+}
