@@ -73,3 +73,16 @@ canvas.chart{width:100%;height:150px;border:1px solid var(--line);border-radius:
 .thumbs{display:flex;gap:8px;flex-wrap:wrap}
 .thumbs figure{margin:0;width:140px}.thumbs canvas{width:100%;border-radius:8px}
 @media print{.top,.btn,.toast,.tabs{display:none}body{background:#fff}}
+
+/* --- Figures de posture, comparaison, lecteur ralenti, assistant --- */
+.issue-row{display:grid;gap:12px}
+@media(min-width:640px){.issue-row{grid-template-columns:1fr 220px;align-items:start}}
+.postfig{margin:0}.postfig figcaption{font-size:.82rem;color:var(--muted);margin-top:4px}
+.figsvg{width:100%;height:auto;display:block;border-radius:12px}
+.cmp .cmp-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.cmp figure{margin:0}.cmp canvas,.cmp img,.cmp svg{width:100%;height:auto;border-radius:10px;display:block;background:#000}
+.cmp figure.flip svg{transform:scaleX(-1)}
+.slowmo canvas{width:100%;max-width:560px;height:auto;border-radius:12px;background:#000;display:block;margin:0 auto 8px}
+.pickcv{width:100%;max-width:420px;height:auto;border-radius:10px;cursor:crosshair;display:block;margin:6px 0}
+.ai-box{margin:14px 0}.ai-out{background:color-mix(in srgb,var(--brand2) 12%,transparent);border-radius:10px;padding:12px 14px;margin-top:10px}
+textarea,input[type=text],input[type=password]{font:inherit;padding:9px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);max-width:100%}

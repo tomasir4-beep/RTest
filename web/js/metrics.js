@@ -1,4 +1,4 @@
-﻿// Calcul des métriques biomécaniques à partir des points de pose (MediaPipe, 33 points).
+// Calcul des métriques biomécaniques à partir des points de pose (MediaPipe, 33 points).
 // frames[i] = { t (s), lm: [{x,y,z,visibility}] image normalisée | null, wl: [{x,y,z}] monde en m | null }
 
 export const LM = { nose: 0, lSh: 11, rSh: 12, lEl: 13, rEl: 14, lWr: 15, rWr: 16, lHip: 23, rHip: 24, lKn: 25, rKn: 26, lAn: 27, rAn: 28 };
@@ -152,6 +152,41 @@ export const METRIC_DEFS = {
   forehand: GROUND(),
   backhand1: GROUND({ elbowMin: 145 }),
   backhand2: GROUND({ skipElbow: true }),
+  // --- Coups ajoutés (seuils PROVISOIRES : non calibrés sur des vidéos réelles) ---
+  slice: [
+    { id: "knee_load", label: "Flexion des jambes au chargement", unit: "°", ok: [110, 165], warn: [100, 172], high: "g_knee_stiff", w: 1.5, tip: "180° = jambes tendues" },
+    { id: "shoulder_turn", label: "Rotation des épaules (préparation)", unit: "°", ok: [35, 400], warn: [20, 400], low: "g_turn_small", w: 1, video: true, tip: "amplitude de rotation du buste" },
+    { id: "wrist_path", label: "Descente du poignet vers l'impact", unit: "× buste", ok: [0.25, 6], warn: [0.05, 6], low: "sl_path_flat", w: 2.5, video: true, tip: "positif = le poignet descend (geste coupé)" },
+    { id: "contact_front", label: "Point de contact devant le corps", unit: "× buste", ok: [0.25, 5], warn: [0.05, 5], low: "g_contact_behind", w: 2, video: true, tip: "distance poignet–hanches dans l'axe du coup" },
+    { id: "elbow_contact", label: "Angle du coude au contact", unit: "°", ok: [145, 181], warn: [120, 181], low: "g_arm_cramped", w: 1, tip: "180° = bras tendu" },
+    { id: "head_stability", label: "Stabilité de la tête (± 0,15 s)", unit: "× buste", ok: [0, 0.25], warn: [0, 0.45], high: "g_head_moves", w: 1, video: true, tip: "déplacement de la tête autour de l'impact" },
+  ],
+  dropshot: [
+    { id: "shoulder_turn", label: "Préparation déguisée (rotation des épaules)", unit: "°", ok: [40, 400], warn: [25, 400], low: "dr_not_disguised", w: 2, video: true, tip: "comparable à celle d'un coup normal" },
+    { id: "contact_speed", label: "Vitesse du poignet à l'impact", unit: "buste/s", ok: [0, 4], warn: [0, 6], high: "dr_too_fast", w: 2.5, video: true, tip: "faible : le tamis ralentit au toucher (seuil provisoire)" },
+    { id: "contact_front", label: "Point de contact devant le corps", unit: "× buste", ok: [0.25, 5], warn: [0.05, 5], low: "g_contact_behind", w: 1.5, video: true, tip: "distance poignet–hanches dans l'axe du coup" },
+    { id: "knee_load", label: "Flexion des jambes", unit: "°", ok: [110, 165], warn: [100, 172], high: "g_knee_stiff", w: 1, tip: "180° = jambes tendues" },
+    { id: "head_stability", label: "Stabilité de la tête (± 0,15 s)", unit: "× buste", ok: [0, 0.25], warn: [0, 0.45], high: "g_head_moves", w: 1, video: true, tip: "déplacement de la tête autour de l'impact" },
+  ],
+  smash: [
+    { id: "elbow_trophy", label: "Hauteur du coude / épaule (armé)", unit: "× buste", ok: [-0.1, 3], warn: [-0.3, 3], low: "sm_elbow_low", w: 1.5, tip: "≥ 0 : coude au niveau des épaules" },
+    { id: "toss_arm", label: "Bras libre levé (armé)", unit: "× buste", ok: [0.2, 5], warn: [-0.1, 5], low: "sm_toss_arm", w: 1, tip: "poignet libre au-dessus de l'épaule" },
+    { id: "elbow_contact", label: "Angle du coude au contact", unit: "°", ok: [165, 181], warn: [150, 181], low: "sm_elbow_bent", w: 2, tip: "180° = bras tendu" },
+    { id: "contact_height", label: "Hauteur du point de contact", unit: "× (cheville→nez)", ok: [1.15, 4], warn: [1.05, 4], low: "sm_contact_low", w: 2, tip: "poignet frappeur relatif à la taille" },
+  ],
+  lob: [
+    { id: "wrist_path", label: "Montée du poignet vers l'impact", unit: "× buste", ok: [-6, -0.25], warn: [-6, -0.05], high: "lb_path_flat", w: 2.5, video: true, tip: "négatif = le poignet monte (geste ascendant)" },
+    { id: "follow_high", label: "Hauteur de la finition", unit: "× buste", ok: [0.4, 5], warn: [0, 5], low: "lb_finish_low", w: 2, video: true, tip: "poignet au-dessus de l'épaule à la fin" },
+    { id: "knee_load", label: "Flexion des jambes", unit: "°", ok: [105, 160], warn: [95, 168], high: "g_knee_stiff", w: 1, tip: "180° = jambes tendues" },
+    { id: "head_stability", label: "Stabilité de la tête (± 0,15 s)", unit: "× buste", ok: [0, 0.25], warn: [0, 0.45], high: "g_head_moves", w: 1, video: true, tip: "déplacement de la tête autour de l'impact" },
+  ],
+  return: [
+    { id: "backswing", label: "Amplitude de la préparation", unit: "× buste", ok: [0, 0.9], warn: [0, 1.3], high: "rt_prep_big", w: 2, video: true, tip: "recul du poignet avant l'impact" },
+    { id: "contact_front", label: "Point de contact devant le corps", unit: "× buste", ok: [0.2, 5], warn: [0, 5], low: "rt_contact_behind", w: 2, video: true, tip: "distance poignet–hanches dans l'axe du coup" },
+    { id: "knee_load", label: "Flexion des jambes", unit: "°", ok: [110, 160], warn: [100, 168], high: "g_knee_stiff", w: 1.5, tip: "180° = jambes tendues" },
+    { id: "shoulder_turn", label: "Rotation des épaules (préparation)", unit: "°", ok: [30, 400], warn: [18, 400], low: "g_turn_small", w: 1, video: true, tip: "amplitude de rotation du buste" },
+    { id: "head_stability", label: "Stabilité de la tête (± 0,15 s)", unit: "× buste", ok: [0, 0.25], warn: [0, 0.45], high: "g_head_moves", w: 1, video: true, tip: "déplacement de la tête autour de l'impact" },
+  ],
   volley: [
     { id: "backswing", label: "Amplitude de la préparation", unit: "× buste", ok: [0, 0.7], warn: [0, 1.1], high: "v_swing_big", w: 2, video: true, tip: "recul du poignet avant l'impact" },
     { id: "contact_front", label: "Point de contact devant le corps", unit: "× buste", ok: [0.25, 5], warn: [0.05, 5], low: "v_contact_behind", w: 2, video: true, tip: "distance poignet–hanches dans l'axe du coup" },
@@ -171,6 +206,7 @@ export function analyze(rawFrames, o) {
   const aspect = o.aspect || 16 / 9;
   const notes = [];
   let hand = o.hand;
+  const serveLike = o.stroke === "serve" || o.stroke === "smash"; // frappe au-dessus de la tête, même logique de phases
   let S = sides(hand);
   const torso = torsoImg(fr, aspect);
 
@@ -193,12 +229,12 @@ export function analyze(rawFrames, o) {
   let c = o.contactIdx;
   if (c == null) {
     if (o.timed) {
-      if (o.stroke === "serve") {
+      if (serveLike) {
         const cand = [];
         for (let i = 0; i < n; i++) if (fr[i].lm[S.wr].y < fr[i].lm[LM.nose].y) cand.push(i);
         c = cand.length ? cand.reduce((b, i) => (spd[i] > spd[b] ? i : b), cand[0]) : argmax(spd);
       } else c = argmax(spd);
-    } else c = o.stroke === "serve" ? argmin(fr.map((f) => f.lm[S.wr].y), 0, n - 1) : Math.floor(n / 2);
+    } else c = serveLike ? argmin(fr.map((f) => f.lm[S.wr].y), 0, n - 1) : Math.floor(n / 2);
   }
   // Cadence de la vidéo : 1 = temps réel ; > 1 = ralenti (les durées de référence sont multipliées).
   const slow = o.slow || 1;
@@ -206,7 +242,7 @@ export function analyze(rawFrames, o) {
   const kneeSeries = fr.map(kneeAvg);
   let l = o.loadIdx;
   if (l == null) {
-    if (o.timed && o.stroke === "serve") {
+    if (o.timed && serveLike) {
       // Service : chargement = point le plus bas du bassin avant l'impact (remontée monotone jusqu'au contact),
       // indépendant de la cadence de la vidéo (temps réel ou ralenti).
       const hy = fr.map((ff) => (ff.lm[LM.lHip].y + ff.lm[LM.rHip].y) / 2);
@@ -214,7 +250,7 @@ export function analyze(rawFrames, o) {
       const lo = winLo(1.8), hi = Math.max(lo, c - 2);
       l = argmax(hs, lo, hi);
     } else if (o.timed) {
-      const lo = winLo(o.stroke === "volley" ? 0.6 : 1.0);
+      const lo = winLo(o.stroke === "volley" || o.stroke === "return" ? 0.6 : 1.0);
       const hi = Math.max(lo, idxAt(fr, fr[c].t - 0.05 * slow));
       // Volée : flexion maximale ; coups de fond : rotation d'épaules maximale (chargement)
       l = o.stroke === "volley" ? argmin(kneeSeries, lo, hi) : argmax(shoulderYawAbs(fr), lo, hi);
@@ -240,7 +276,7 @@ export function analyze(rawFrames, o) {
 
   const values = {};
   // service : flexion maximale autour du point bas du bassin (± 3 images)
-  values.knee_load = o.stroke === "serve" && o.timed && o.loadIdx == null ? Math.min(...kneeSeries.slice(Math.max(0, l - 3), Math.min(c, l + 3) + 1)) : kneeSeries[l];
+  values.knee_load = serveLike && o.timed && o.loadIdx == null ? Math.min(...kneeSeries.slice(Math.max(0, l - 3), Math.min(c, l + 3) + 1)) : kneeSeries[l];
   values.elbow_contact = angle3(fc.wl[S.sh], fc.wl[S.el], fc.wl[S.wr]);
   {
     const sh = mid(fc.wl[LM.lSh], fc.wl[LM.rSh]), hp = mid(fc.wl[LM.lHip], fc.wl[LM.rHip]);
@@ -249,7 +285,7 @@ export function analyze(rawFrames, o) {
   }
   // dissociation max autour de l'impact (fenêtre) ou instantanée (photo)
   {
-    const lo = o.timed ? (o.stroke === "serve" ? Math.max(0, l - 2) : winLo(0.9)) : l, hi = o.timed ? c : Math.max(c, l);
+    const lo = o.timed ? (serveLike ? Math.max(0, l - 2) : winLo(0.9)) : l, hi = o.timed ? c : Math.max(c, l);
     let best = 0;
     for (let i = Math.min(lo, hi); i <= Math.max(lo, hi); i++) best = Math.max(best, Math.abs(wrapDiff(shYaw[i] - hipYaw[i])));
     values.separation = best;
@@ -282,6 +318,17 @@ export function analyze(rawFrames, o) {
     values.contact_height = den > 0 ? (ank - fc.lm[S.wr].y) / den : NaN;
   }
 
+  // Trajectoire verticale du poignet vers l'impact (+ = descend), niveau du contact, finition, vitesse (coups coupés, lob, amortie)
+  if (o.timed) {
+    const dts = []; for (let i = 1; i < n; i++) dts.push(fr[i].t - fr[i - 1].t);
+    dts.sort((a, b) => a - b);
+    const dtm = dts[Math.floor(dts.length / 2)] || 0.066;
+    const k = Math.max(1, Math.round((0.25 * slow) / dtm));
+    values.wrist_path = (fc.lm[S.wr].y - fr[Math.max(0, c - k)].lm[S.wr].y) / torso;
+    const shy = (fr[f].lm[LM.lSh].y + fr[f].lm[LM.rSh].y) / 2;
+    values.follow_high = (shy - fr[f].lm[S.wr].y) / torso;
+    values.contact_speed = Math.max(spd[Math.max(0, c - 1)], spd[c], spd[Math.min(n - 1, c + 1)]) * slow;
+  }
   const { metrics, issues: issueList, score } = evaluate(o.stroke, values, o.timed);
   if (prep.detRate < 0.7) notes.push(`Silhouette détectée sur ${Math.round(prep.detRate * 100)} % des images seulement : résultats moins fiables.`);
   if (o.timed && (fr[n - 1].t - fr[0].t) < 0.8) notes.push("Séquence très courte : filmez la préparation complète du geste.");
@@ -290,7 +337,13 @@ export function analyze(rawFrames, o) {
     metrics, issues: issueList, notes, hand,
     phases: { load: l, contact: c, follow: f },
     detRate: prep.detRate, frames: fr,
-    series: { speed: spd, knee: kneeSeries, t: fr.map((x) => x.t) },
+    series: {
+      speed: spd, knee: kneeSeries, t: fr.map((x) => x.t),
+      elbow: fr.map((ff) => angle3(ff.wl[S.sh], ff.wl[S.el], ff.wl[S.wr])),
+      trunk: fr.map((ff) => { const t = sub(mid(ff.wl[LM.lSh], ff.wl[LM.rSh]), mid(ff.wl[LM.lHip], ff.wl[LM.rHip])); return deg(Math.acos(clamp(-t.y / (norm(t) || 1), -1, 1))); }),
+    },
+    contactSpeed: Math.max(spd[Math.max(0, c - 1)], spd[c], spd[Math.min(n - 1, c + 1)]), // longueurs de buste / s (vidéo)
+    slow,
   };
 }
 
@@ -341,17 +394,20 @@ export function segmentStrokes(rawFrames, { stroke, hand = "right", aspect = 16 
   const fr = prep.frames, torso = torsoImg(fr, aspect);
   const S = sides(hand);
   const sR = wristSpeed(fr, LM.rWr, aspect, torso), sL = wristSpeed(fr, LM.lWr, aspect, torso);
-  const speed = stroke === "serve" ? (hand === "left" ? sL : sR) : sR.map((v, i) => Math.max(v, sL[i]));
+  const speed = stroke === "serve" || stroke === "smash" ? (hand === "left" ? sL : sR) : sR.map((v, i) => Math.max(v, sL[i]));
   const sorted = [...speed].sort((a, b) => a - b);
   const p99 = sorted[Math.floor(sorted.length * 0.995)] || 1;
-  const thr = Math.max(0.4 * p99, 1.5);
+  const thr = stroke === "dropshot" ? Math.max(0.18 * p99, 0.7) : Math.max(0.4 * p99, 1.5); // amortie : geste lent, seuil plus bas
   const out = [];
   for (let i = 2; i < fr.length - 2; i++) {
     if (!(speed[i] > thr && speed[i] >= speed[i - 1] && speed[i] >= speed[i + 1])) continue;
-    if (stroke === "serve") {
-      const hi = fr[i].lm[S.wr].y < fr[i].lm[LM.nose].y;
-      const elbow = angle3(fr[i].wl[S.sh], fr[i].wl[S.el], fr[i].wl[S.wr]);
-      if (!hi || elbow < 140) continue;
+    if (stroke === "serve" || stroke === "smash") {
+      // poignet au-dessus de la tête et bras tendu, à ± 2 images du pic de vitesse
+      let ok = false;
+      for (let j = Math.max(0, i - 2); j <= Math.min(fr.length - 1, i + 2) && !ok; j++) {
+        ok = fr[j].lm[S.wr].y < fr[j].lm[LM.nose].y && angle3(fr[j].wl[S.sh], fr[j].wl[S.el], fr[j].wl[S.wr]) >= 140;
+      }
+      if (!ok) continue;
     }
     if (out.length && fr[i].t - out[out.length - 1].t < minGap) { if (speed[i] > out[out.length - 1].v) out[out.length - 1] = { t: fr[i].t, v: speed[i] }; }
     else out.push({ t: fr[i].t, v: speed[i] });

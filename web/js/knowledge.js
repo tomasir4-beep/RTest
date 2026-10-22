@@ -28,6 +28,11 @@ export const STROKES = {
   backhand1: { label: "Revers à 1 main", icon: "🔵", cam: "Filmez de dos ou de côté, joueur entier visible, caméra fixe." },
   backhand2: { label: "Revers à 2 mains", icon: "🔷", cam: "Filmez de dos ou de côté, joueur entier visible, caméra fixe." },
   volley: { label: "Volée", icon: "🟡", cam: "Filmez de côté, à hauteur de hanche, joueur entier visible. Geste court : privilégiez 60 i/s." },
+  slice: { label: "Coup coupé (chop / slice)", icon: "✂️", cam: "Filmez de côté ou de dos, joueur entier visible, caméra fixe, 60 i/s si possible. Un coup coupé par séquence idéalement (revers ou coup droit)." },
+  dropshot: { label: "Amortie (drop shot)", icon: "🪶", cam: "Filmez de côté ou de dos, joueur entier visible. Pour juger le déguisement, filmez aussi un coup droit ou un revers normal dans les mêmes conditions." },
+  smash: { label: "Smash", icon: "💥", cam: "Filmez de côté ou de dos, joueur entier visible, jusqu'à la fin du geste. Smash sur lob lent (ou lancé à la main) pour un geste complet." },
+  lob: { label: "Lob", icon: "🌙", cam: "Filmez de côté, joueur entier visible, caméra fixe, avec la finition complète du geste." },
+  return: { label: "Retour de service", icon: "↩️", cam: "Filmez de côté ou de dos, depuis la position d'attente jusqu'à la fin du retour, joueur entier visible." },
 };
 
 // Défauts techniques : id → libellé, pourquoi (biomécanique), consigne (cue), exercices recommandés.
@@ -128,6 +133,72 @@ export const ISSUES = {
     cue: "Plie les jambes, pas le dos : « descends avec les genoux ».",
     ex: ["ex_volley_low_knee", "ex_volley_block_feed"],
   },
+  sl_path_flat: {
+    label: "Geste coupé trop plat ou ascendant",
+    why: "Le slice se joue de haut en bas : le tamis descend derrière puis sous la balle, ce qui crée un effet rétrograde, une trajectoire basse et un rebond qui reste bas. Un geste plat ou qui remonte donne une balle molle qui flotte.",
+    cue: "Armer haut, puis « couper la tranche de pain » : le poignet descend vers l'avant, la main finit devant, pas au-dessus de la tête.",
+    ex: ["ex_slice_shadow", "ex_slice_wall", "ex_slice_target"],
+  },
+  dr_too_fast: {
+    label: "Amortie trop rapide ou trop appuyée",
+    why: "L'amortie se joue avec un tamis qui ralentit à l'impact : la balle perd sa vitesse et son rebond mort la rend difficile à rattraper. Un geste trop rapide donne une balle qui va trop loin.",
+    cue: "Même préparation qu'un coup normal, mais la main devient souple et le tamis « accompagne » la balle sans la frapper.",
+    ex: ["ex_drop_touch", "ex_drop_disguise"],
+  },
+  dr_not_disguised: {
+    label: "Préparation trop petite : amortie devinable",
+    why: "Une amortie efficace part de la même préparation que le coup de fond : l'adversaire ne doit pas pouvoir deviner. Une préparation courte ou différente prévient l'adversaire.",
+    cue: "Tourne les épaules comme pour un coup normal et ne change l'intention qu'au dernier moment.",
+    ex: ["ex_drop_disguise", "ex_unit_turn_feed"],
+  },
+  sm_elbow_low: {
+    label: "Smash : coude trop bas à l'armé",
+    why: "Un coude sous les épaules limite l'extension et la hauteur du contact : le smash perd de la puissance et de l'angle.",
+    cue: "Raquette derrière la tête, coude à hauteur d'épaule, comme au service.",
+    ex: ["ex_smash_shadow", "ex_trophy_freeze"],
+  },
+  sm_toss_arm: {
+    label: "Smash : bras libre pas assez levé",
+    why: "Le bras libre pointé vers la balle sert de repère et équilibre le tronc : sans lui, le contact est moins précis.",
+    cue: "Bras libre tendu vers la balle jusqu'au dernier moment.",
+    ex: ["ex_smash_shadow", "ex_smash_footwork"],
+  },
+  sm_elbow_bent: {
+    label: "Smash : bras plié au contact",
+    why: "Frapper bras tendu donne la plus grande hauteur de contact et le meilleur angle d'attaque.",
+    cue: "Frappe le plus haut possible, bras allongé.",
+    ex: ["ex_smash_shadow", "ex_wall_reach"],
+  },
+  sm_contact_low: {
+    label: "Smash : contact trop bas",
+    why: "Un contact trop bas arrive quand on est mal placé sous la balle : on frappe devant ou à côté plutôt que de reculer.",
+    cue: "Recule avec des pas chassés pour te placer sous la balle, puis saute pour la frapper plus haut.",
+    ex: ["ex_smash_footwork", "ex_smash_shadow"],
+  },
+  lb_path_flat: {
+    label: "Lob : geste pas assez ascendant",
+    why: "Le lob demande un geste de bas en haut pour donner de la hauteur : un geste plat produit une balle trop tendue que l'adversaire peut smasher.",
+    cue: "Tamis sous la balle, geste vers le haut et vers l'avant, comme pour lancer la balle par-dessus le filet.",
+    ex: ["ex_lob_target", "ex_lob_finish"],
+  },
+  lb_finish_low: {
+    label: "Lob : finition trop basse",
+    why: "Une finition haute accompagne la balle et garantit la hauteur et la profondeur.",
+    cue: "Finis le geste haut, raquette au-dessus de l'épaule opposée.",
+    ex: ["ex_lob_finish", "ex_lob_target"],
+  },
+  rt_prep_big: {
+    label: "Retour : préparation trop longue",
+    why: "Au retour, la balle arrive vite : une préparation large fait perdre du temps et crée des fautes.",
+    cue: "Épaules tournées, raquette devant, préparation courte et compacte.",
+    ex: ["ex_return_block", "ex_return_split"],
+  },
+  rt_contact_behind: {
+    label: "Retour : contact trop près du corps",
+    why: "Prendre la balle devant permet de mieux contrôler la direction et la profondeur du retour.",
+    cue: "Avance sur la balle, frappe devant la hanche et accompagne.",
+    ex: ["ex_return_block", "ex_return_split"],
+  },
 };
 
 // Bibliothèque d'exercices (descriptions courtes, progressions par niveau).
@@ -178,6 +249,28 @@ export const EXERCISES = {
     how: "Le panier envoie à vitesse modérée : volées de blocage profondes en visant une zone de 2 m." },
   ex_volley_low_knee: { name: "Volées basses : genoux plus que dos", where: "Filet", dose: "3 × 10", level: 1,
     how: "Panier bas : plie les genoux, raquette ouverte devant, vise à plat. Garde la tête stable à la hauteur du contact." },
+  ex_slice_shadow: { name: "Slice fantôme (sans balle)", where: "Seul", dose: "3 × 10 gestes lents", level: 1,
+    how: "Armé haut, descends le tamis vers l'avant et finis devant toi. Filme-toi de côté : le poignet doit descendre vers l'impact." },
+  ex_slice_wall: { name: "Slices au mur", where: "Mur", dose: "3 × 2 min", level: 1,
+    how: "À 3–4 m d'un mur, slices lents et réguliers. La balle doit revenir basse et sans effet vers le haut." },
+  ex_slice_target: { name: "Slice sur cible basse", where: "Fond de court", dose: "3 × 10", level: 2,
+    how: "Place une corde ou un élastique à 1 m du filet : le slice doit passer juste au-dessus et rester bas. Vise une zone de 2 m au fond." },
+  ex_drop_touch: { name: "Toucher d'amortie", where: "Fond de court", dose: "3 × 8 de chaque côté", level: 1,
+    how: "Panier lent : amortie avec le tamis qui accompagne la balle. Vise une zone de 3 m derrière le filet, la balle doit rebondir deux fois avant la ligne de service." },
+  ex_drop_disguise: { name: "Déguiser l'amortie", where: "Fond de court, avec partenaire", dose: "3 × 10", level: 2,
+    how: "Même préparation que pour un coup de fond, ton partenaire annonce « long » ou « court » au dernier moment ; tu joues l'un ou l'autre. Il doit être surpris." },
+  ex_smash_shadow: { name: "Smash fantôme", where: "Seul", dose: "3 × 10", level: 1,
+    how: "Sans balle : pas chassés vers l'arrière, bras libre pointé, armé comme au service, extension complète au contact." },
+  ex_smash_footwork: { name: "Placement sous le lob", where: "Filet, avec partenaire", dose: "3 × 8", level: 1,
+    how: "Le partenaire lance des lobs. Recule avec des pas chassés (jamais en croisant) et vise le smash tendu, bras haut." },
+  ex_lob_target: { name: "Lob sur cible", where: "Fond de court", dose: "3 × 10", level: 1,
+    how: "Vise une zone au fond du terrain adverse, balle au moins 4 m au-dessus du filet." },
+  ex_lob_finish: { name: "Finition haute du lob", where: "Fond de court", dose: "3 × 10", level: 1,
+    how: "Après chaque lob, garde la raquette haute 2 secondes : elle doit finir au-dessus de l'épaule opposée." },
+  ex_return_block: { name: "Retour bloqué", where: "Au retour, avec partenaire", dose: "3 × 10 services", level: 1,
+    how: "Raquette devant, préparation courte, bloque la balle profonde au centre." },
+  ex_return_split: { name: "Retour : split-step et fente", where: "Au retour", dose: "4 × 8", level: 1,
+    how: "Split-step au moment où le serveur frappe, fente vers la balle, contact devant la hanche." },
 };
 
 export const LEVELS = {

@@ -1,7 +1,7 @@
 // Service worker : application utilisable hors-ligne après la première visite.
-const SHELL = "tca-shell-v1";
+const SHELL = "tca-shell-v3";
 const RUNTIME = "tca-runtime-v1";
-const ASSETS = ["./", "./index.html", "./css/style.css", "./js/app.js", "./js/knowledge.js", "./js/metrics.js", "./js/pose.js", "./js/tactics.js", "./manifest.webmanifest", "./icons/icon.svg"];
+const ASSETS = ["./", "./index.html", "./css/style.css", "./js/app.bundle.js", "./js/knowledge.js", "./js/metrics.js", "./js/pose.js", "./js/tactics.js", "./js/extras.js", "./js/posefig.js", "./js/assistant.js", "./js/coach.js", "./manifest.webmanifest", "./icons/icon.svg"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(SHELL).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));

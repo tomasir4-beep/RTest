@@ -15,7 +15,7 @@ export async function loadPose(model = "full", onStatus = () => {}) {
   if (landmarker && loadedModel === model) return landmarker;
   onStatus("Chargement du moteur IA (première fois : ~10 Mo)…");
   // Mode hors-ligne : si les fichiers ont été téléchargés (scripts/fetch-offline-assets.ps1), ils sont utilisés en priorité.
-  const local = new URL("../vendor/mediapipe/", import.meta.url).href;
+  const local = new URL("vendor/mediapipe/", document.baseURI).href;
   let base = CDN, modelUrl = MODELS[model];
   try {
     const head = await fetch(`${local}pose_landmarker_${model}.task`, { method: "HEAD" });
@@ -142,8 +142,19 @@ export async function detectRotation(src) {
   return votes[180] > votes[0] ? 180 : 0;
 }
 
-export async function processVideo(src, { start = 0, end, fps = 20, rot = "auto", onProgress = () => {}, signal, onStatus = () => {} }) {
+/** Aperçu pour « choisir le joueur par toucher » : image (orientée) + personnes détectées. Coordonnées normalisées. */
+export async function previewPlayers(src, t, rot = "auto") {
+  if (rot === "auto") rot = await detectRotation(src);
+  const full = makeFull(src, rot);
+  await seek(src.video, t);
+  drawFull(src, full, rot);
+  const persons = findPlayers(full).filter((p) => p.h > full.height * 0.02).map((p) => ({ cx: p.cx / full.width, cy: p.cy / full.height, h: p.h / full.height, pts: p.pts.map((q) => ({ x: q.x / full.width, y: q.y / full.height })) }));
+  return { canvas: full, persons, rot };
+}
+
+export async function processVideo(src, { start = 0, end, fps = 20, rot = "auto", seed = null, onProgress = () => {}, signal, onStatus = () => {} }) {
   const { video } = src;
+  if (seed && seed.rot != null && rot === "auto") rot = seed.rot;
   if (rot === "auto") { onStatus("Détection de l'orientation de la vidéo…"); rot = await detectRotation(src); if (rot) onStatus("Vidéo à l'envers détectée : remise à l'endroit."); }
   const full = makeFull(src, rot), W = full.width, H = full.height;
   const stop = Math.min(end ?? src.duration, src.duration);
@@ -167,7 +178,9 @@ export async function processVideo(src, { start = 0, end, fps = 20, rot = "auto"
     }
     if (!pick && (!track || miss >= 2)) {
       const ps = findPlayers(full).filter((p) => p.vis >= 8 && p.h > H * 0.03);
-      if (ps.length) pick = ps.reduce((a, b) => (b.h > a.h ? b : a));
+      // joueur désigné par toucher : le plus proche du point choisi (ou de la dernière position connue) ; sinon le plus grand
+      const ref = track ? { x: track.cx, y: track.cy } : seed ? { x: seed.x * W, y: seed.y * H } : null;
+      if (ps.length) pick = ref ? ps.reduce((a, b) => (Math.hypot(b.cx - ref.x, b.cy - ref.y) < Math.hypot(a.cx - ref.x, a.cy - ref.y) ? b : a)) : ps.reduce((a, b) => (b.h > a.h ? b : a));
     }
     if (pick) {
       track = { cx: pick.cx, cy: pick.cy, h: track ? track.h * 0.5 + pick.h * 0.5 : pick.h }; miss = 0;

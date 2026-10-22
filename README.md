@@ -6,7 +6,7 @@ Analyse de gestes de tennis par IA (pose 3D sur l'appareil), exercices correctif
 ## Lancer la webapp (Windows)
 
 ```powershell
-.\serve.ps1            # http://localhost:8080
+.\serve.ps1            # http://localhost:8080   (ou double-clic sur Lancer-Tennis-Coach.bat)
 ```
 Aucune dépendance (ni Node, ni Python). N'importe quel serveur statique fonctionne (`web/` à la racine).
 L'application doit être servie en **HTTPS ou localhost** (caméra, service worker, import de modules).
@@ -59,5 +59,29 @@ Ajoutez dans `android/android/app/src/main/AndroidManifest.xml` (avant `<applica
 - Les rotations dépendent de l'angle de filmage ; aucune donnée ne quitte l'appareil (stockage local).
 
 ## Pistes d'évolution
-Comparaison avec un modèle pro côte à côte, ralenti annoté, détection du joueur par toucher, calibration par la taille du joueur,
-export PDF, synchronisation compte/coach, stats de match (1res balles…), modèle de balle (TrackNet), assistant LLM pour reformuler les conseils.
+Export PDF, compte en ligne + synchronisation joueur/coach, stats de match (1res balles…), suivi de balle (TrackNet), calibration des seuils sur davantage de joueurs, plusieurs angles de caméra.
+
+## Nouveautés (v0.2)
+
+| Fonction | Où | Remarques |
+|---|---|---|
+| Images de bonnes postures par défaut | Analyse › Priorités | Figures schématiques générées (pas des photos) avec l'articulation à corriger en jaune ; `web/js/posefig.js` |
+| Comparaison côte à côte | Analyse › Comparaison | (1) joueur vs **modèle de référence** schématique ; (2) joueur vs **vidéo de référence** importée (analysée sur l'appareil) avec tableau d'écarts. Aucune vidéo de pro n'est fournie (droits) |
+| Lecteur ralenti annoté | Analyse › Lecteur ralenti | Image par image, ×0,1 à ×1, squelette, angles en direct, trace du poignet, phase |
+| Choix du joueur par toucher | Analyse › 👆 Choisir le joueur | Utile quand plusieurs personnes sont à l'image |
+| Calibration par la taille | Analyse (champ Taille) et Coach › Profil | Hauteur du poignet (m) et vitesse du poignet (m/s), ± 15 % |
+| Espace coach | Coach | Échange par **fichiers** (dossier joueur ↔ retour coach), sans serveur ni compte |
+| Assistant IA | Coach › Assistant, boutons ✨ | Reformule avec Claude (clé API personnelle, saisie dans l'app). Seuls des textes sont envoyés. « Copier le prompt » fonctionne sans clé |
+
+**Non inclus** : compte en ligne et synchronisation continue joueur/coach (demande un serveur d'authentification et de stockage, ex. Supabase ou Firebase).
+
+### Notes Android
+- Le partage de fichiers (dossier joueur / retour coach) utilise les plugins Capacitor `Share` et `Filesystem` ; ils sont ajoutés dans `android/package.json` et embarqués par le workflow GitHub.
+- La clé API de l'assistant est enregistrée dans le stockage local de l'application : utilisez une clé dédiée avec une limite de dépense.
+### Développement
+- Les modules web/js/*.js sont assemblés en un script classique web/js/app.bundle.js (chargé par index.html) : l'application fonctionne ainsi même en ouvrant web/index.html directement (file://).
+- **Après toute modification de web/js/*.js, relancez** : `.\scripts\build-bundle.ps1`.
+- Le workflow GitHub vérifie que l'APK contient bien index.html, pp.bundle.js et sw.js.
+
+### Coups ajoutés (v0.3) - seuils PROVISOIRES
+Coup coupé (chop/slice), amortie, smash, lob, retour de service. Seuils non calibrés sur des vidéos réelles : validés uniquement par tests de logique sur des séquences synthétiques (bon geste vs mauvais geste). À calibrer avec des vidéos réelles de chaque coup.
