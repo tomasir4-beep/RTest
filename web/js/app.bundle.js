@@ -23,7 +23,49 @@ const REFERENCES = [
   { id: "mediapipe", cite: "Google MediaPipe Pose Landmarker (BlazePose, estimation de pose 33 points 2D/3D, exécutée sur l'appareil).", url: "https://developers.google.com/edge/mediapipe/solutions/vision/pose_landmarker/web_js", topic: "Outil IA" },
   { id: "fft", cite: "FFT – Ressources pédagogiques (Direction Technique Nationale) et programmes de formation d'entraîneur (DE/DES tennis).", topic: "Pédagogie FR" },
   { id: "usta", cite: "USTA / PTR / Tennis Australia – Documentation d'entraîneurs sur les patterns de jeu, la tactique singles/doubles.", topic: "Tactique" },
+  // --- Actualisation du 16/11/2026 (OpenAlex ; niveau de lecture : titre + résumé) ---
+  { id: "lambrich2023", cite: "Lambrich J., Muehlbauer T. (2023). Biomechanical analyses of different serve and groundstroke techniques in tennis: a systematic scoping review. PLoS ONE.", doi: "10.1371/journal.pone.0290320", topic: "Service / coups de fond (revue)", lu: "résumé" },
+  { id: "elliott2018", cite: "Elliott B.C., Reid M., Whiteside D. (2018). Biomechanics of groundstrokes and volleys. In : Tennis Medicine, Springer.", doi: "10.1007/978-3-319-71498-1_2", topic: "Coups de fond / volée", lu: "titre" },
+  { id: "genevois2015", cite: "Genevois C., Reid M., Rogowski I., Crespo M. (2015). Performance factors related to the different tennis backhand groundstrokes: a review. J Sports Sci Med.", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC4306773/", topic: "Revers (1 et 2 mains, lift et slice)", lu: "résumé" },
+  { id: "colomar2022", cite: "Colomar J., Corbi F., Brich Q., Baiget E. (2022). Determinant physical factors of tennis serve velocity: a brief review. Int J Sports Physiol Perform.", doi: "10.1123/ijspp.2022-0091", topic: "Service / facteurs physiques", lu: "résumé" },
+  { id: "wood2023", cite: "Wood D., Reid M., Elliott B., Alderson J.A., Mian A.S. (2023). The expert eye? An inter-rater comparison of elite tennis serve kinematics and performance. J Sports Sci.", doi: "10.1080/02640414.2023.2298102", topic: "Évaluation du service sur vidéo 2D par des experts", lu: "résumé" },
+  { id: "vantrigt2025", cite: "van Trigt B. et al. (2025). Uncovering the hidden mechanics of upper body rotations in tennis serves using wearable sensors on Dutch professional players. Front Sports Act Living.", doi: "10.3389/fspor.2024.1463299", topic: "Service / chaîne cinétique", lu: "résumé" },
+  { id: "martin2026", cite: "Martin C., Touzard P., Fourel L., Fernández-Fernández J. (2026). Tennis serve biomechanics and implications for physical conditioning. Strength Cond J.", doi: "10.1519/ssc.0000000000000977", topic: "Service / préparation physique", lu: "résumé" },
+  { id: "palmer2018", cite: "Palmer K.J. et al. (2018). Relationship between range of motion, strength, motor control, power, and the tennis serve in competitive-level tennis players: a pilot study. Sports Health.", doi: "10.1177/1941738118785348", topic: "Service / mobilité, force, puissance", lu: "résumé" },
+  { id: "reid2012", cite: "Reid M., Whiteside D., Gilbin G., Elliott B. (2012). Effect of a common task constraint on the body, racket, and ball kinematics of the elite junior tennis serve. Sports Biomech.", doi: "10.1080/14763141.2012.724702", topic: "Service / exercice contraint", lu: "résumé" },
+  { id: "sheets2011", cite: "Sheets A.L. et al. (2011). Kinematics differences between the flat, kick, and slice serves measured using a markerless motion capture method. Ann Biomed Eng.", doi: "10.1007/s10439-011-0418-y", topic: "Service à plat / kické / slicé", lu: "titre" },
+  { id: "bottura2025", cite: "Bottura R.M. et al. (2025). Shorter follow-through is associated with greater accuracy: a kinematic analysis of the tennis forehand in youth athletes. Int J Perform Anal Sport.", doi: "10.1080/24748668.2025.2577551", topic: "Coup droit / finition", lu: "résumé" },
+  { id: "liu2026", cite: "Liu F. et al. (2026). Relationship between trunk and pelvis coordination strategies and stances during tennis forehand strokes. Sports Biomech.", doi: "10.1080/14763141.2026.2759826", topic: "Coup droit / appuis et rotation", lu: "résumé" },
+  { id: "dines2015", cite: "Dines J.S. et al. (2015). Tennis injuries: epidemiology, pathophysiology, and treatment. J Am Acad Orthop Surg.", doi: "10.5435/jaaos-d-13-00148", topic: "Blessures", lu: "résumé" },
+  { id: "cools2015", cite: "Cools A.M.J., Johansson F.R., Borms D., Maenhout A. (2015). Prevention of shoulder injuries in overhead athletes: a science-based approach. Braz J Phys Ther.", doi: "10.1590/bjpt-rbf.2014.0109", topic: "Prévention épaule", lu: "résumé" },
+  { id: "tooth2020", cite: "Tooth C. et al. (2020). Risk factors of overuse shoulder injuries in overhead athletes: a systematic review. Sports Health.", doi: "10.1177/1941738120931764", topic: "Prévention épaule", lu: "titre" },
+  { id: "pozzi2020", cite: "Pozzi F. et al. (2020). Preseason shoulder range of motion screening and in-season risk of shoulder and elbow injuries in overhead athletes: systematic review and meta-analysis. Br J Sports Med.", doi: "10.1136/bjsports-2019-100698", topic: "Prévention épaule / coude", lu: "titre" },
+  { id: "kekelekis2020", cite: "Kekelekis A. et al. (2020). Risk factors for upper limb injury in tennis players: a systematic review. Int J Environ Res Public Health.", doi: "10.3390/ijerph17082744", topic: "Prévention membre supérieur", lu: "titre" },
+  { id: "gillet2019", cite: "Gillet B., Rogowski I., Monga-Dubreuil É., Begon M. (2019). Lower trapezius weakness and shoulder complex biomechanics during the tennis serve. Med Sci Sports Exerc.", doi: "10.1249/mss.0000000000002079", topic: "Service / épaule", lu: "résumé" },
+  { id: "gescheit2017", cite: "Gescheit D.T. et al. (2017). Injury epidemiology of tennis players at the 2011–2016 Australian Open Grand Slam. Br J Sports Med.", doi: "10.1136/bjsports-2016-097283", topic: "Blessures", lu: "titre" },
+  { id: "fernandez2013", cite: "Fernández-Fernández J., Ellenbecker T., Sanz-Rivas D., Ulbricht A., Ferrauti A. (2013). Effects of a 6-week junior tennis conditioning program on service velocity. J Sports Sci Med.", url: "https://www.ncbi.nlm.nih.gov/pmc/articles/3761833", topic: "Préparation physique jeunes", lu: "résumé" },
+  { id: "myers2015", cite: "Myers N.L. et al. (2015). Increasing ball velocity in the overhead athlete: a meta-analysis of randomized controlled trials. J Strength Cond Res.", doi: "10.1519/jsc.0000000000000931", topic: "Préparation physique", lu: "résumé" },
+  { id: "fernandez2020", cite: "Fernández-Fernández J. et al. (2020). The effect of a neuromuscular vs. dynamic warm-up on physical performance in young tennis players. J Strength Cond Res.", doi: "10.1519/jsc.0000000000003703", topic: "Échauffement", lu: "titre" },
+  { id: "colomar2020", cite: "Colomar J., Baiget E., Corbi F. (2020). Influence of strength, power, and muscular stiffness on stroke velocity in junior tennis players. Front Physiol.", doi: "10.3389/fphys.2020.00196", topic: "Préparation physique", lu: "titre" },
+  { id: "hayes2018", cite: "Hayes M.J., Spits D.R., Watts D.G., Kelly V.G. (2018). Relationship between tennis serve velocity and select performance measures. J Strength Cond Res.", doi: "10.1519/jsc.0000000000002440", topic: "Service / performance physique", lu: "titre" },
+  { id: "touzard2023", cite: "Touzard P. et al. (2023). There is no rush to upgrade the tennis racket in young intermediate competitive players: the effects of scaling racket on serve biomechanics and performance. Front Psychol.", doi: "10.3389/fpsyg.2023.1104146", topic: "Matériel / jeunes joueurs", lu: "résumé" },
+  { id: "whiteside2017", cite: "Whiteside D., Cant O., Connolly M., Reid M. (2017). Monitoring hitting load in tennis using inertial sensors and machine learning. Int J Sports Physiol Perform.", doi: "10.1123/ijspp.2016-0683", topic: "Charge de frappe", lu: "titre" },
+  { id: "whiteside2016", cite: "Whiteside D., Reid M. (2016). Spatial characteristics of professional tennis serves with implications for serving aces: a machine learning approach. J Sports Sci.", doi: "10.1080/02640414.2016.1183805", topic: "Tactique / service (Hawk-Eye)", lu: "résumé" },
+  { id: "reid2016", cite: "Reid M., Morgan S., Whiteside D. (2016). Matchplay characteristics of Grand Slam tennis: implications for training and conditioning. J Sports Sci.", doi: "10.1080/02640414.2016.1139161", topic: "Tactique / match", lu: "résumé" },
+  { id: "kovalchik2017", cite: "Kovalchik S.A., Reid M. (2017). Comparing matchplay characteristics and physical demands of junior and professional tennis athletes in the era of big data. J Sports Sci Med.", url: "https://www.ncbi.nlm.nih.gov/pmc/articles/5721178", topic: "Tactique / match", lu: "titre" },
+  { id: "fitzpatrick2021", cite: "Fitzpatrick A., Stone J.A., Choppin S.B., Kelley J. (2021). Investigating the most important aspect of elite grass court tennis: short points. Int J Sports Sci Coach.", doi: "10.1177/1747954121999593", topic: "Tactique / points courts", lu: "résumé" },
+  { id: "meffert2019", cite: "Meffert D., O'Shannessy C., Born P., Grambow R., Vogt T. (2019). Tennis at tiebreaks: addressing elite players' performance for tomorrows' coaching. Ger J Exerc Sport Res.", doi: "10.1007/s12662-019-00611-3", topic: "Tactique / tie-break", lu: "titre" },
+  { id: "pluim2023", cite: "Pluim B.M. et al. (2023). Physical demands of tennis across the different court surfaces, performance levels and sexes: a systematic review with meta-analysis. Sports Med.", doi: "10.1007/s40279-022-01807-8", topic: "Surfaces / exigences physiques", lu: "titre" },
+  { id: "krause2019", cite: "Krause L., Farrow D., Pinder R., Buszard T., Kovalchik S. et al. (2019). Enhancing skill transfer in tennis using representative learning design. J Sports Sci.", doi: "10.1080/02640414.2019.1647739", topic: "Apprentissage / pratique représentative", lu: "résumé" },
+  { id: "lautenbach2014", cite: "Lautenbach F. et al. (2014). Nonautomated pre-performance routine in tennis: an intervention study. J Appl Sport Psychol.", doi: "10.1080/10413200.2014.957364", topic: "Mental / routines", lu: "résumé" },
+  { id: "beckmann2021", cite: "Beckmann J., Fimpel L., Wergin V.V. (2021). Preventing a loss of accuracy of the tennis serve under pressure. PLoS ONE.", doi: "10.1371/journal.pone.0255060", topic: "Mental / pression", lu: "résumé" },
+  { id: "bacic2018", cite: "Bačić B., Hume P.A. (2018). Computational intelligence for qualitative coaching diagnostics: automated assessment of tennis swings to improve performance and safety. Big Data.", doi: "10.1089/big.2018.0062", topic: "Outil IA / diagnostic technique", lu: "résumé" },
+  { id: "roggio2024", cite: "Roggio F., Trovato B., Sortino M., Musumeci G. (2024). A comprehensive analysis of the machine learning pose estimation models used in human movement and posture analyses: a narrative review. Heliyon.", doi: "10.1016/j.heliyon.2024.e39977", topic: "Outil IA / estimation de pose", lu: "titre" },
+  { id: "emmerson2025", cite: "Emmerson J., Needham L., Williams S., Colyer S. (2025). Evaluation of a markerless motion capture system for measuring mechanical work during tennis strokes. J Sports Sci.", doi: "10.1080/02640414.2025.2555096", topic: "Outil IA / sans marqueurs", lu: "résumé" },
+  { id: "yue2026", cite: "Yue X.A., Gu Y., Yu B. (2026). Validation of single-camera MediaPipe BlazePose for knee joint angle measurement across multiple functional tasks. JMIR Rehabil Assist Technol.", doi: "10.2196/102399", topic: "Outil IA / validité BlazePose", lu: "titre" },
 ];
+
+const REFERENCES_UPDATED = "16/11/2026";
 
 const STROKES = {
   serve: { label: "Service", icon: "🎾", cam: "Filmez de côté (perpendiculaire à la ligne de service) ou de dos, à ~5 m, joueur entier visible, caméra immobile à hauteur de hanche, 60 i/s si possible. Un seul service par séquence idéalement." },
@@ -284,7 +326,7 @@ const LEVELS = {
   s1: "1re série ou +",
 };
 
-return { REFERENCES, STROKES, ISSUES, EXERCISES, LEVELS };
+return { REFERENCES, REFERENCES_UPDATED, STROKES, ISSUES, EXERCISES, LEVELS };
 })();
 const __M_metrics = (() => {
 "use strict";
@@ -423,7 +465,7 @@ const torsoWorld = (f) => norm(sub(mid(f.wl[LM.lSh], f.wl[LM.rSh]), mid(f.wl[LM.
 const GROUND = (opts = {}) => [
   { id: "knee_load", label: "Flexion des jambes au chargement", unit: "°", ok: [110, 160], warn: [100, 168], high: "g_knee_stiff", w: 1.5, tip: "180° = jambes tendues" },
   { id: "shoulder_turn", label: "Rotation des épaules (préparation)", unit: "°", ok: [45, 400], warn: [28, 400], low: "g_turn_small", w: 1.5, video: true, tip: "amplitude de rotation du buste" },
-  { id: "separation", label: "Dissociation bassin–épaules (max)", unit: "°", ok: [15, 120], warn: [8, 120], low: "g_sep_low", w: 1, tip: "écart de rotation épaules / bassin" },
+  { id: "separation", label: "Dissociation bassin–épaules (max)", unit: "°", ok: [15, 120], warn: [8, 120], low: "g_sep_low", w: 0.5, tip: "écart de rotation épaules / bassin" },
   { id: "contact_front", label: "Point de contact devant le corps", unit: "× buste", ok: [0.25, 5], warn: [0.05, 5], low: "g_contact_behind", w: 2, video: true, tip: "distance poignet–hanches dans l'axe du coup" },
   opts.skipElbow ? null : { id: "elbow_contact", label: "Angle du coude au contact", unit: "°", ok: [opts.elbowMin || 135, 181], warn: [110, 181], low: "g_arm_cramped", w: 1, tip: "180° = bras tendu" },
   { id: "head_stability", label: "Stabilité de la tête (± 0,15 s)", unit: "× buste", ok: [0, 0.25], warn: [0, 0.45], high: "g_head_moves", w: 1, video: true, tip: "déplacement de la tête autour de l'impact" },
@@ -435,7 +477,7 @@ const METRIC_DEFS = {
     { id: "knee_load", label: "Flexion des jambes (position trophée)", unit: "°", ok: [105, 150], warn: [95, 160], high: "s_knee_stiff", w: 2, tip: "180° = jambes tendues" },
     { id: "elbow_trophy", label: "Hauteur du coude / épaule (trophée)", unit: "× buste", ok: [-0.1, 3], warn: [-0.3, 3], low: "s_elbow_low", w: 1, tip: "≥ 0 : coude au niveau des épaules" },
     { id: "toss_arm", label: "Bras lanceur haut (trophée)", unit: "× buste", ok: [0.2, 5], warn: [-0.1, 5], low: "s_toss_arm", w: 1, tip: "poignet lanceur au-dessus de l'épaule" },
-    { id: "separation", label: "Dissociation bassin–épaules (max)", unit: "°", ok: [20, 140], warn: [10, 140], low: "s_sep_low", w: 1, tip: "écart de rotation épaules / bassin" },
+    { id: "separation", label: "Dissociation bassin–épaules (max)", unit: "°", ok: [20, 140], warn: [10, 140], low: "s_sep_low", w: 0.5, tip: "écart de rotation épaules / bassin" },
     { id: "elbow_contact", label: "Angle du coude au contact", unit: "°", ok: [165, 181], warn: [150, 181], low: "s_elbow_bent", w: 2, tip: "180° = bras tendu" },
     { id: "contact_height", label: "Hauteur du point de contact", unit: "× (cheville→nez)", ok: [1.15, 4], warn: [1.05, 4], low: "s_contact_low", w: 2, tip: "poignet frappeur relatif à la taille" },
   ],
@@ -484,6 +526,25 @@ const METRIC_DEFS = {
   ],
 };
 
+// Métadonnées issues de la revue « expert du domaine » : fiabilité de la mesure (monoculaire), vue de caméra conseillée,
+// tolérance de régularité (écart-type au-delà duquel le geste est jugé variable d'une répétition à l'autre).
+const METRIC_META = {
+  knee_load: { conf: "high", view: "side", tol: 10 },
+  elbow_contact: { conf: "high", view: "side", tol: 10 },
+  elbow_trophy: { conf: "mid", view: "side", tol: 0.15 },
+  toss_arm: { conf: "mid", view: "side", tol: 0.2 },
+  contact_height: { conf: "mid", view: "side", tol: 0.08 },
+  separation: { conf: "low", view: "behind", tol: 10 },
+  shoulder_turn: { conf: "low", view: "behind", tol: 15 },
+  contact_front: { conf: "mid", view: "side", tol: 0.25 },
+  head_stability: { conf: "mid", view: "any", tol: 0.1 },
+  trunk_lean: { conf: "mid", view: "side", tol: 6 },
+  backswing: { conf: "mid", view: "side", tol: 0.25 },
+  wrist_path: { conf: "mid", view: "side", tol: 0.2 },
+  follow_high: { conf: "mid", view: "side", tol: 0.2 },
+  contact_speed: { conf: "low", view: "side", tol: 1.0 },
+};
+for (const defs of Object.values(METRIC_DEFS)) for (const d of defs) Object.assign(d, METRIC_META[d.id] || {});
 // --- Analyse principale ----------------------------------------------------------------------
 /**
  * @param {Array} rawFrames
@@ -528,6 +589,14 @@ function analyze(rawFrames, o) {
   }
   // Cadence de la vidéo : 1 = temps réel ; > 1 = ralenti (les durées de référence sont multipliées).
   const slow = o.slow || 1;
+  // Service / smash : l'impact est au point le plus haut du poignet, à ± 0,12 s du pic de vitesse (le pic de vitesse
+  // arrive un peu avant la pleine extension : sans cet affinage, le bras paraît plié et le contact trop bas).
+  if (serveLike && o.timed && o.contactIdx == null) {
+    const lo = idxAt(fr, fr[c].t - 0.12 * slow), hi = idxAt(fr, fr[c].t + 0.12 * slow);
+    let best = c, bestY = Infinity;
+    for (let i = lo; i <= hi; i++) { const y = fr[i].lm[S.wr].y; if (y < fr[i].lm[LM.nose].y && y < bestY) { bestY = y; best = i; } }
+    c = best;
+  }
   const winLo = (sec) => (o.timed ? idxAt(fr, fr[c].t - sec * slow) : Math.max(0, c - 1));
   const kneeSeries = fr.map(kneeAvg);
   let l = o.loadIdx;
@@ -667,13 +736,20 @@ const median = (a) => { const s = [...a].sort((x, y) => x - y); const m = Math.f
 /** Agrège plusieurs gestes de la même séance : médiane de chaque mesure + dispersion. */
 function aggregate(stroke, reps) {
   const values = {}, spread = {};
+  let regular = 0, counted = 0;
   for (const d of METRIC_DEFS[stroke] || []) {
     const v = reps.map((r) => r.values[d.id]).filter((x) => x != null && !Number.isNaN(x));
-    if (v.length) { values[d.id] = median(v); spread[d.id] = [Math.min(...v), Math.max(...v), v.length]; }
+    if (!v.length) continue;
+    const mean = v.reduce((a, b) => a + b, 0) / v.length;
+    const sd = v.length > 1 ? Math.sqrt(v.reduce((a, b) => a + (b - mean) ** 2, 0) / (v.length - 1)) : 0;
+    const med = median(v);
+    const mad = median(v.map((x) => Math.abs(x - med))) || 0; // dispersion robuste pour repérer un geste aberrant
+    values[d.id] = med;
+    spread[d.id] = { min: Math.min(...v), max: Math.max(...v), n: v.length, mean, sd, regular: v.length < 2 ? null : sd <= (d.tol ?? Infinity), mad, 0: Math.min(...v), 1: Math.max(...v), 2: v.length };
+    if (v.length > 1) { counted++; if (sd <= (d.tol ?? Infinity)) regular++; }
   }
-  return { ...evaluate(stroke, values, true), values, spread };
+  return { ...evaluate(stroke, values, true), values, spread, consistency: counted ? Math.round((regular / counted) * 100) : null };
 }
-
 /**
  * Repère les gestes dans une longue séquence (séance entière) : pics de vitesse du poignet frappeur.
  * Service : poignet au-dessus de la tête et bras tendu. Renvoie des instants de contact (s).
@@ -712,36 +788,43 @@ function shoulderYawAbs(fr) {
 }
 
 
-return { LM, angle3, prepare, METRIC_DEFS, analyze, evaluate, aggregate, segmentStrokes };
+return { LM, angle3, prepare, METRIC_DEFS, METRIC_META, analyze, evaluate, aggregate, segmentStrokes };
 })();
 const __M_posefig = (() => {
 "use strict";
-// Figures schématiques de « bonnes postures » (vue de profil, joueur tourné vers la droite) générées par cinématique directe,
-// avec mise en évidence de l'articulation à corriger. Ce sont des modèles pédagogiques simplifiés, pas des captures de joueurs réels.
+// Figures pédagogiques (vue de profil, joueur tourné vers la droite) générées par cinématique directe.
+// Chaque défaut est illustré par deux panneaux « À éviter / Cible » avec l'angle mesuré, la zone à regarder et une légende.
+// Ce sont des modèles simplifiés : les valeurs d'angle affichées sont calculées à partir de la figure elle-même.
 
-const L = { thigh: 0.245, shank: 0.246, torso: 0.3, neck: 0.1, upper: 0.186, fore: 0.146, hand: 0.07, racket: 0.3 };
+const SEG = { thigh: 0.245, shank: 0.246, torso: 0.3, neck: 0.1, upper: 0.186, fore: 0.146, hand: 0.07, racket: 0.3 };
 const rad = (d) => (d * Math.PI) / 180;
+const deg = (r) => (r * 180) / Math.PI;
 
 // Angle d'un bras : 0° = vers le bas, 90° = horizontal vers l'avant, 180° = vers le haut.
 const armVec = (a) => ({ x: Math.sin(rad(a)), y: -Math.cos(rad(a)) }); // y vers le haut (coordonnées monde)
 const add = (p, v, k) => ({ x: p.x + v.x * k, y: p.y + v.y * k });
 
-/** pose = { knee, lean, hit:{a, elbow}, toss:{a}, racket (bool) } -> points monde (y vers le haut, taille = 1) */
+/**
+ * Cinématique directe de la figure.
+ * @param {{knee:number, lean:number, hit:{a:number, elbow:number}, toss:{a:number}}} p pose (angles en degrés)
+ * @returns {object} points en coordonnées monde (y vers le haut, taille = 1)
+ */
 function buildFigure(p) {
   const flex = 180 - p.knee, psi = flex / 2;
   const ankle = { x: 0, y: 0.04 };
-  const knee = add(ankle, { x: Math.sin(rad(psi)), y: Math.cos(rad(psi)) }, L.shank);
-  const hip = add(knee, { x: Math.sin(rad(psi - flex)), y: Math.cos(rad(psi - flex)) }, L.thigh);
+  const knee = add(ankle, { x: Math.sin(rad(psi)), y: Math.cos(rad(psi)) }, SEG.shank);
+  const hip = add(knee, { x: Math.sin(rad(psi - flex)), y: Math.cos(rad(psi - flex)) }, SEG.thigh);
   const tv = { x: Math.sin(rad(p.lean)), y: Math.cos(rad(p.lean)) };
-  const sh = add(hip, tv, L.torso);
-  const nose = add(sh, { x: Math.sin(rad(p.lean * 0.5)), y: Math.cos(rad(p.lean * 0.5)) }, L.neck + 0.03);
-  const head = add(sh, { x: Math.sin(rad(p.lean * 0.5)), y: Math.cos(rad(p.lean * 0.5)) }, L.neck + 0.03);
-  const elbow = add(sh, armVec(p.hit.a), L.upper);
-  const fa = p.hit.a + (180 - p.hit.elbow) * (p.hit.a > 90 ? 1 : 1);
-  const wrist = add(elbow, armVec(fa), L.fore);
-  const racketTip = add(wrist, armVec(fa), L.hand + L.racket);
-  const tElbow = add(sh, armVec(p.toss.a), L.upper);
-  const tWrist = add(tElbow, armVec(p.toss.a), L.fore);
+  const sh = add(hip, tv, SEG.torso);
+  const hv = { x: Math.sin(rad(p.lean * 0.5)), y: Math.cos(rad(p.lean * 0.5)) };
+  const nose = add(sh, hv, SEG.neck + 0.03);
+  const head = add(sh, hv, SEG.neck + 0.03);
+  const elbow = add(sh, armVec(p.hit.a), SEG.upper);
+  const fa = p.hit.a + (180 - p.hit.elbow);
+  const wrist = add(elbow, armVec(fa), SEG.fore);
+  const racketTip = add(wrist, armVec(fa), SEG.hand + SEG.racket);
+  const tElbow = add(sh, armVec(p.toss.a), SEG.upper);
+  const tWrist = add(tElbow, armVec(p.toss.a), SEG.fore);
   return { ankle, knee, hip, sh, nose, head, elbow, wrist, racketTip, tElbow, tWrist };
 }
 
@@ -753,7 +836,6 @@ const IDEAL = {
   ground_contact: { knee: 142, lean: 10, hit: { a: 78, elbow: 150 }, toss: { a: 120 } },
   volley_prep: { knee: 140, lean: 12, hit: { a: 60, elbow: 105 }, toss: { a: 55 } },
   volley_contact: { knee: 138, lean: 14, hit: { a: 75, elbow: 120 }, toss: { a: 35 } },
-  // coups ajoutés (poses pédagogiques simplifiées)
   slice_prep: { knee: 140, lean: 8, hit: { a: 140, elbow: 110 }, toss: { a: 80 } },
   slice_contact: { knee: 145, lean: 10, hit: { a: 85, elbow: 155 }, toss: { a: 110 } },
   drop_contact: { knee: 138, lean: 12, hit: { a: 70, elbow: 140 }, toss: { a: 100 } },
@@ -764,81 +846,500 @@ const IDEAL = {
   return_prep: { knee: 135, lean: 10, hit: { a: 25, elbow: 105 }, toss: { a: 55 } },
 };
 
-// défaut -> figure de référence + élément à mettre en évidence + légende courte
-const FIG_FOR_ISSUE = {
-  s_knee_stiff: { pose: "serve_trophy", hi: ["knee"], cap: "Trophée : genoux fléchis (≈ 110–150°), poids sur les appuis" },
-  s_elbow_bent: { pose: "serve_contact", hi: ["elbow"], cap: "Contact : bras allongé, coude proche de 180°" },
-  s_contact_low: { pose: "serve_contact", hi: ["wrist"], cap: "Contact haut : poignet au plus haut, talon décollé" },
-  s_elbow_low: { pose: "serve_trophy", hi: ["elbow"], cap: "Coude au niveau des épaules, avant-bras vertical (« L »)" },
-  s_toss_arm: { pose: "serve_trophy", hi: ["toss"], cap: "Bras lanceur haut, pointé vers la balle" },
-  s_sep_low: { pose: "serve_trophy", hi: [], top: 30, cap: "Épaules tournées avant le bassin (dissociation ≈ 20–40°)" },
-  g_knee_stiff: { pose: "ground_load", hi: ["knee"], cap: "Appui fléchi (≈ 110–160°) pour pousser vers l'avant" },
-  g_sep_low: { pose: "ground_load", hi: [], top: 25, cap: "Épaules en avance de rotation sur le bassin au chargement" },
-  g_turn_small: { pose: "ground_load", hi: [], top: 45, cap: "Préparation complète : épaules tournées de 45° ou plus" },
-  g_contact_behind: { pose: "ground_contact", hi: ["wrist", "front"], cap: "Contact devant la hanche, balle gérée à bout de bras" },
-  g_arm_cramped: { pose: "ground_contact", hi: ["elbow"], cap: "Bras confortablement étendu au contact (coude ≈ 135–180°)" },
-  g_head_moves: { pose: "ground_contact", hi: ["head"], cap: "Tête stable : regard sur la zone de contact" },
-  g_lean: { pose: "ground_contact", hi: ["trunk"], cap: "Tronc proche de la verticale (< 22°), équilibre à la finition" },
-  v_swing_big: { pose: "volley_prep", hi: ["wrist"], cap: "Préparation courte : raquette devant, bloc" },
-  v_contact_behind: { pose: "volley_contact", hi: ["wrist", "front"], cap: "Contact devant le corps, poignet ferme" },
-  v_knee_stiff: { pose: "volley_contact", hi: ["knee"], cap: "Fléchir les jambes (≈ 115–165°), pas le dos" },
-  sl_path_flat: { pose: "slice_prep", hi: ["wrist"], cap: "Armé haut, puis le poignet descend vers l'impact (geste de haut en bas)" },
-  dr_too_fast: { pose: "drop_contact", hi: ["wrist"], cap: "Contact souple : le tamis ralentit et accompagne la balle" },
-  dr_not_disguised: { pose: "slice_prep", hi: [], top: 40, cap: "Même préparation (épaules tournées) que le coup de fond" },
-  sm_elbow_low: { pose: "smash_trophy", hi: ["elbow"], cap: "Armé : coude à hauteur d'épaule, raquette derrière la tête" },
-  sm_toss_arm: { pose: "smash_trophy", hi: ["toss"], cap: "Bras libre levé et pointé vers la balle" },
-  sm_elbow_bent: { pose: "smash_contact", hi: ["elbow"], cap: "Contact : bras allongé, coude proche de 180°" },
-  sm_contact_low: { pose: "smash_contact", hi: ["wrist"], cap: "Contact haut, bien placé sous la balle" },
-  lb_path_flat: { pose: "lob_load", hi: ["wrist"], cap: "Tamis sous la balle puis geste de bas en haut" },
-  lb_finish_low: { pose: "lob_finish", hi: ["wrist"], cap: "Finition haute : raquette au-dessus de l'épaule opposée" },
-  rt_prep_big: { pose: "return_prep", hi: ["wrist"], cap: "Préparation courte, raquette devant" },
-  rt_contact_behind: { pose: "ground_contact", hi: ["wrist", "front"], cap: "Contact devant la hanche, accompagner" },
+/**
+ * Description pédagogique de chaque défaut : pose cible, pose « à éviter » (surcharges), zone à regarder, légendes.
+ * focus : knee | elbow | wrist | front | trunk | head | toss | shoulderLine | path | speed ; top : vue de dessus (dissociation).
+ */
+const ISSUE_FIG = {
+  s_knee_stiff: { base: "serve_trophy", bad: { knee: 176 }, focus: ["knee"], badNote: "Jambes presque tendues : l'énergie venue du sol n'est pas utilisée.", goodNote: "Genoux fléchis : on « s'assoit », puis on pousse vers le haut." },
+  s_elbow_bent: { base: "serve_contact", bad: { hit: { a: 150, elbow: 118 } }, focus: ["elbow"], badNote: "Bras plié au contact : point de frappe bas et levier court.", goodNote: "Bras presque tendu (coude proche de 180°) : contact le plus haut possible." },
+  s_contact_low: { base: "serve_contact", bad: { knee: 176, hit: { a: 135, elbow: 150 } }, focus: ["wrist"], badNote: "Contact trop bas : peu d'angle, la balle passe tout juste le filet.", goodNote: "Contact haut : on s'étire et le talon décolle." },
+  s_elbow_low: { base: "serve_trophy", bad: { hit: { a: 55, elbow: 90 } }, focus: ["elbow", "shoulderLine"], badNote: "Coude sous la ligne des épaules : l'épaule est mal placée pour accélérer.", goodNote: "Coude à hauteur d'épaule, avant-bras vertical : le « L » du trophée." },
+  s_toss_arm: { base: "serve_trophy", bad: { toss: { a: 60 } }, focus: ["toss"], badNote: "Bras libre qui retombe trop tôt : le tronc perd son repère.", goodNote: "Bras libre haut et pointé vers la balle jusqu'au dernier moment." },
+  s_sep_low: { top: { bad: 5, good: 30 }, badNote: "Épaules et bassin tournent ensemble : pas de « ressort » dans le tronc.", goodNote: "Les épaules tournent en avance sur le bassin (≈ 20–40°) : le tronc se charge." },
+  g_knee_stiff: { base: "ground_load", bad: { knee: 176 }, focus: ["knee"], badNote: "Appui raide : on frappe avec les bras seulement.", goodNote: "Appui fléchi : le sol devient une source de puissance." },
+  g_sep_low: { top: { bad: 6, good: 25 }, badNote: "Épaules et bassin tournent d'un bloc.", goodNote: "Le bassin démarre, les épaules suivent : dissociation visible." },
+  g_turn_small: { top: { bad: 15, good: 50 }, topLabel: "rotation des épaules", badNote: "Préparation trop petite : peu de course pour accélérer.", goodNote: "Épaules bien tournées dès la préparation." },
+  g_contact_behind: { base: "ground_contact", bad: { hit: { a: -8, elbow: 150 } }, focus: ["front", "wrist"], badNote: "Contact à hauteur du corps ou derrière : on subit la balle.", goodNote: "Contact devant la hanche : on contrôle la direction." },
+  g_arm_cramped: { base: "ground_contact", bad: { hit: { a: 45, elbow: 85 } }, focus: ["elbow"], badNote: "Bras coincé contre le corps : balle trop proche.", goodNote: "Bras confortablement étendu (coude ≈ 135–180°) : on garde de l'espace." },
+  g_head_moves: { base: "ground_contact", bad: {}, focus: ["head"], badMotion: true, badNote: "La tête bouge à l'impact : les épaules suivent, le timing se dégrade.", goodNote: "Tête immobile, regard sur la zone de contact jusqu'après l'impact." },
+  g_lean: { base: "ground_contact", bad: { lean: 36 }, focus: ["trunk"], badNote: "Tronc très penché : déséquilibre, geste moins répétable.", goodNote: "Tronc proche de la verticale (< 22°) : on reste équilibré." },
+  v_swing_big: { base: "volley_prep", bad: { hit: { a: -55, elbow: 110 } }, focus: ["wrist"], badNote: "Grande préparation : la volée arrive trop vite pour ce geste.", goodNote: "Préparation courte : raquette devant, on bloque." },
+  v_contact_behind: { base: "volley_contact", bad: { hit: { a: 8, elbow: 125 } }, focus: ["front", "wrist"], badNote: "Contact près du corps : peu d'angle, geste de rattrapage.", goodNote: "Contact devant le corps, poignet ferme." },
+  v_knee_stiff: { base: "volley_contact", bad: { knee: 176, lean: 28 }, focus: ["knee"], badNote: "Jambes raides : on se penche du dos pour la balle basse.", goodNote: "Genoux fléchis : le dos reste droit, la tête stable." },
+  sl_path_flat: { base: "slice_contact", bad: {}, focus: ["path", "wrist"], pathGood: { a: 148, elbow: 112 }, pathBad: { a: 40, elbow: 145 }, badNote: "Le poignet monte vers la balle : pas d'effet rétrograde, balle qui flotte.", goodNote: "Armé haut puis le poignet descend vers l'impact : slice bas." },
+  dr_too_fast: { base: "drop_contact", bad: {}, focus: ["wrist", "speed"], badFast: true, badNote: "Geste rapide à l'impact : la balle part trop loin.", goodNote: "Contact souple : le tamis ralentit et accompagne la balle." },
+  dr_not_disguised: { top: { bad: 12, good: 45 }, topLabel: "rotation des épaules", badNote: "Préparation courte ou différente : l'adversaire devine l'amortie.", goodNote: "Même préparation que le coup de fond : l'adversaire est piégé." },
+  sm_elbow_low: { base: "smash_trophy", bad: { hit: { a: 55, elbow: 90 } }, focus: ["elbow", "shoulderLine"], badNote: "Coude trop bas à l'armé : peu d'extension ensuite.", goodNote: "Coude à hauteur d'épaule, raquette derrière la tête." },
+  sm_toss_arm: { base: "smash_trophy", bad: { toss: { a: 55 } }, focus: ["toss"], badNote: "Bras libre baissé : plus de repère sur la balle.", goodNote: "Bras libre levé et pointé vers la balle." },
+  sm_elbow_bent: { base: "smash_contact", bad: { hit: { a: 150, elbow: 118 } }, focus: ["elbow"], badNote: "Bras plié au contact : smash sans hauteur ni puissance.", goodNote: "Bras tendu au point le plus haut." },
+  sm_contact_low: { base: "smash_contact", bad: { knee: 176, hit: { a: 135, elbow: 150 } }, focus: ["wrist"], badNote: "Mal placé sous la balle : on frappe plus bas et devant.", goodNote: "Bien placé (pas chassés) : contact haut, sous la balle." },
+  lb_path_flat: { base: "lob_finish", bad: {}, focus: ["path", "wrist"], pathGood: { a: -35, elbow: 130 }, pathBad: { a: 70, elbow: 140 }, badNote: "Geste plat : balle trop tendue, facile à smasher.", goodNote: "Geste de bas en haut : de la hauteur, de la profondeur." },
+  lb_finish_low: { base: "lob_finish", bad: { hit: { a: 85, elbow: 150 } }, focus: ["wrist", "shoulderLine"], badNote: "La raquette s'arrête devant : la balle manque de hauteur.", goodNote: "Finition haute : raquette au-dessus de l'épaule opposée." },
+  rt_prep_big: { base: "return_prep", bad: { hit: { a: -60, elbow: 110 } }, focus: ["wrist"], badNote: "Préparation large : on est en retard sur le service.", goodNote: "Préparation courte et compacte, raquette devant." },
+  rt_contact_behind: { base: "ground_contact", bad: { hit: { a: -8, elbow: 150 } }, focus: ["front", "wrist"], badNote: "Contact trop près du corps : retour court ou en retard.", goodNote: "On avance sur la balle : contact devant la hanche." },
 };
 
-const ACC = "#ffd23f";
-const css = (c) => c;
+// ----------------------------------------------------------------------------------------------------------------------
+const ACCENT = "#ffd23f", GOOD = "#9be15d", BADC = "#ff8a80";
+const merge = (base, over = {}) => ({ ...base, ...over, hit: { ...base.hit, ...(over.hit || {}) }, toss: { ...base.toss, ...(over.toss || {}) } });
+const angleBetween = (a, b, c) => { // angle en b entre a et c (y vers le haut), degrés
+  const u = { x: a.x - b.x, y: a.y - b.y }, v = { x: c.x - b.x, y: c.y - b.y };
+  return deg(Math.acos(Math.max(-1, Math.min(1, (u.x * v.x + u.y * v.y) / ((Math.hypot(u.x, u.y) * Math.hypot(v.x, v.y)) || 1)))));
+};
 
-/** SVG de la figure. opts: { hi: [], cap, top (angle de dissociation à illustrer), ghost: pose utilisateur (facultatif) } */
-function figureSVG(poseKey, opts = {}) {
-  const pose = typeof poseKey === "string" ? IDEAL[poseKey] : poseKey;
-  const f = buildFigure(pose);
-  const W = 300, H = 300, ox = 110, oy = 282, sc = 160;
-  const X = (p) => (ox + p.x * sc).toFixed(1), Y = (p) => (oy - p.y * sc).toFixed(1);
-  const hi = new Set(opts.hi || []);
-  const seg = (a, b, key, w = 6) => `<line x1="${X(a)}" y1="${Y(a)}" x2="${X(b)}" y2="${Y(b)}" stroke="${hi.has(key) ? ACC : "#9be15d"}" stroke-width="${hi.has(key) ? w + 2 : w}" stroke-linecap="round"/>`;
-  const dot = (p, key, r = 4.5) => `<circle cx="${X(p)}" cy="${Y(p)}" r="${hi.has(key) ? r + 3 : r}" fill="${hi.has(key) ? ACC : "#fff"}" stroke="#0b3d2e" stroke-width="1.5"/>`;
-  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="figsvg" role="img" aria-label="${opts.cap || "Posture de référence"}">`;
-  s += `<rect width="${W}" height="${H}" rx="12" fill="#14532d"/><line x1="10" y1="${oy + 4}" x2="${W - 10}" y2="${oy + 4}" stroke="#fff6" stroke-width="2"/>`;
-  // lignes d'aide
-  if (hi.has("front")) s += `<line x1="${X(f.hip)}" y1="${Y(f.wrist) - 40}" x2="${X(f.hip)}" y2="${oy}" stroke="#fff8" stroke-dasharray="4 4"/><line x1="${X(f.hip)}" y1="${Y(f.wrist)}" x2="${X(f.wrist)}" y2="${Y(f.wrist)}" stroke="${ACC}" stroke-width="3"/><text x="${(+X(f.hip) + +X(f.wrist)) / 2}" y="${+Y(f.wrist) - 6}" fill="${ACC}" font-size="11" text-anchor="middle">devant</text>`;
-  if (hi.has("trunk")) s += `<line x1="${X(f.hip)}" y1="${Y(f.hip)}" x2="${X(f.hip)}" y2="${+Y(f.hip) - 90}" stroke="#fff8" stroke-dasharray="4 4"/>`;
-  if (hi.has("wrist") && !hi.has("front")) s += `<line x1="10" y1="${Y(f.wrist)}" x2="${+X(f.wrist) + 20}" y2="${Y(f.wrist)}" stroke="${ACC}" stroke-dasharray="5 4" stroke-width="2"/>`;
-  // corps
-  s += seg(f.ankle, f.knee, "knee") + seg(f.knee, f.hip, "knee") + seg(f.hip, f.sh, "trunk", 8);
-  s += seg(f.sh, f.tElbow, "toss") + seg(f.tElbow, f.tWrist, "toss");
-  s += seg(f.sh, f.elbow, "elbow") + seg(f.elbow, f.wrist, "elbow");
-  if (pose.racket !== false) s += `<line x1="${X(f.wrist)}" y1="${Y(f.wrist)}" x2="${X(f.racketTip)}" y2="${Y(f.racketTip)}" stroke="#e5e7eb" stroke-width="3" stroke-linecap="round"/><circle cx="${X(f.racketTip)}" cy="${Y(f.racketTip)}" r="9" fill="none" stroke="#e5e7eb" stroke-width="2.5"/>`;
-  s += `<circle cx="${X(f.head)}" cy="${Y(f.head)}" r="${hi.has("head") ? 17 : 14}" fill="#14532d" stroke="${hi.has("head") ? ACC : "#9be15d"}" stroke-width="${hi.has("head") ? 4 : 3}"/>`;
-  s += dot(f.knee, "knee") + dot(f.hip, "x") + dot(f.sh, "x") + dot(f.elbow, "elbow") + dot(f.wrist, "wrist", 5);
-  // inset vue de dessus (dissociation)
-  if (opts.top != null) {
-    const cx = 252, cy = 50, r = 26, a = rad(opts.top);
-    s += `<circle cx="${cx}" cy="${cy}" r="${r + 8}" fill="#0b3d2e" stroke="#fff4"/><line x1="${cx - r}" y1="${cy}" x2="${cx + r}" y2="${cy}" stroke="#9be15d" stroke-width="5" stroke-linecap="round"/><line x1="${cx - r * Math.cos(a)}" y1="${cy - r * Math.sin(a)}" x2="${cx + r * Math.cos(a)}" y2="${cy + r * Math.sin(a)}" stroke="${ACC}" stroke-width="5" stroke-linecap="round"/><text x="${cx}" y="${cy + r + 22}" fill="#fff" font-size="10" text-anchor="middle">dessus : bassin / épaules</text>`;
-  }
-  s += `</svg>`;
+const W = 260, H = 300, OX = 100, OY = 282, SC = 165;
+const label = (x, y, text, anchor = "middle", color = "#fff", size = 15) =>
+  `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anchor}" font-size="${size}" font-weight="700" fill="${color}" stroke="#0b3d2e" stroke-width="3.5" paint-order="stroke" stroke-linejoin="round">${text}</text>`;
+
+/** Arc d'angle en b entre les points a et c (coordonnées écran), avec la valeur. */
+function arc(b, a, c, r, color, text) {
+  const ua = { x: a.x - b.x, y: a.y - b.y }, uc = { x: c.x - b.x, y: c.y - b.y };
+  const la = Math.hypot(ua.x, ua.y) || 1, lc = Math.hypot(uc.x, uc.y) || 1;
+  const p1 = { x: b.x + (ua.x / la) * r, y: b.y + (ua.y / la) * r }, p2 = { x: b.x + (uc.x / lc) * r, y: b.y + (uc.y / lc) * r };
+  const cross = ua.x * uc.y - ua.y * uc.x;
+  const mid = { x: ua.x / la + uc.x / lc, y: ua.y / la + uc.y / lc };
+  const ml = Math.hypot(mid.x, mid.y) || 1;
+  const tp = { x: b.x + (mid.x / ml) * (r + 20), y: b.y + (mid.y / ml) * (r + 20) };
+  return `<path d="M ${p1.x.toFixed(1)} ${p1.y.toFixed(1)} A ${r} ${r} 0 0 ${cross > 0 ? 1 : 0} ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}" fill="none" stroke="${color}" stroke-width="4" stroke-linecap="round"/>` + label(tp.x, tp.y + 5, text, "middle", color, 16);
+}
+
+/** Panneau « vue de dessus » : bassin et épaules vus d'en haut avec leur écart de rotation. */
+function topPanel(angle, color, label2) {
+  const cx = 130, cy = 150, r = 82, a = rad(angle);
+  const hipEnd = { x: r, y: 0 }; // bassin de référence (horizontal)
+  const sh = { x: r * Math.cos(a), y: -r * Math.sin(a) };
+  let s = `<circle cx="${cx}" cy="${cy}" r="${r + 22}" fill="#0f4a35" stroke="#fff3" stroke-width="2"/>`;
+  s += `<text x="${cx}" y="${cy - r - 34}" text-anchor="middle" font-size="12" fill="#fffb">Vue de dessus (le joueur regarde en haut)</text>`;
+  s += `<line x1="${cx - hipEnd.x}" y1="${cy}" x2="${cx + hipEnd.x}" y2="${cy}" stroke="#c9d6cf" stroke-width="9" stroke-linecap="round"/>`;
+  s += `<line x1="${cx - sh.x}" y1="${cy - sh.y}" x2="${cx + sh.x}" y2="${cy + sh.y}" stroke="${ACCENT}" stroke-width="9" stroke-linecap="round"/>`;
+  s += `<circle cx="${cx}" cy="${cy}" r="9" fill="#fff"/>`;
+  s += `<path d="M ${cx + 46} ${cy} A 46 46 0 0 0 ${cx + 46 * Math.cos(a)} ${cy - 46 * Math.sin(a)}" fill="none" stroke="${color}" stroke-width="4"/>`;
+  s += label(cx + 70, cy - 22, `${Math.round(angle)}°`, "middle", color, 20);
+  s += `<text x="${cx - r - 4}" y="${cy + 24}" font-size="13" font-weight="700" fill="#c9d6cf">bassin</text>`;
+  s += `<text x="${cx - sh.x - 4}" y="${cy - sh.y - 10}" font-size="13" font-weight="700" fill="${ACCENT}">${label2 || "épaules"}</text>`;
   return s;
 }
 
-function issueFigure(issueId) {
-  const d = FIG_FOR_ISSUE[issueId];
-  if (!d) return "";
-  return `<figure class="postfig">${figureSVG(d.pose, { hi: d.hi, top: d.top, cap: d.cap })}<figcaption>✅ ${d.cap}</figcaption></figure>`;
+/**
+ * Un panneau (figure + annotations).
+ * @param {object} pose pose à dessiner
+ * @param {object} d définition du défaut (ISSUE_FIG[id])
+ * @param {boolean} isBad panneau « à éviter »
+ */
+function panel(pose, d, isBad, refPose) {
+  const col = isBad ? BADC : GOOD;
+  const f = buildFigure(pose);
+  const X = (p) => OX + p.x * SC, Y = (p) => OY - p.y * SC;
+  const P = (p) => ({ x: X(p), y: Y(p) });
+  const has = (k) => (d.focus || []).includes(k);
+  const seg = (a, b, key, w = 7) => `<line x1="${X(a).toFixed(1)}" y1="${Y(a).toFixed(1)}" x2="${X(b).toFixed(1)}" y2="${Y(b).toFixed(1)}" stroke="${key && has(key) ? ACCENT : col}" stroke-width="${key && has(key) ? w + 3 : w}" stroke-linecap="round"/>`;
+  const dot = (p, key, r = 5) => `<circle cx="${X(p).toFixed(1)}" cy="${Y(p).toFixed(1)}" r="${key && has(key) ? r + 3 : r}" fill="${key && has(key) ? ACCENT : "#fff"}" stroke="#0b3d2e" stroke-width="1.8"/>`;
+  let s = `<rect width="${W}" height="${H}" rx="14" fill="${isBad ? "#4a2323" : "#14532d"}"/>`;
+  s += `<line x1="12" y1="${OY + 4}" x2="${W - 12}" y2="${OY + 4}" stroke="#fff5" stroke-width="2"/>`;
+
+  // repères en arrière-plan
+  if (has("shoulderLine")) s += `<line x1="14" y1="${Y(f.sh).toFixed(1)}" x2="${W - 14}" y2="${Y(f.sh).toFixed(1)}" stroke="#fff" stroke-opacity=".55" stroke-dasharray="6 5" stroke-width="2"/>` + label(W - 16, Y(f.sh) - 6, "ligne des épaules", "end", "#fff", 12);
+  if (has("trunk")) s += `<line x1="${X(f.hip).toFixed(1)}" y1="${(Y(f.hip) + 14).toFixed(1)}" x2="${X(f.hip).toFixed(1)}" y2="${(Y(f.hip) - 105).toFixed(1)}" stroke="#fff" stroke-opacity=".6" stroke-dasharray="5 5" stroke-width="2"/>`;
+  if (has("front")) s += `<line x1="${X(f.hip).toFixed(1)}" y1="${(Y(f.wrist) - 50).toFixed(1)}" x2="${X(f.hip).toFixed(1)}" y2="${OY}" stroke="#fff" stroke-opacity=".6" stroke-dasharray="5 5" stroke-width="2"/>`;
+  if (has("wrist") && !has("front") && !has("path")) {
+    const ry = refPose ? Y(buildFigure(refPose).wrist) : null;
+    if (isBad && ry != null) s += `<line x1="14" y1="${ry.toFixed(1)}" x2="${W - 14}" y2="${ry.toFixed(1)}" stroke="${GOOD}" stroke-opacity=".8" stroke-dasharray="6 5" stroke-width="2"/>` + label(W - 16, ry - 6, "cible", "end", GOOD, 12);
+    s += `<line x1="14" y1="${Y(f.wrist).toFixed(1)}" x2="${(X(f.wrist) + 24).toFixed(1)}" y2="${Y(f.wrist).toFixed(1)}" stroke="${ACCENT}" stroke-dasharray="5 4" stroke-width="2.5"/>`;
+  }
+  if (has("path")) {
+    const start = merge(pose, { hit: isBad ? d.pathBad : d.pathGood });
+    const fs = buildFigure(start);
+    s += `<defs><marker id="arw${isBad ? "b" : "g"}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="${ACCENT}"/></marker></defs>`;
+    s += `<circle cx="${X(fs.wrist).toFixed(1)}" cy="${Y(fs.wrist).toFixed(1)}" r="6" fill="none" stroke="${ACCENT}" stroke-width="2.5" stroke-dasharray="3 3"/>`;
+    s += `<line x1="${X(fs.wrist).toFixed(1)}" y1="${Y(fs.wrist).toFixed(1)}" x2="${X(f.wrist).toFixed(1)}" y2="${Y(f.wrist).toFixed(1)}" stroke="${ACCENT}" stroke-width="4" stroke-dasharray="7 5" marker-end="url(#arw${isBad ? "b" : "g"})"/>`;
+  }
+
+  // corps
+  s += seg(f.ankle, f.knee, "knee") + seg(f.knee, f.hip, "knee") + seg(f.hip, f.sh, "trunk", 9);
+  s += seg(f.sh, f.tElbow, "toss") + seg(f.tElbow, f.tWrist, "toss");
+  s += seg(f.sh, f.elbow, "elbow") + seg(f.elbow, f.wrist, "elbow");
+  s += `<line x1="${X(f.wrist).toFixed(1)}" y1="${Y(f.wrist).toFixed(1)}" x2="${X(f.racketTip).toFixed(1)}" y2="${Y(f.racketTip).toFixed(1)}" stroke="#e5e7eb" stroke-width="3.5" stroke-linecap="round"/><ellipse cx="${X(f.racketTip).toFixed(1)}" cy="${Y(f.racketTip).toFixed(1)}" rx="10" ry="12" fill="none" stroke="#e5e7eb" stroke-width="3"/>`;
+  s += `<circle cx="${X(f.head).toFixed(1)}" cy="${Y(f.head).toFixed(1)}" r="${has("head") ? 19 : 15}" fill="#14532d" stroke="${has("head") ? ACCENT : col}" stroke-width="${has("head") ? 4 : 3}"/>`;
+  s += dot(f.knee, "knee") + dot(f.hip) + dot(f.sh) + dot(f.elbow, "elbow") + dot(f.wrist, "wrist", 6);
+
+  // angle mesuré
+  if (has("knee")) s += arc(P(f.knee), P(f.ankle), P(f.hip), 26, ACCENT, `${Math.round(angleBetween(f.ankle, f.knee, f.hip))}°`);
+  if (has("elbow")) s += arc(P(f.elbow), P(f.sh), P(f.wrist), 24, ACCENT, `${Math.round(angleBetween(f.sh, f.elbow, f.wrist))}°`);
+  if (has("trunk")) {
+    const up = { x: f.hip.x, y: f.hip.y + 0.3 };
+    s += arc(P(f.hip), P(up), P(f.sh), 40, ACCENT, `${Math.round(angleBetween(up, f.hip, f.sh))}°`);
+  }
+  if (has("front")) {
+    const dx = (f.wrist.x - f.hip.x) / SEG.torso;
+    const y = Y(f.wrist) - 12;
+    s += `<line x1="${X(f.hip).toFixed(1)}" y1="${y}" x2="${X(f.wrist).toFixed(1)}" y2="${y}" stroke="${ACCENT}" stroke-width="3.5"/>`;
+    s += label((X(f.hip) + X(f.wrist)) / 2, y - 8, `${dx >= 0 ? "+" : "−"}${Math.abs(dx).toFixed(1)} buste`, "middle", ACCENT, 13);
+  }
+  if (has("head") && isBad && d.badMotion) {
+    const hx = X(f.head), hy = Y(f.head);
+    s += `<path d="M ${hx - 34} ${hy - 4} l 10 -8 l 10 8 l 10 -8" fill="none" stroke="${BADC}" stroke-width="3" stroke-linecap="round"/><path d="M ${hx + 22} ${hy + 6} l 10 8 l 10 -8" fill="none" stroke="${BADC}" stroke-width="3" stroke-linecap="round"/>`;
+  }
+  if (has("head") && !isBad) s += label(X(f.head) + 10, Y(f.head) - 24, "immobile", "middle", GOOD, 12);
+  if (has("speed")) {
+    const wx = X(f.wrist), wy = Y(f.wrist), n = d.badFast && isBad ? 6 : 2, len = d.badFast && isBad ? 46 : 14;
+    for (let k = 0; k < n; k++) s += `<line x1="${(wx - 14 - len).toFixed(1)}" y1="${(wy - 12 + k * 8).toFixed(1)}" x2="${(wx - 14).toFixed(1)}" y2="${(wy - 12 + k * 8).toFixed(1)}" stroke="${ACCENT}" stroke-width="3" stroke-linecap="round" stroke-opacity="${isBad ? 0.95 : 0.7}"/>`;
+  }
+  return s;
 }
 
+const svgOpen = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="figsvg"`;
 
+/** Panneau seul (utilisé pour le glossaire) : pose idéale + annotation de la grandeur. */
+function metricPanelSVG(poseKey, focus, extra = {}) {
+  const d = { focus, ...extra };
+  return `${svgOpen} role="img" aria-label="Illustration">${panel(IDEAL[poseKey], d, false)}</svg>`;
+}
 
+/** Deux panneaux « À éviter / Cible » pour un défaut, avec légendes. */
+function issueFigure(issueId) {
+  const d = ISSUE_FIG[issueId];
+  if (!d) return "";
+  const goodPose = d.base ? IDEAL[d.base] : null;
+  const badPose = goodPose ? merge(goodPose, d.bad) : null;
+  const mk = (isBad) => `${svgOpen} role="img" aria-label="${isBad ? "À éviter" : "Cible"}">${panel(isBad ? badPose : goodPose, d, isBad, goodPose)}</svg>`;
+  const mkTop = (isBad) => `${svgOpen} role="img">${topPanelFull(d, isBad)}</svg>`;
+  const draw = d.top ? mkTop : mk;
+  return `<figure class="issuefig"><div class="pans">
+    <div class="pan bad"><div class="pt">✗ À éviter</div>${draw(true)}<p>${d.badNote}</p></div>
+    <div class="pan good"><div class="pt">✓ Cible</div>${draw(false)}<p>${d.goodNote}</p></div></div>
+    <figcaption class="small muted">Jaune = ce qu'il faut regarder · l'angle est mesuré à l'articulation · figure schématique, vue de profil.</figcaption></figure>`;
+}
 
-return { buildFigure, IDEAL, FIG_FOR_ISSUE, figureSVG, issueFigure };
+function topPanelFull(d, isBad) {
+  const col = isBad ? BADC : GOOD;
+  return `<rect width="${W}" height="${H}" rx="14" fill="${isBad ? "#4a2323" : "#14532d"}"/>` + topPanel(isBad ? d.top.bad : d.top.good, col, d.topLabel);
+}
+
+// --- Jauge : où se situe la valeur mesurée par rapport à la cible ---------------------------------------------------
+const GAUGE_DOMAIN = {
+  knee_load: [80, 180], elbow_contact: [90, 180], elbow_trophy: [-0.6, 0.6], toss_arm: [-0.6, 1.4], contact_height: [0.9, 1.4],
+  separation: [0, 60], shoulder_turn: [0, 100], contact_front: [-0.6, 1.2], head_stability: [0, 0.8], trunk_lean: [0, 45],
+  backswing: [0, 1.6], wrist_path: [-1.2, 1.2], follow_high: [-0.6, 1.4], contact_speed: [0, 10],
+};
+
+/**
+ * Jauge horizontale : zone verte (cible), orange (à surveiller), rouge (à corriger), repère de la valeur mesurée.
+ * @param {{id:string, ok:number[], warn:number[], unit:string}} def définition de la mesure
+ * @param {number|null} value valeur mesurée (médiane)
+ * @param {{min:number, max:number}} [range] étendue des répétitions (facultatif)
+ * @returns {string} SVG
+ */
+function gaugeSVG(def, value, range) {
+  const [lo, hi] = GAUGE_DOMAIN[def.id] || [0, 1];
+  const w = 220, h = 34, pad = 6;
+  const x = (v) => pad + ((Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo)) * (w - 2 * pad);
+  const rect = (a, b, c) => `<rect x="${x(a).toFixed(1)}" y="12" width="${Math.max(0, x(b) - x(a)).toFixed(1)}" height="10" fill="${c}"/>`;
+  let s = `<svg viewBox="0 0 ${w} ${h}" class="gauge" role="img" aria-label="Jauge ${def.label}"><rect x="${pad}" y="12" width="${w - 2 * pad}" height="10" rx="5" fill="#e03131" opacity=".85"/>`;
+  s += rect(def.warn[0], def.warn[1], "#f59f00") + rect(def.ok[0], def.ok[1], "#2f9e44");
+  s += `<rect x="${pad}" y="12" width="${w - 2 * pad}" height="10" rx="5" fill="none" stroke="#0004"/>`;
+  if (range && range.max > range.min) s += `<line x1="${x(range.min).toFixed(1)}" y1="27" x2="${x(range.max).toFixed(1)}" y2="27" stroke="currentColor" stroke-width="3" opacity=".55"/>`;
+  if (value != null && !Number.isNaN(value)) s += `<path d="M ${x(value).toFixed(1)} 11 l -6 -10 l 12 0 z" fill="currentColor"/><line x1="${x(value).toFixed(1)}" y1="11" x2="${x(value).toFixed(1)}" y2="24" stroke="currentColor" stroke-width="2.5"/>`;
+  return s + `</svg>`;
+}
+
+/** Figure simple d'une pose de référence (comparaison joueur / modèle). */
+const figureSVG = (poseKey) => metricPanelSVG(poseKey, []);
+
+/** Vue de dessus seule (glossaire) : bassin gris, épaules en jaune. */
+const topFigure = (angle, label) => `${svgOpen} role="img" aria-label="Vue de dessus">${topPanelFull({ top: { good: angle, bad: angle }, topLabel: label }, false)}</svg>`;
+
+return { buildFigure, IDEAL, ISSUE_FIG, metricPanelSVG, issueFigure, GAUGE_DOMAIN, gaugeSVG, figureSVG, topFigure };
+})();
+const __M_guide = (() => {
+"use strict";
+// Guide du coach : glossaire illustré des mesures, fiches techniques par coup, prévention, préparation physique,
+// mental, matériel, tactique, plan de progression, conseils de filmage.
+// Les affirmations chiffrées renvoient à des publications de l'onglet Sources ([id]) ; le reste relève de la pratique
+// courante des entraîneurs et reste à adapter à chaque joueur avec un professionnel.
+const { metricPanelSVG, topFigure, gaugeSVG } = __M_posefig;
+const { METRIC_DEFS } = __M_metrics;
+
+// ---------------------------------------------------------------------------------------------------------------------
+// 1. Glossaire illustré : « que mesure l'application, comment, et que viser ? »
+// ---------------------------------------------------------------------------------------------------------------------
+const GLOSSARY = [
+  { id: "elbow_contact", title: "Angle du coude au contact", fig: ["serve_contact", ["elbow"]],
+    what: "L'angle entre le bras (épaule → coude) et l'avant-bras (coude → poignet). 180° = bras tendu ; 90° = coude à angle droit.",
+    how: "Calculé en 3D estimée sur la photo/vidéo à l'instant de l'impact (angle épaule–coude–poignet).",
+    target: "Service et smash : 165° ou plus. Coups de fond : 135–180° selon le coup.",
+    mistakes: "Bras plié par manque d'espace (balle trop proche), lancer trop bas, geste « poussé » avec le coude.",
+    tip: "Au service : « touche le plafond avec la raquette ». Aux coups de fond : éloigne-toi un peu de la balle." },
+  { id: "knee_load", title: "Flexion des jambes", fig: ["serve_trophy", ["knee"]],
+    what: "L'angle du genou (hanche–genou–cheville). 180° = jambe tendue ; plus l'angle est petit, plus les jambes sont fléchies.",
+    how: "Moyenne des deux genoux à l'instant du chargement (service : point bas du bassin ; coups de fond : rotation maximale des épaules).",
+    target: "Environ 105–150° au service ; 110–160° aux coups de fond. Les jambes participent à la vitesse du service [colomar2022].",
+    mistakes: "Jambes raides, flexion faite trop tôt ou relâchée avant le geste, poids sur les talons.",
+    tip: "« Assieds-toi » puis pousse dans le sol : la flexion doit servir à propulser, pas seulement à se baisser." },
+  { id: "elbow_trophy", title: "Hauteur du coude (position trophée / armé)", fig: ["serve_trophy", ["elbow", "shoulderLine"]],
+    what: "Position du coude de la main qui frappe par rapport à la ligne des épaules. 0 = au niveau des épaules ; négatif = en dessous.",
+    how: "Différence de hauteur coude–épaule, divisée par la longueur du buste (hanches → épaules).",
+    target: "0 ou plus (coude à hauteur d'épaule ou au-dessus), l'avant-bras plutôt vertical (« L »).",
+    mistakes: "Coude qui tombe quand la raquette descend dans le dos ; épaule qui monte pour compenser.",
+    tip: "Pense « coude à hauteur d'épaule » : c'est la bonne position de départ pour la rotation interne de l'épaule." },
+  { id: "toss_arm", title: "Bras libre levé (trophée / armé)", fig: ["serve_trophy", ["toss"]],
+    what: "Hauteur du poignet du bras qui n'a pas la raquette, par rapport à l'épaule.",
+    how: "Différence de hauteur poignet libre – épaule, divisée par la longueur du buste.",
+    target: "Poignet libre au-dessus de l'épaule (valeur positive) pendant que la raquette monte.",
+    mistakes: "Bras libre qui retombe dès que la balle est lancée : le tronc perd son repère.",
+    tip: "Garde le bras libre pointé vers la balle jusqu'à ce que la raquette s'accélère, puis ramène le coude vers le ventre." },
+  { id: "contact_height", title: "Hauteur du point de contact", fig: ["serve_contact", ["wrist"]],
+    what: "Hauteur du poignet frappeur à l'impact, comparée à la distance cheville → nez du joueur.",
+    how: "Rapport (cheville→poignet) / (cheville→nez) sur l'image à l'impact. Le poignet n'est pas la raquette : la valeur réelle de la raquette est plus haute.",
+    target: "1,15 ou plus (valeur provisoire, calibrée sur un joueur). Plus c'est haut, plus l'angle de frappe est favorable.",
+    mistakes: "Lancer trop bas ou trop en arrière, jambes qui ne se déplient pas, saut insuffisant.",
+    tip: "Au smash : place-toi sous la balle avec des pas chassés, puis saute pour la frapper au plus haut." },
+  { id: "separation", title: "Dissociation bassin–épaules", fig: ["TOP", 30, "épaules"],
+    what: "L'écart de rotation entre la ligne des épaules et la ligne du bassin, vus d'en haut. C'est le « ressort » du tronc.",
+    how: "Estimée à partir de la profondeur 3D (donc approximative) : écart maximal de rotation entre épaules et hanches.",
+    target: "Environ 20° ou plus au service ; 12–15° ou plus aux coups de fond (valeurs indicatives).",
+    mistakes: "Épaules et bassin qui tournent d'un bloc ; bassin trop lent à démarrer.",
+    tip: "Charge d'abord les épaules, puis le bassin ouvre : l'énergie se transmet jusqu'au bras (chaîne cinétique) [vantrigt2025]." },
+  { id: "shoulder_turn", title: "Rotation des épaules en préparation", fig: ["TOP", 50, "rotation des épaules"],
+    what: "L'amplitude dont les épaules tournent pendant la préparation (vue de dessus).",
+    how: "Étendue de rotation des épaules entre le début de la préparation et l'impact.",
+    target: "45° ou plus pour un coup de fond classique ; 30° pour un slice ou un retour compact.",
+    mistakes: "Préparation uniquement avec le bras ; épaules qui ne tournent pas.",
+    tip: "Dès que tu lis la trajectoire, tourne le menton vers l'épaule opposée : la raquette suit." },
+  { id: "contact_front", title: "Point de contact devant le corps", fig: ["ground_contact", ["front", "wrist"]],
+    what: "Distance entre les hanches et la main au moment de l'impact, dans l'axe du coup, en nombre de « bustes » (longueur hanches → épaules).",
+    how: "Projection du poignet sur la direction du coup (déduite du mouvement du poignet), divisée par la longueur du buste.",
+    target: "0,25 buste ou plus devant les hanches (volée et coups de fond).",
+    mistakes: "Balle prise trop tard ou trop près du corps : on subit au lieu de contrôler.",
+    tip: "Anticipe plus tôt, ajuste les petits pas, et frappe « devant la hanche »." },
+  { id: "head_stability", title: "Stabilité de la tête", fig: ["ground_contact", ["head"]],
+    what: "Déplacement de la tête autour de l'impact (± 0,15 s), rapporté à la longueur du buste.",
+    how: "Distance parcourue par le nez entre 0,15 s avant et 0,15 s après l'impact.",
+    target: "0,25 buste ou moins.",
+    mistakes: "Regard qui part trop tôt vers la cible ; tête qui suit le mouvement des épaules.",
+    tip: "Regarde la balle partir : « annonce contact ! » dans ta tête, tête immobile." },
+  { id: "trunk_lean", title: "Inclinaison du tronc", fig: ["ground_contact", ["trunk"]],
+    what: "L'angle du buste (hanches → épaules) par rapport à la verticale. 0° = tronc droit.",
+    how: "Angle entre le tronc estimé en 3D et la verticale de l'image.",
+    target: "Moins de 22° à l'impact.",
+    mistakes: "Se jeter sur la balle ; fin de geste qui fait tomber le tronc ; jambes raides.",
+    tip: "Reste « grand » sur la jambe d'appui et finis le geste en équilibre." },
+  { id: "backswing", title: "Amplitude de la préparation", fig: ["volley_prep", ["wrist"]],
+    what: "De combien le poignet recule avant l'impact, en nombre de « bustes ».",
+    how: "Recul maximal du poignet dans l'axe du coup, pendant 0,6 s avant l'impact.",
+    target: "Volée : 0,7 buste ou moins. Retour : 0,9 buste ou moins.",
+    mistakes: "Préparation large qui fait perdre du temps ; poignet trop mou.",
+    tip: "Raquette devant, poignet ferme, petit pas en avant : « bloque »." },
+  { id: "wrist_path", title: "Trajectoire verticale du poignet", fig: ["slice_contact", ["path", "wrist"], { pathGood: { a: 148, elbow: 112 } }],
+    what: "Le poignet monte-t-il ou descend-il vers l'impact ? Positif = descend (slice), négatif = monte (lob).",
+    how: "Variation de hauteur du poignet sur 0,25 s avant l'impact, divisée par la longueur du buste.",
+    target: "Slice / chop : +0,25 ou plus. Lob : −0,25 ou moins (valeurs provisoires).",
+    mistakes: "Slice : geste plat ou qui remonte. Lob : geste horizontal qui ne donne pas de hauteur.",
+    tip: "Slice : « coupe la tranche de pain » du haut vers le bas. Lob : tamis sous la balle, geste vers le haut." },
+  { id: "follow_high", title: "Hauteur de la finition", fig: ["lob_finish", ["wrist", "shoulderLine"]],
+    what: "Hauteur du poignet à la fin du geste par rapport à l'épaule.",
+    how: "Différence de hauteur épaule – poignet 0,3 s après l'impact, divisée par la longueur du buste.",
+    target: "0,4 ou plus au lob (poignet au-dessus de l'épaule à la fin).",
+    mistakes: "La raquette s'arrête devant : la balle manque de hauteur.",
+    tip: "Finis haut, raquette au-dessus de l'épaule opposée, et garde l'équilibre." },
+  { id: "contact_speed", title: "Vitesse du poignet à l'impact", fig: ["drop_contact", ["wrist", "speed"]],
+    what: "La vitesse du poignet à l'impact, en longueurs de buste par seconde (ou en m/s si la taille est renseignée).",
+    how: "Dérivée de la position du poignet dans l'image, corrigée de la cadence de la vidéo.",
+    target: "Amortie : faible (4 buste/s ou moins, seuil provisoire). Pour les autres coups : sert au suivi de vos progrès.",
+    mistakes: "Amortie jouée avec un geste de coup normal ; tamis qui accélère au lieu de ralentir.",
+    tip: "Amortie : même préparation, puis la main devient souple et le tamis accompagne la balle." },
+];
+
+/** Illustration d'une entrée du glossaire. */
+function glossaryFigure(entry) {
+  const [pose, focus, extra] = entry.fig;
+  if (pose === "TOP") return topFigure(focus, extra);
+  return metricPanelSVG(pose, focus, extra || {});
+}
+
+/** Définition de la mesure (plages cibles) pour afficher la jauge du glossaire. */
+function glossaryDef(id) {
+  for (const defs of Object.values(METRIC_DEFS)) { const d = defs.find((x) => x.id === id); if (d) return d; }
+  return null;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// 2. Fiches techniques par coup
+// ---------------------------------------------------------------------------------------------------------------------
+const STROKE_GUIDE = {
+  serve: {
+    title: "Service", icon: "🎾",
+    keys: ["Prise continentale (« poignée de marteau »), poignet souple.", "Lancer régulier : légèrement devant le pied avant, assez haut pour étirer le bras.", "Trophée : genoux fléchis, coude à hauteur d'épaule, bras libre haut.", "Chaîne cinétique : jambes → bassin → tronc → épaule → bras → raquette (pronation) [colomar2022] [martin2026].", "Contact haut bras tendu, puis finition équilibrée (retombée sur le pied avant)."],
+    faults: ["Lancer trop bas, trop en arrière ou différent à chaque fois.", "Coude bas en position trophée.", "Bras plié au contact (point de frappe bas).", "Jambes non utilisées ; service « avec le bras ».", "Tomber sur le côté en fin de geste."],
+    levels: { debutant: "Service en deux temps (trophée → frappe), balle de mousse ou raquette courte, viser la zone sans puissance.", intermediaire: "Rythme continu, 3 zones (T / ouvert / corps), 2e service slicé ou kické à 70–75 % de puissance.", avance: "Variation de zones et d'effets, service + 1, service sous pression (jeu décisif)." },
+    camera: "De côté (flexion, coude, hauteur de contact) et de dos (rotations). Une étude d'experts a évalué des services sur vidéo 2D avec deux angles de caméra [wood2023]. 5 à 10 services par séquence.",
+  },
+  forehand: {
+    title: "Coup droit", icon: "🟢",
+    keys: ["Préparation d'épaule précoce (« unit turn »), raquette prête avant le rebond.", "Appuis fléchis et stables : la flexion transmet la puissance du sol.", "Rotation du bassin puis des épaules : c'est le moteur du coup [reid2013] [elliott2018].", "Contact devant la hanche, bras confortable.", "Accélération du bas vers le haut puis finition équilibrée ; une finition plus courte a été associée à plus de précision chez des jeunes joueurs [bottura2025]."],
+    faults: ["Préparation tardive.", "Appuis raides ou trop larges.", "Contact trop près ou derrière.", "Tête qui bouge à l'impact.", "Fin de geste déséquilibrée."],
+    levels: { debutant: "Balles lancées à la main, préparation en un temps, viser le centre.", intermediaire: "Rotation et contact devant sur balles régulières, croisé puis long de ligne.", avance: "Variation de hauteur et de rythme, coup droit inside-out, accélération sur balle courte." },
+    camera: "De dos dans l'axe du coup (rotation) puis de côté (contact devant, flexion).",
+  },
+  backhand1: {
+    title: "Revers à 1 main", icon: "🔵",
+    keys: ["Épaule opposée tournée vers le filet dès la préparation.", "Contact bien devant, bras allongé, poignet ferme.", "Balance : le bras libre équilibre le geste.", "Tête stable jusqu'après l'impact.", "Finition haute pour le lift ; plus basse et vers l'avant pour le slice (revue de référence sur les revers : [genevois2015])."],
+    faults: ["Contact trop tardif.", "Poignet qui lâche.", "Épaules qui s'ouvrent trop tôt.", "Balles hautes mal gérées (reculer ou monter la prise)."],
+    levels: { debutant: "Slice de revers pour la sécurité, puis lift sur balles lentes.", intermediaire: "Lift régulier croisé, changement de ligne sur balle courte.", avance: "Revers lifté à plat, revers slicé d'approche, passing." },
+    camera: "De dos puis de côté.",
+  },
+  backhand2: {
+    title: "Revers à 2 mains", icon: "🔷",
+    keys: ["Deux mains qui travaillent ensemble : la main non dominante guide.", "Contact un peu moins devant qu'à 1 main, tronc moteur.", "Épaules et hanches tournent ensemble puis se dissocient.", "Tête stable à l'impact.", "Finition haute au-dessus de l'épaule (revue de référence : [genevois2015])."],
+    faults: ["Contact trop proche du corps.", "Bras qui se raidit.", "Absence de rotation.", "Appuis trop fermés."],
+    levels: { debutant: "Préparation en un temps, balles lancées.", intermediaire: "Direction croisée / long de ligne.", avance: "Accélération sur balle courte, revers sous pression." },
+    camera: "De dos ou de côté, joueur entier.",
+  },
+  volley: {
+    title: "Volée", icon: "🟡",
+    keys: ["Raquette devant, tamis au-dessus du poignet.", "Préparation très courte : on bloque.", "Un pas en avant à l'impact ; jambes fléchies sur la balle basse.", "Contact devant le corps, poignet ferme.", "Placement profond avant l'angle."],
+    faults: ["Préparation large.", "Jambes raides (on se penche du dos).", "Poignet qui se casse.", "Contact près du corps."],
+    levels: { debutant: "Volées au mur et volées de blocage, jeu de jambes.", intermediaire: "Volée croisée profonde, volée de transition.", avance: "Volée courte, volée coupée, enchaînement volée-smash." },
+    camera: "De côté, à hauteur de hanche, 60 i/s si possible.",
+  },
+  slice: {
+    title: "Coup coupé (chop / slice)", icon: "✂️",
+    keys: ["Armé haut : le tamis est au-dessus de la balle.", "Le poignet descend vers l'avant : trajectoire de haut en bas.", "Contact devant, bras allongé et poignet ferme.", "Jambes fléchies pour rester bas ; tête stable.", "Finition basse et longue vers la cible."],
+    faults: ["Geste plat ou qui remonte (balle qui flotte).", "Contact trop près du corps.", "Pas assez de rotation des épaules.", "Tamis trop ouvert (la balle part en l'air)."],
+    levels: { debutant: "Slice lent au mur, direction avant effet.", intermediaire: "Slice bas sur cible (corde à 1 m du filet).", avance: "Slice d'approche, slice défensif profond, slice court." },
+    camera: "De côté ; l'angle du tamis n'est pas mesuré (il faut le vérifier à l'œil et à la trajectoire de la balle).",
+  },
+  dropshot: {
+    title: "Amortie (drop shot)", icon: "🪶",
+    keys: ["Même préparation que le coup de fond : rien ne doit trahir l'intention.", "Main souple, tamis légèrement ouvert à l'impact.", "Le tamis ralentit et accompagne la balle.", "Contact devant, jambes fléchies.", "Choisir le bon moment : adversaire reculé, balle pas trop haute."],
+    faults: ["Préparation plus petite : l'adversaire devine.", "Geste trop rapide : la balle part trop loin.", "Balle jouée trop haut ou trop profonde.", "Pas de suivi : on reste sur place."],
+    levels: { debutant: "Toucher sur balle lancée, viser une zone large.", intermediaire: "Amortie déguisée après un coup de fond croisé.", avance: "Amortie suivie d'un lob ou d'une montée ; amortie de revers." },
+    camera: "De côté ; filmez aussi un coup de fond normal pour comparer les préparations.",
+  },
+  smash: {
+    title: "Smash", icon: "💥",
+    keys: ["Dès que le lob part : tourner l'épaule, bras libre pointé vers la balle.", "Pas chassés vers l'arrière (ne pas croiser les jambes).", "Armé comme au service : coude à hauteur d'épaule.", "Contact haut, bras tendu, sous la balle.", "Finition équilibrée, retour au filet."],
+    faults: ["Mal placé sous la balle.", "Coude bas.", "Bras libre baissé.", "Départ tardif."],
+    levels: { debutant: "Smash sur lob lent, sans saut, viser le grand côté.", intermediaire: "Smash avec pas chassés, rebond ou volée.", avance: "Smash en reculant, smash de défense, smash après saut." },
+    camera: "De côté ou de dos, jusqu'à la fin du geste ; lob lent pour un geste complet.",
+  },
+  lob: {
+    title: "Lob", icon: "🌙",
+    keys: ["Préparation comme un coup de fond pour ne pas prévenir.", "Tamis sous la balle, geste de bas en haut et vers l'avant.", "Jambes fléchies puis qui poussent vers le haut.", "Finition haute : raquette au-dessus de l'épaule opposée.", "Viser la profondeur : la balle doit passer au-dessus de la raquette adverse et retomber près du fond."],
+    faults: ["Geste plat, balle trop tendue.", "Finition basse.", "Trop tôt ou trop tard.", "Lob trop court (facile à smasher)."],
+    levels: { debutant: "Lob défensif haut au centre.", intermediaire: "Lob d'attaque croisé.", avance: "Lob lifté, lob de revers, lob sous pression." },
+    camera: "De côté, joueur entier, finition comprise.",
+  },
+  return: {
+    title: "Retour de service", icon: "↩️",
+    keys: ["Position d'attente équilibrée, split-step au moment où le serveur frappe.", "Lire la balle : trajectoire, effet, vitesse.", "Préparation courte et compacte.", "Contact devant la hanche, accompagner la balle.", "Premier objectif : remettre profond, puis attaquer les secondes balles faibles."],
+    faults: ["Préparation large.", "Appuis trop lourds ou trop tardifs.", "Contact trop près du corps.", "Retour trop court."],
+    levels: { debutant: "Bloquer la balle au centre, balles faciles.", intermediaire: "Retour croisé profond, retour slicé.", avance: "Retour agressif sur 2e service (avancer), retour long de ligne en surprise." },
+    camera: "De côté ou de dos depuis la position d'attente.",
+  },
+};
+
+// ---------------------------------------------------------------------------------------------------------------------
+// 3. Sections transversales
+// ---------------------------------------------------------------------------------------------------------------------
+const GUIDE_SECTIONS = [
+  { id: "filming", title: "Bien filmer pour une mesure fiable", icon: "🎥", html: `
+    <ul class="clean">
+      <li><b>Caméra immobile</b> (trépied, mur, sac) à hauteur de hanche, à 4–8 m du joueur ; le joueur entier reste dans l'image du début à la fin du geste.</li>
+      <li><b>Deux angles</b> sont préférables : <b>de côté</b> (flexion, angle du coude, hauteur du contact) et <b>de dos</b> (rotations). Une étude a fait évaluer des services sur vidéo 2D par des experts depuis deux angles de caméra [wood2023].</li>
+      <li><b>Cadence :</b> 60 i/s (ou ralenti) pour les gestes rapides ; indiquez la cadence dans l'application si la vidéo est au ralenti.</li>
+      <li><b>Lumière et contraste :</b> évitez le contre-jour ; un vêtement qui contraste avec le fond aide la détection.</li>
+      <li><b>Un seul joueur à l'image</b> si possible ; sinon touchez le joueur à analyser.</li>
+      <li><b>Répétez le geste</b> 5 à 10 fois dans la même séquence (ou plusieurs vidéos) : la médiane est bien plus fiable qu'un geste isolé.</li>
+      <li><b>Limites :</b> une seule caméra estime la profondeur (rotations) avec moins de précision que les angles dans le plan de l'image (voir les revues et validations de l'estimation de pose : [roggio2024] [yue2026]).</li>
+    </ul>` },
+  { id: "health", title: "Prévention et santé (épaule, coude, dos, poignet)", icon: "🩺", html: `
+    <p>Le service est le coup le plus exigeant pour le corps ; les blessures aiguës touchent surtout les membres inférieurs, et les blessures chroniques surtout le membre supérieur (coiffe des rotateurs, conflit interne, labrum, épicondylite) [dines2015].</p>
+    <ul class="clean">
+      <li><b>Échauffement dynamique de 10–15 minutes</b> avant de jouer : mobilité de hanches, tronc et épaules, activation des jambes, puis frappes progressives ; échauffements dynamique et neuromusculaire ont été comparés chez de jeunes joueurs [fernandez2020].</li>
+      <li><b>Épaule :</b> renforcez les rotateurs externes et les muscles de l'omoplate (trapèze inférieur, dentelé) ; l'effet d'une faiblesse du trapèze inférieur sur la mécanique de l'épaule au service a été étudié [gillet2019] ; une approche de prévention fondée sur la définition des facteurs de risque et de valeurs seuils est proposée [cools2015].</li>
+      <li><b>Mobilité :</b> le lien entre le dépistage de la mobilité d'épaule en début de saison et le risque de blessure a fait l'objet d'une méta-analyse [pozzi2020] ; les facteurs de risque du membre supérieur sont synthétisés dans des revues [tooth2020] [kekelekis2020].</li>
+      <li><b>Charge :</b> augmentez progressivement le volume de frappe (nombre de services, durée) ; le suivi de charge est un axe de recherche actif [whiteside2017].</li>
+      <li><b>Technique :</b> coude à hauteur d'épaule au trophée, contact haut bras tendu, tronc qui participe : un geste qui utilise bien la chaîne cinétique sollicite moins l'épaule seule.</li>
+      <li><b>Consultez</b> un médecin du sport ou un kinésithérapeute en cas de douleur persistante (plus de quelques jours), de douleur nocturne, de perte de force ou d'engourdissement. Cette application ne remplace pas un avis médical.</li>
+    </ul>` },
+  { id: "physical", title: "Préparation physique spécifique", icon: "💪", html: `
+    <p>La vitesse de service dépend notamment de la poussée des jambes, des rotations du bassin et du tronc, de l'extension du bras et de la rotation interne de l'épaule [colomar2022] ; l'influence de la force, de la puissance et de la raideur musculaire sur la vitesse de frappe a été étudiée chez les juniors [colomar2020]. La préparation physique du service se pense comme une chaîne cinétique [martin2026].</p>
+    <ul class="clean">
+      <li><b>Jambes (2 séances/semaine) :</b> squats, fentes, sauts verticaux et unilatéraux.</li>
+      <li><b>Tronc :</b> rotations à la medecine ball contre un mur (bassin → tronc → bras), gainage, anti-rotation.</li>
+      <li><b>Épaule :</b> rotateurs externes à l'élastique, tirages, Y-T-W ; un programme de force de tronc + élastiques + medecine ball de 6 semaines a été étudié chez des jeunes joueurs [fernandez2013] ; une méta-analyse d'essais randomisés a examiné l'effet de renforcements sur la vitesse de balle (dont le service) chez les athlètes lanceurs [myers2015].</li>
+      <li><b>Déplacement :</b> split-step, appuis latéraux, changements de direction.</li>
+      <li><b>Récupération :</b> sommeil, hydratation, alimentation ; une semaine de charge = une séance de moindre intensité.</li>
+    </ul>
+    <p class="muted small">Programme indicatif : à adapter à l'âge, au niveau et à l'état de santé avec un préparateur physique.</p>` },
+  { id: "mental", title: "Mental, routines et gestion des points importants", icon: "🧠", html: `
+    <ul class="clean">
+      <li><b>Routine entre les points :</b> respiration, regard sur les cordes, choix de la zone et de l'effet, puis lancer. Des protocoles de routine ont été testés en tennis, avec des résultats nuancés sous pression [lautenbach2014] ; essayez, mesurez, gardez ce qui marche pour vous.</li>
+      <li><b>Un point à la fois :</b> le prochain point est le seul que vous contrôlez.</li>
+      <li><b>Après une erreur :</b> une consigne simple (« haut et profond »), pas de réflexion technique pendant le jeu.</li>
+      <li><b>Points importants (break, jeu décisif) :</b> jouez vos schémas fiables ; la pression se gère par une routine et des choix simples.</li>
+      <li><b>Pratique représentative :</b> à l'entraînement, travaillez le service avec un retourneur et le coup d'après (« service + 3e balle ») plutôt qu'à vide ; cette conception d'entraînement (service seul, service + retour, service + 3e balle) a été étudiée pour favoriser le transfert chez des juniors [krause2019].</li>
+    </ul>` },
+  { id: "tactics", title: "Principes tactiques d'un coach", icon: "♟️", html: `
+    <ul class="clean">
+      <li><b>Les 5 variables :</b> hauteur, profondeur, direction, vitesse (rythme), rotation (effet). Un bon joueur en change une à la fois.</li>
+      <li><b>Construire le point en 3 temps :</b> ouvrir (déplacer l'adversaire), forcer (le mettre en difficulté), finir (espace libre ou filet).</li>
+      <li><b>Les zones :</b> le croisé est le plus sûr (filet plus bas, terrain plus long) ; le long de ligne se joue sur une balle courte ou un contre-pied.</li>
+      <li><b>Les points courts décident beaucoup de matchs :</b> sur gazon d'élite, les points de 0 à 4 coups sont déterminants [fitzpatrick2021] ; les caractéristiques des matchs de Grand Chelem sont décrites dans [reid2016] ; travaillez service, retour et la balle qui suit.</li>
+      <li><b>Service :</b> les caractéristiques spatiales d'un ace (zone, vitesse, angle) ont été étudiées à partir de données Hawk-Eye [whiteside2016] ; variez les zones et gardez une 2e balle fiable.</li>
+      <li><b>Jeu décisif :</b> l'analyse de matchs d'élite sert de base aux conseils [meffert2019] ; gardez des schémas simples et un 1er service solide.</li>
+      <li><b>Surface :</b> les exigences physiques varient selon la surface [pluim2023] ; adaptez durée des échanges et choix tactiques (voir l'onglet Tactique).</li>
+    </ul>` },
+  { id: "gear", title: "Matériel", icon: "🏸", html: `
+    <ul class="clean">
+      <li><b>Raquette :</b> taille adaptée à la taille de l'enfant ; chez de jeunes joueurs intermédiaires, un changement de raquette trop rapide n'est pas toujours utile [touzard2023].</li>
+      <li><b>Prise (grip) :</b> épaisseur du manche adaptée à la main ; un surgrip usé fait serrer plus fort.</li>
+      <li><b>Cordage :</b> demandez conseil à un cordeur ; une tension trop élevée ou un cordage rigide augmente les vibrations ressenties au bras (épicondylite).</li>
+      <li><b>Balles :</b> des balles usées sont plus lentes ; renouvelez-les pour les séances de service.</li>
+      <li><b>Chaussures :</b> adaptées à la surface (terre, dur), remplacées avant usure complète.</li>
+    </ul>` },
+  { id: "plan", title: "Plan de progression et suivi (objectif 2e série)", icon: "📅", html: `
+    <p><b>Cycle de 4 semaines :</b> conscience du geste → automatisation → variabilité → intégration en match. L'onglet « Exercices » génère ce programme à partir de vos défauts.</p>
+    <ul class="clean">
+      <li><b>Chaque semaine :</b> 2–3 séances techniques (20 min de geste + jeu de situation), 1 séance physique, 1 match d'entraînement avec un objectif unique.</li>
+      <li><b>Mesurez :</b> filmez les mêmes gestes (5–10 répétitions) tous les 15 jours, de côté et de dos, et suivez la médiane et la régularité dans l'onglet Suivi.</li>
+      <li><b>Statistiques de match à noter :</b> pourcentage de 1res balles, points gagnés sur 1re et 2e balle, fautes directes / coups gagnants, points de 0 à 4 coups gagnés [reid2016] [kovalchik2017].</li>
+      <li><b>Pour viser la 2e série :</b> un 2e service fiable (kické/slicé à 70–75 % de puissance), un retour solide, une régularité de fond de court et 3 schémas de jeu maîtrisés.</li>
+      <li><b>Une seule priorité technique à la fois</b> (par exemple : flexion → hauteur de contact → dissociation) : réglez, automatisez, passez à la suivante.</li>
+    </ul>` },
+];
+
+// --- Rendu HTML ---------------------------------------------------------------------------------------------------------
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+/** Remplace les renvois [id] par des liens vers l'onglet Sources. */
+const linkRefs = (html) => html.replace(/\[([a-z]+[0-9]{4})\]/g, (_, id) => `<a href="#src" data-go="src" data-ref="${id}" class="refl">[${id}]</a>`);
+
+/** HTML du glossaire illustré. */
+function glossaryHTML() {
+  return GLOSSARY.map((g) => {
+    const d = glossaryDef(g.id);
+    return `<article class="gloss card"><h3>${esc(g.title)}</h3>
+      <div class="gloss-row"><div class="gloss-fig">${glossaryFigure(g)}${d ? gaugeSVG(d, null) : ""}<p class="muted small">Jauge : <span style="color:var(--ok)">vert = cible</span>, orange = à surveiller, rouge = à corriger.</p></div>
+      <dl><dt>Ce que c'est</dt><dd>${linkRefs(esc(g.what))}</dd><dt>Comment c'est mesuré</dt><dd>${linkRefs(esc(g.how))}</dd><dt>Cible</dt><dd>${linkRefs(esc(g.target))}</dd><dt>Erreurs fréquentes</dt><dd>${linkRefs(esc(g.mistakes))}</dd><dt>Le conseil du coach</dt><dd>${linkRefs(esc(g.tip))}</dd></dl></div></article>`;
+  }).join("");
+}
+
+/** HTML d'une fiche technique. */
+function strokeGuideHTML(key) {
+  const g = STROKE_GUIDE[key];
+  const li = (a) => a.map((x) => `<li>${linkRefs(esc(x))}</li>`).join("");
+  return `<details class="gdet"><summary>${g.icon} ${esc(g.title)}</summary>
+    <h4>Les clés techniques</h4><ol class="clean">${li(g.keys)}</ol>
+    <h4>Erreurs fréquentes</h4><ul class="clean">${li(g.faults)}</ul>
+    <h4>Progression</h4><ul class="clean"><li><b>Débutant :</b> ${linkRefs(esc(g.levels.debutant))}</li><li><b>Intermédiaire :</b> ${linkRefs(esc(g.levels.intermediaire))}</li><li><b>Avancé :</b> ${linkRefs(esc(g.levels.avance))}</li></ul>
+    <h4>Comment filmer</h4><p>${linkRefs(esc(g.camera))}</p></details>`;
+}
+
+/** HTML d'une section transversale (le contenu est maîtrisé : liens de références seulement). */
+const sectionHTML = (s) => `<details class="gdet"><summary>${s.icon} ${esc(s.title)}</summary>${linkRefs(s.html)}</details>`;
+
+return { GLOSSARY, glossaryFigure, glossaryDef, STROKE_GUIDE, GUIDE_SECTIONS, linkRefs, glossaryHTML, strokeGuideHTML, sectionHTML };
 })();
 const __M_tactics = (() => {
 "use strict";
@@ -1028,6 +1529,84 @@ const PATTERNS = [
     desc: "Visez le milieu du terrain entre les deux adversaires : crée de l'hésitation (« à toi ! ») et réduit l'angle adverse.",
     steps: [m(0.5, 0, 0.5, 0.9, "Balle au milieu"), o(0.3, 1, 0.5, 0.3, "Hésitation")],
     fit: (P, O, C) => mk(3).add(wk(O, "lateral"), 1).done() },
+  // ===== Actualisation du 16/11/2026 : schémas supplémentaires =====
+  // ----- SERVICE
+  { id: "sv_plus1_bh", phase: "Service", name: "Service sur le revers, puis attaque en long de ligne",
+    desc: "Le service au revers donne souvent un retour faible ou court : prenez la balle tôt et attaquez dans le grand côté ouvert (long de ligne).",
+    steps: [m(0.62, 0, 0.12, 0.66, "1 Service au revers"), o(0.2, 1, 0.55, 0.2, "2 Retour faible"), m(0.55, 0.2, 0.92, 0.92, "3 Attaque long de ligne")],
+    fit: (P, O, C) => mk(2).add(wk(O, "bh"), 3, "Son revers est un point faible.").add(has(P.p_weapon, "fh"), 2, "Votre coup droit finit bien la balle.").add(P.p_serve1 !== "low", 1, "Votre 1re balle est assez régulière pour viser une zone.").done() },
+  { id: "sv_vary", phase: "Service", name: "Varier les zones : jamais deux fois le même service",
+    desc: "Alternez T, extérieur et corps selon un ordre non prévisible : l'adversaire ne peut plus anticiper et son retour perd en précision.",
+    steps: [m(0.62, 0, 0.47, 0.68, "1 T"), m(0.62, 0, 0.06, 0.68, "2 Extérieur"), m(0.62, 0, 0.3, 0.64, "3 Corps")],
+    fit: (P, O, C) => mk(2).add(O.o_style === "attaquant" || like(O, "return"), 3, "Il prend vite le retour : ne le laissez pas anticiper.").add(level(P) >= 2, 1, "À votre niveau, la variation des zones est rentable.").add(P.p_serve1 === "high", 1, "Vous placez bien vos 1res balles.").done() },
+  { id: "sv_second_deep", phase: "Service", name: "2e service profond au corps (sécurité)",
+    desc: "Un 2e service lifté au corps, bien profond, évite les doubles fautes et limite l'attaque du retourneur.",
+    steps: [m(0.38, 0, 0.7, 0.72, "1 2e service profond au corps"), o(0.75, 1, 0.5, 0.2, "2 Retour contraint"), m(0.5, 0.1, 0.4, 0.9, "3 Reprise du point")],
+    fit: (P, O, C) => mk(1).add(P.p_serve2 === "weak" || P.p_weak.includes("serve2"), 4, "Votre 2e service est fragile : sécurité d'abord.").add(O.o_style === "attaquant" || like(O, "return"), 2, "Il attaque les secondes balles.").add(C.c_wind !== "none", 1, "Vent : réduire le risque.").done() },
+  // ----- RETOUR
+  { id: "ret_long_line", phase: "Retour", name: "Retour long de ligne en surprise",
+    desc: "Après plusieurs retours croisés, un retour long de ligne surprend l'adversaire qui s'est déplacé vers le centre ou le filet.",
+    steps: [o(0.55, 0, 0.35, 1, "Service"), m(0.35, 1, 0.05, 0.9, "Retour long de ligne")],
+    fit: (P, O, C) => mk(0).add(O.o_pos === "in", 3, "Il avance après le service : la ligne est ouverte.").add(O.o_net === "high" || like(O, "net"), 3, "Il monte au filet : un retour long de ligne le surprend.").add(level(P) >= 2, 1, "Option rentable à ce niveau.").done() },
+  { id: "ret_slice_low", phase: "Retour", name: "Retour slicé bas sur gros service",
+    desc: "Contre un service puissant, le retour slicé bas et compact absorbe la vitesse et laisse du temps pour se replacer.",
+    steps: [o(0.55, 0, 0.35, 1, "Gros service"), m(0.35, 1, 0.6, 0.72, "Retour slicé bas et compact")],
+    fit: (P, O, C) => mk(1).add(O.o_serve === "big", 4, "Gros service : absorbez la vitesse.").add(["dur_rapide", "indoor", "gazon"].includes(C.c_surface), 2, "Surface rapide : la balle glisse.").add(wk(O, "lowball"), 2, "Il n'aime pas les balles basses.").done() },
+  // ----- ÉCHANGE
+  { id: "ry_triangle", phase: "Échange", name: "Triangle : croisé, croisé, puis long de ligne",
+    desc: "Deux croisés profonds pour fixer l'adversaire, puis un changement de ligne sur une balle courte : le terrain à couvrir est le plus grand.",
+    steps: [m(0.2, 0, 0.8, 0.95, "1 Croisé"), o(0.8, 1, 0.2, 0.05, "2 Retour croisé"), m(0.2, 0.05, 0.8, 0.95, "3 Croisé"), o(0.8, 1, 0.25, 0.1, "4 Balle courte"), m(0.25, 0.1, 0.05, 0.9, "5 Long de ligne")],
+    fit: (P, O, C) => mk(2).add(["limeur", "contreur", "complet", "rameur"].includes(P.p_style), 2, "Jeu régulier adapté à ce schéma.").add(level(P) <= 2, 2, "Croisé = zone la plus sûre.").add(O.o_style === "rameur", 1, "Un joueur qui ramène tout finit par offrir une balle courte.").done() },
+  { id: "ry_defense_lob", phase: "Échange", name: "Défense : lob profond puis reprise du point",
+    desc: "Quand vous êtes poussé hors du terrain, un lob profond au centre redonne le temps de revenir et neutralise l'attaque adverse.",
+    steps: [o(0.15, 1, 0.85, 0.05, "1 Balle qui vous pousse"), m(0.85, 0.05, 0.4, 0.97, "2 Lob défensif profond"), o(0.4, 1, 0.55, 0.15, "3 Retour neutre"), m(0.5, 0.0, 0.5, 0.9, "4 Reprise du point")],
+    fit: (P, O, C) => mk(1).add(O.o_style === "attaquant", 3, "Il dicte le jeu : cassez son attaque.").add(P.p_weak.includes("move"), 2, "Gagne du temps pour se replacer.").add(C.c_wind === "back", -3, "Vent dans le dos : risque de long.").done() },
+  { id: "ry_slice_lob", phase: "Échange", name: "Slice court puis lob",
+    desc: "Un slice court attire l'adversaire vers le filet, puis un lob profond le prend à contre-pied : il doit repartir vers le fond.",
+    steps: [m(0.3, 0, 0.65, 0.6, "1 Slice court"), o(0.6, 1, 0.65, 0.62, "2 Il avance"), m(0.4, 0.05, 0.35, 0.98, "3 Lob profond")],
+    fit: (P, O, C) => mk(0).add(wk(O, "short"), 3, "Il gère mal les balles courtes.").add(O.o_pos === "deep", 3, "Il joue en retrait : il doit avancer puis reculer.").add(C.c_surface === "terre", 1).add(C.c_wind === "face", -2, "Vent de face : le lob est difficile à doser.").done() },
+  { id: "ry_wrongfoot", phase: "Échange", name: "Contre-pied : jouer derrière le joueur",
+    desc: "Quand l'adversaire court d'un côté, renvoyez la balle dans la zone qu'il vient de quitter : il ne peut pas inverser son appui.",
+    steps: [m(0.8, 0, 0.2, 0.95, "1 Croisé à gauche"), o(0.2, 1, 0.4, 0.1, "2 Il est excentré"), m(0.4, 0.1, 0.78, 0.95, "3 Derrière lui")],
+    fit: (P, O, C) => mk(1).add(wk(O, "lateral") || O.o_move !== "good", 3, "Sa mobilité latérale est limitée.").add(like(O, "cross"), 2, "Il s'installe en croisé : jouez derrière lui.").add(level(P) >= 2, 1).done() },
+  { id: "ry_pace_change", phase: "Échange", name: "Changement de rythme : lift lourd puis accélération plate",
+    desc: "Une balle haute et lourde lui fait perdre son rythme, puis une accélération à plat sur la balle suivante le surprend.",
+    steps: [m(0.25, 0, 0.8, 0.95, "1 Lift lourd"), o(0.8, 1, 0.3, 0.1, "2 Balle haute"), m(0.3, 0.1, 0.15, 0.9, "3 Accélération plate")],
+    fit: (P, O, C) => mk(1).add(dislike(O, "pace"), 3, "Il n'aime pas les changements de rythme.").add(O.o_style === "rameur" || O.o_style === "limeur", 3, "À bousculer : il ne prend pas de risque.").add(O.o_react === "passive", 1).done() },
+  { id: "ry_feet", phase: "Échange", name: "Jouer dans les pieds du joueur qui monte",
+    desc: "Contre un joueur de filet, une balle basse et rapide dans ses pieds l'oblige à volleyer vers le haut : le passing devient facile.",
+    steps: [o(0.4, 0.55, 0.5, 0.5, "1 Il monte"), m(0.7, 0, 0.5, 0.52, "2 Balle dans les pieds")],
+    fit: (P, O, C) => mk(0).add(O.o_net === "high" || like(O, "net") || O.o_react === "net", 4, "Il monte souvent au filet.").add(dislike(O, "low"), 2, "Il n'aime pas les balles basses.").done() },
+  // ----- FILET
+  { id: "net_block_short", phase: "Filet", name: "Volée de blocage profonde, puis volée courte",
+    desc: "Une première volée profonde au fond de court, puis une volée courte croisée pour terminer le point.",
+    steps: [m(0.5, 0.5, 0.1, 0.85, "1 Volée profonde croisée"), o(0.1, 1, 0.45, 0.35, "2 Défense adverse"), m(0.4, 0.55, 0.55, 0.62, "3 Volée courte")],
+    fit: (P, O, C) => mk(1).add(P.p_net !== "low", 3, "Vous êtes à l'aise au filet.").add(O.o_style === "limeur" || O.o_style === "rameur", 2, "Il ramène tout : finissez au filet.").add(wk(O, "short"), 1).done() },
+  { id: "net_smash", phase: "Filet", name: "Smash : placement avant puissance",
+    desc: "Contre un lob, placez-vous sous la balle avec des pas chassés, frappez dans le grand côté ouvert et gardez de la marge.",
+    steps: [o(0.5, 1, 0.5, 0.2, "1 Lob adverse"), m(0.5, 0.35, 0.9, 0.9, "2 Smash dans le grand côté")],
+    fit: (P, O, C) => mk(0).add(like(O, "lob") || O.o_style === "limeur", 3, "Il lobe souvent.").add(P.p_net === "high", 2).add(C.c_sun === "yes", -2, "Soleil : lancez-vous tôt sous la balle.").done() },
+  { id: "net_approach_slice", phase: "Filet", name: "Approche slicée long de ligne",
+    desc: "L'approche slicée reste basse : l'adversaire ne peut pas attaquer le passing, et le slice vous laisse le temps de monter.",
+    steps: [m(0.4, 0.3, 0.92, 0.95, "1 Approche slicée"), m(0.92, 0.6, 0.55, 0.5, "2 Montée au filet"), o(0.92, 1, 0.5, 0.2, "3 Passing contraint")],
+    fit: (P, O, C) => mk(0).add(["gazon", "dur_rapide", "indoor"].includes(C.c_surface), 3, "Surface rapide : le slice glisse.").add(P.p_net !== "low", 2).add(wk(O, "passing"), 2, "Son passing est faible.").add(P.p_net === "low", -3).done() },
+  // ----- DOUBLE
+  { id: "db_australian", phase: "Double", dbl: true, name: "Formation australienne",
+    desc: "Le serveur et son partenaire sont du même côté du terrain : cela perturbe le retour croisé habituel et protège un côté faible.",
+    steps: [m(0.62, 0, 0.45, 0.66, "Service T"), m(0.75, 0.5, 0.55, 0.62, "Partenaire du même côté, au filet")],
+    fit: (P, O, C) => mk(2).add(C.c_mode === "double", 1).add(O.o_style === "attaquant" || like(O, "return"), 2, "Le retour croisé est son point fort : changez la donne.").done() },
+  { id: "db_i_formation", phase: "Double", dbl: true, name: "Formation « I » avec signaux",
+    desc: "Le partenaire se place au centre, accroupi, et indique par un signal s'il croise ou reste. Le retourneur ne sait pas d'où viendra la volée.",
+    steps: [m(0.5, 0, 0.45, 0.66, "Service"), m(0.5, 0.5, 0.7, 0.62, "Partenaire au centre : poach ou reste")],
+    fit: (P, O, C) => mk(2).add(P.p_net !== "low", 2).add(C.c_mode === "double", 1).done() },
+  { id: "db_lob_cross", phase: "Double", dbl: true, name: "Retour lobé croisé sur le volleyeur",
+    desc: "Quand le partenaire adverse est au filet, un lob croisé le fait reculer et ouvre le terrain.",
+    steps: [o(0.55, 0, 0.35, 1, "Service"), m(0.35, 1, 0.8, 0.98, "Lob croisé")],
+    fit: (P, O, C) => mk(2).add(O.o_net === "high" || like(O, "net"), 3, "L'adversaire monte souvent.").add(C.c_wind === "face", -2).done() },
+  { id: "db_target_weak", phase: "Double", dbl: true, name: "Cibler l'adversaire le plus faible",
+    desc: "Au double, 2 à 3 balles sur 4 vers le joueur le plus fragile ; il finit par faire la faute ou affaiblit son partenaire.",
+    steps: [m(0.5, 0, 0.8, 0.9, "Balle au plus faible"), o(0.8, 1, 0.5, 0.2, "Retour sous contrainte")],
+    fit: (P, O, C) => mk(3).add(wk(O, "bh") || wk(O, "fh"), 3, "Une faiblesse est repérée.").done() },
 ];
 
 // --- Moteur ------------------------------------------------------------------------------------------------
@@ -1038,7 +1617,7 @@ function buildPlan(A) {
   const dbl = A.c_mode === "double";
   const rank = (phase, n, min = 3) => PATTERNS.filter((p) => p.phase === phase && !!p.dbl === dbl)
     .map((p) => ({ p, ...p.fit(P, O, C) })).filter((x) => x.score >= min).sort((a, b) => b.score - a.score).slice(0, n);
-  const patterns = dbl ? rank("Double", 4, 3) : [...rank("Service", 2, 3), ...rank("Retour", 2, 3), ...rank("Échange", 3, 3), ...rank("Filet", 1, 4)];
+  const patterns = dbl ? rank("Double", 6, 3) : [...rank("Service", 3, 3), ...rank("Retour", 2, 3), ...rank("Échange", 4, 3), ...rank("Filet", 2, 4)];
 
   const principles = [], serve = [], ret = [], rally = [], cond = [], situ = [], avoid = [], check = [];
   const surf = A.c_surface;
@@ -1141,10 +1720,21 @@ function buildPlan(A) {
   avoid.push("Changer complètement de tactique après 2 points perdus.");
 
   check.push("Avant le match : 1 plan A (arme principale), 1 plan B (variation), 1 plan C (urgence).");
-  check.push("Après 6 jeux : bilan flash (ce qui marche / ce que j'abandonne).");
+  check.push("Échauffement de 15 minutes : mobilité, déplacements, puis frappes progressives ; testez les balles, le rebond et le vent (ou le soleil) avant le premier jeu.");
+  check.push("Pendant le match : après 6 jeux, bilan flash (ce qui marche / ce que j'abandonne) ; à chaque changement de côté, boire, respirer, rappeler le plan.");
   check.push("Entre les points : respirer, choisir zone + hauteur, jouer le point suivant.");
+  check.push("Après le match : notez 1res balles en jeu, points gagnés sur 1re/2e balle, fautes directes / coups gagnants, 2 choses réussies et 1 axe de progrès.");
+  const growthByStyle = {
+    attaquant: ["Ajoutez de la variation de hauteur et de rythme (slice, balle haute) pour ne pas dépendre de votre seule vitesse.", "Fabriquez un coup de sécurité (croisé profond) pour les moments difficiles.", "Patience sur 3 balles : l'attaque vient quand la balle est courte."],
+    contreur: ["Ajoutez une arme pour finir (coup droit inside-in, passing) afin de ne pas attendre la faute.", "Travaillez l'anticipation et la transition défense → attaque.", "Apprenez à jouer plus fort sur les balles courtes."],
+    limeur: ["Gagnez en profondeur : balles près de la ligne de fond pour repousser l'adversaire.", "Développez la montée au filet sur balle courte.", "Ajoutez un deuxième rythme (lift lourd) pour ne pas être prévisible."],
+    rameur: ["Ajoutez une accélération contrôlée sur la première balle faible.", "Travaillez un jeu de filet minimal (volée de blocage, smash).", "Gérez l'énergie : points courts quand c'est possible."],
+    sv: ["Retour solide et profond avant tout : le service seul ne suffit pas.", "Volée basse et placement en 2 temps (profondeur puis angle).", "Passing défensif pour les jours où la montée ne passe pas."],
+    complet: ["Choisissez une signature (service + 1, coup droit inside-out…) pour décider les points importants.", "Entraînez les variations jusqu'à ce qu'elles soient réflexes.", "Évitez de tout changer à chaque jeu : un seul changement à la fois."],
+  };
+  const growth = growthByStyle[A.p_style] || growthByStyle.complet;
 
-  return { principles, serve, ret, cond, situ, avoid, check, patterns, headline: `Plan de jeu — ${label(QUESTIONS[0].items[0].options, A.p_style)} vs ${label(QUESTIONS[1].items[0].options, A.o_style)} (${label(QUESTIONS[2].items[1].options, A.c_surface)})` };
+  return { principles, serve, ret, cond, situ, avoid, check, growth, patterns, headline: `Plan de jeu — ${label(QUESTIONS[0].items[0].options, A.p_style)} vs ${label(QUESTIONS[1].items[0].options, A.o_style)} (${label(QUESTIONS[2].items[1].options, A.c_surface)})` };
 }
 
 // --- Schéma SVG d'un court -----------------------------------------------------------------------------------
@@ -1560,7 +2150,7 @@ async function grabFrame(src, t, rot = 0) {
 
 // Recadre l'image autour du joueur (marge) et recalcule les points : les keyframes restent lisibles même si le joueur est petit.
 function cropToPlayer(canvas, lm, margin = 0.6) {
-  if (!lm) return { canvas, lm };
+  if (!lm) return { canvas, lm, map: (p) => p };
   const W = canvas.width, H = canvas.height;
   const xs = lm.map((p) => p.x * W), ys = lm.map((p) => p.y * H);
   const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
@@ -1569,7 +2159,8 @@ function cropToPlayer(canvas, lm, margin = 0.6) {
   const s = Math.min(side, W, H), out = 520;
   const c = document.createElement("canvas"); c.width = c.height = out;
   c.getContext("2d").drawImage(canvas, x0, y0, s, s, 0, 0, out, out);
-  return { canvas: c, lm: lm.map((p) => ({ ...p, x: (p.x * W - x0) / s, y: (p.y * H - y0) / s })) };
+  const map = (p) => ({ ...p, x: (p.x * W - x0) / s, y: (p.y * H - y0) / s }); // image complète → image recadrée
+  return { canvas: c, lm: lm.map(map), map };
 }
 
 const BONES = [[11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [11, 23], [12, 24], [23, 24], [23, 25], [25, 27], [24, 26], [26, 28], [27, 31], [28, 32]];
@@ -1609,11 +2200,12 @@ const __M_extras = (() => {
 // Fonctions d'affichage avancées : images clés, comparaison à un modèle, lecteur ralenti annoté, mesures calibrées.
 const { grabFrame, cropToPlayer, drawSkeleton, drawAngleLabel } = __M_pose;
 const { figureSVG, IDEAL } = __M_posefig;
+const { METRIC_DEFS } = __M_metrics;
 
 const S_IDX = (hand) => (hand === "left" ? [11, 13, 15] : [12, 14, 16]);
 
 /** Image d'une phase (load / contact / follow) recadrée sur le joueur, squelette et angles dessinés. */
-async function phaseCanvas(L, src, k, { labels = true } = {}) {
+async function phaseCanvas(L, src, k, { labels = true, targets = false } = {}) {
   const { res, proc } = L;
   const i = res.phases[k];
   let cv;
@@ -1626,7 +2218,145 @@ async function phaseCanvas(L, src, k, { labels = true } = {}) {
     if (k === "contact") drawAngleLabel(crop.canvas, crop.lm, S[0], S[1], S[2], `coude ${Math.round(res.series.elbow[i])}°`);
     if (k === "load") drawAngleLabel(crop.canvas, crop.lm, 23, 25, 27, `genoux ${Math.round(res.series.knee[i])}°`);
   }
+  if (targets && crop.lm) drawTargets(crop.canvas, L, k, i, crop.lm, crop.map);
   return { canvas: crop.canvas, lm: crop.lm, i };
+}
+
+// --- Cibles en pointillés sur l'image de la vidéo ------------------------------------------------------------------------
+const TARGET_COLOR = "#8cff9e";
+const ATTENTION_COLOR = "#ffb4a8";
+
+const mid2 = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+const rotate = (v, a) => ({ x: v.x * Math.cos(a) - v.y * Math.sin(a), y: v.x * Math.sin(a) + v.y * Math.cos(a) });
+const unit = (v) => { const n = Math.hypot(v.x, v.y) || 1; return { x: v.x / n, y: v.y / n }; };
+
+/** Texte contouré, lisible sur n'importe quel fond. */
+function tag(ctx, text, x, y, color, size, align = "left") {
+  ctx.font = `bold ${size}px system-ui,sans-serif`; ctx.textAlign = align;
+  ctx.lineWidth = 4; ctx.strokeStyle = "#0b3d2e"; ctx.lineJoin = "round"; ctx.strokeText(text, x, y);
+  ctx.fillStyle = color; ctx.fillText(text, x, y);
+}
+
+function dashed(ctx, x1, y1, x2, y2, color, width, alpha = 1) {
+  ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = "round"; ctx.setLineDash([width * 2.6, width * 2]);
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore();
+}
+
+/** Direction (±1) de la frappe dans l'image, d'après le déplacement du poignet autour de l'impact. */
+function strokeSign(res, S) {
+  const c = res.phases.contact, n = res.frames.length;
+  const a = res.frames[Math.max(0, c - 2)].lm[S[2]].x, b = res.frames[Math.min(n - 1, c + 2)].lm[S[2]].x;
+  return b >= a ? 1 : -1;
+}
+
+/**
+ * Dessine, en pointillés verts, la position idéale de chaque articulation ou ligne mesurée sur l'image de la phase.
+ * Les mesures déjà conformes sont atténuées ; celles à corriger sont plus marquées et légendées.
+ * @param {HTMLCanvasElement} canvas image recadrée (modifiée en place)
+ * @param {object} L analyse (res, opts)
+ * @param {string} k phase : "load" | "contact" | "follow"
+ * @param {number} i indice de l'image dans res.frames
+ * @param {object[]} lm points recadrés (coordonnées normalisées du canvas)
+ * @param {function} mapPt convertit un point de l'image complète vers le canvas recadré
+ */
+function drawTargets(canvas, L, k, i, lm, mapPt) {
+  const { res } = L, stroke = L.opts?.stroke, defs = METRIC_DEFS[stroke] || [];
+  const ctx = canvas.getContext("2d"), W = canvas.width, H = canvas.height;
+  const px = (j) => ({ x: lm[j].x * W, y: lm[j].y * H });
+  const S = S_IDX(res.hand), O = res.hand === "left" ? [12, 14, 16] : [11, 13, 15];
+  const hip = mid2(px(23), px(24)), sh = mid2(px(11), px(12));
+  const torso = Math.hypot(sh.x - hip.x, sh.y - hip.y) || 1;
+  const lw = Math.max(3, W / 150), fs = Math.max(20, W / 21);
+  const st = Object.fromEntries(res.metrics.map((m) => [m.id, m.status]));
+  const def = (id) => defs.find((d) => d.id === id);
+  const alphaOf = (id) => (st[id] === "ok" ? 0.55 : 1);
+  const colorOf = (id) => (st[id] === "ok" ? TARGET_COLOR : TARGET_COLOR);
+  const overhead = stroke === "serve" || stroke === "smash";
+  const sign = strokeSign(res, S);
+
+  // Angle cible à une articulation : on prolonge le segment proximal et on fait tourner le distal à l'angle voulu
+  const idealLimb = (rootIdx, jointIdx, endIdx, targetDeg, id, text, noLabel = false) => {
+    const root = px(rootIdx), joint = px(jointIdx), end = px(endIdx);
+    const u = unit({ x: root.x - joint.x, y: root.y - joint.y }), len = Math.hypot(end.x - joint.x, end.y - joint.y);
+    const actual = unit({ x: end.x - joint.x, y: end.y - joint.y });
+    const cands = [rotate(u, (targetDeg * Math.PI) / 180), rotate(u, (-targetDeg * Math.PI) / 180)];
+    const v = cands.reduce((a, b) => (a.x * actual.x + a.y * actual.y >= b.x * actual.x + b.y * actual.y ? a : b));
+    const e = { x: joint.x + v.x * len, y: joint.y + v.y * len };
+    dashed(ctx, joint.x, joint.y, e.x, e.y, colorOf(id), lw * 1.4, alphaOf(id));
+    ctx.save(); ctx.globalAlpha = alphaOf(id); ctx.fillStyle = TARGET_COLOR; ctx.beginPath(); ctx.arc(e.x, e.y, lw * 1.8, 0, 7); ctx.fill(); ctx.restore();
+    if (!noLabel) tag(ctx, text, e.x + (v.x >= 0 ? 8 : -8), e.y + (v.y >= 0 ? fs : -4), TARGET_COLOR, fs, v.x >= 0 ? "left" : "right");
+  };
+  const target = (d, fallback) => { const [a, b] = d.ok; return Math.max(a, Math.min(b > 180 ? 180 : b, fallback ?? (a + Math.min(b, 180)) / 2)); };
+
+  if (k === "load") {
+    const d = def("knee_load");
+    if (d) { const t = Math.round(target(d)); idealLimb(23, 25, 27, t, "knee_load", `genou ≈${t}°`); idealLimb(24, 26, 28, t, "knee_load", "", true); }
+    if (overhead) {
+      const e = def("elbow_trophy");
+      if (e) { const y = px(S[0]).y; dashed(ctx, 6, y, W - 6, y, TARGET_COLOR, lw, alphaOf("elbow_trophy")); tag(ctx, "coude ≥ épaules", W - 8, y - 6, TARGET_COLOR, fs * 0.9, "right"); }
+      const t = def("toss_arm");
+      if (t) { const y = px(O[0]).y - t.ok[0] * torso; dashed(ctx, 6, y, W - 6, y, TARGET_COLOR, lw, alphaOf("toss_arm")); tag(ctx, "bras libre haut", W - 8, y - 6, TARGET_COLOR, fs * 0.9, "right"); }
+    }
+  }
+
+  if (k === "contact") {
+    const e = def("elbow_contact");
+    if (e) { const t = Math.round(target(e)); idealLimb(S[0], S[1], S[2], t, "elbow_contact", `coude ≈${t}°`); }
+    const ch = def("contact_height");
+    if (ch) {
+      const ank = Math.max(px(27).y, px(28).y), nose = px(0).y, y = ank - ch.ok[0] * (ank - nose);
+      dashed(ctx, 6, y, W - 6, y, TARGET_COLOR, lw * 1.3, alphaOf("contact_height"));
+      tag(ctx, "contact : hauteur cible", 8, y - 6, TARGET_COLOR, fs * 0.9, "left");
+      const w = px(S[2]);
+      if (w.y > y + 4) { // flèche du poignet vers la hauteur cible
+        ctx.save(); ctx.strokeStyle = ATTENTION_COLOR; ctx.fillStyle = ATTENTION_COLOR; ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(w.x + 14, w.y); ctx.lineTo(w.x + 14, y + 6); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(w.x + 14, y); ctx.lineTo(w.x + 8, y + 12); ctx.lineTo(w.x + 20, y + 12); ctx.fill(); ctx.restore();
+      }
+    }
+    const cf = def("contact_front");
+    if (cf) {
+      const x0 = hip.x, x1 = hip.x + sign * cf.ok[0] * torso, w = px(S[2]);
+      dashed(ctx, x0, hip.y - torso * 1.2, x0, hip.y + torso * 0.9, "#ffffff", lw, 0.7);
+      dashed(ctx, x1, w.y - torso * 0.5, x1, w.y + torso * 0.5, TARGET_COLOR, lw * 1.4, alphaOf("contact_front"));
+      tag(ctx, "contact ≥ ici", x1 + (sign > 0 ? 6 : -6), w.y - torso * 0.55, TARGET_COLOR, fs * 0.9, sign > 0 ? "left" : "right");
+    }
+    const tl = def("trunk_lean");
+    if (tl) {
+      const lim = (tl.ok[1] * Math.PI) / 180, side = Math.sign(sh.x - hip.x) || 1, len = torso * 1.15;
+      dashed(ctx, hip.x, hip.y, hip.x, hip.y - len, "#ffffff", lw, 0.7);
+      dashed(ctx, hip.x, hip.y, hip.x + side * Math.sin(lim) * len, hip.y - Math.cos(lim) * len, TARGET_COLOR, lw * 1.3, alphaOf("trunk_lean"));
+      tag(ctx, `tronc ≤ ${tl.ok[1]}°`, hip.x + side * (Math.sin(lim) * len + 8), hip.y - Math.cos(lim) * len, TARGET_COLOR, fs * 0.9, side > 0 ? "left" : "right");
+    }
+    const hd = def("head_stability");
+    if (hd && res.frames.length > 4) { // zone de stabilité de la tête + trajet réel
+      const c = res.phases.contact, slow = res.slow || 1, tc = res.frames[c].t;
+      const idx = res.frames.map((f, j) => j).filter((j) => Math.abs(res.frames[j].t - tc) <= 0.15 * slow);
+      if (idx.length > 1) {
+        const pts = idx.map((j) => mapPt(res.frames[j].lm[0])), p0 = { x: pts[0].x * W, y: pts[0].y * H };
+        ctx.save(); ctx.globalAlpha = alphaOf("head_stability"); ctx.strokeStyle = TARGET_COLOR; ctx.lineWidth = lw; ctx.setLineDash([lw * 2.6, lw * 2]);
+        ctx.beginPath(); ctx.arc(p0.x, p0.y, hd.ok[1] * torso, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+        ctx.strokeStyle = "#ffd23f"; ctx.lineWidth = lw; ctx.beginPath(); pts.forEach((p, n) => (n ? ctx.lineTo(p.x * W, p.y * H) : ctx.moveTo(p.x * W, p.y * H))); ctx.stroke(); ctx.restore();
+        tag(ctx, "tête dans le cercle", p0.x, p0.y - hd.ok[1] * torso - 6, TARGET_COLOR, fs * 0.85, "center");
+      }
+    }
+    const wp = def("wrist_path");
+    if (wp && res.frames.length > 4) { // trajet réel du poignet et direction cible
+      const c = res.phases.contact, slow = res.slow || 1, tc = res.frames[c].t;
+      const idx = res.frames.map((f, j) => j).filter((j) => res.frames[j].t >= tc - 0.25 * slow && res.frames[j].t <= tc);
+      const pts = idx.map((j) => mapPt(res.frames[j].lm[S[2]]));
+      if (pts.length > 1) {
+        ctx.save(); ctx.strokeStyle = "#ffd23f"; ctx.lineWidth = lw * 1.2; ctx.beginPath(); pts.forEach((p, n) => (n ? ctx.lineTo(p.x * W, p.y * H) : ctx.moveTo(p.x * W, p.y * H))); ctx.stroke(); ctx.restore();
+        const p0 = { x: pts[0].x * W, y: pts[0].y * H }, dir = wp.ok[0] < 0 ? -1 : 1, len = Math.max(0.35, Math.abs(wp.ok[0]) * 1.6) * torso;
+        dashed(ctx, p0.x, p0.y, p0.x + sign * torso * 0.2, p0.y + dir * len, TARGET_COLOR, lw * 1.5, alphaOf("wrist_path"));
+        tag(ctx, dir > 0 ? "le poignet doit descendre" : "le poignet doit monter", p0.x + sign * torso * 0.2 + 8, p0.y + dir * len, TARGET_COLOR, fs * 0.85, "left");
+      }
+    }
+  }
+
+  if (k === "follow") {
+    const fh = def("follow_high");
+    if (fh) { const y = sh.y - fh.ok[0] * torso; dashed(ctx, 6, y, W - 6, y, TARGET_COLOR, lw * 1.3, alphaOf("follow_high")); tag(ctx, "finition ≥ ici", W - 8, y - 6, TARGET_COLOR, fs * 0.9, "right"); }
+  }
 }
 
 const PHASES = {
@@ -1768,10 +2498,11 @@ return { phaseCanvas, renderCompare, renderRefCompare, calibratedHTML, mountSlow
 })();
 const __M_app = (() => {
 "use strict";
-const { STROKES, ISSUES, EXERCISES, REFERENCES, LEVELS } = __M_knowledge;
+const { STROKES, ISSUES, EXERCISES, REFERENCES, REFERENCES_UPDATED, LEVELS } = __M_knowledge;
+const { glossaryHTML, strokeGuideHTML, GUIDE_SECTIONS, sectionHTML, STROKE_GUIDE } = __M_guide;
 const { analyze, segmentStrokes, aggregate } = __M_metrics;
 const { loadPose, openVideo, processVideo, processImages, previewPlayers } = __M_pose;
-const { issueFigure } = __M_posefig;
+const { issueFigure, gaugeSVG } = __M_posefig;
 const { phaseCanvas, renderCompare, renderRefCompare, calibratedHTML, mountSlowmo } = __M_extras;
 const { askClaude, buildAnalysisPrompt, buildTacticsPrompt, getSystemPrompt, MODELS } = __M_assistant;
 const coach = __M_coach;
@@ -1792,13 +2523,14 @@ const state = {
   answers: { ...defaultAnswers(), ...store.get("answers", {}) },
   last: null, // dernière analyse
   seed: null, // joueur désigné par toucher
+  showTargets: store.get("showTargets", true), // cibles en pointillés sur les images clés
   ref: null, // analyse de référence (comparaison)
   media: null, // { kind, src|files, ... }
   busy: false,
 };
 
 window.__tca = state; // aide au débogage (console du navigateur)
-const TABS = [["home", "Accueil"], ["analyse", "Analyse"], ["tactic", "Tactique"], ["exo", "Exercices"], ["track", "Suivi"], ["coach", "Coach"], ["src", "Sources"]];
+const TABS = [["home", "Accueil"], ["analyse", "Analyse"], ["tactic", "Tactique"], ["exo", "Exercices"], ["track", "Suivi"], ["guide", "Guide"], ["coach", "Coach"], ["src", "Sources"]];
 
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("show"), 3500); }
 
@@ -1806,16 +2538,20 @@ function go(tab) { state.tab = tab; history.replaceState(null, "", "#" + tab); r
 
 function render() {
   $("#nav").innerHTML = TABS.map(([id, l]) => `<button data-tab="${id}" ${state.tab === id ? 'aria-current="page"' : ""}>${l}</button>`).join("");
-  const view = { home: viewHome, analyse: viewAnalyse, tactic: viewTactic, exo: viewExo, track: viewTrack, coach: viewCoach, src: viewSources }[state.tab];
+  const view = { home: viewHome, analyse: viewAnalyse, tactic: viewTactic, exo: viewExo, track: viewTrack, guide: viewGuide, coach: viewCoach, src: viewSources }[state.tab];
   $("#app").innerHTML = view();
-  ({ home: bindHome, analyse: bindAnalyse, tactic: bindTactic, exo: bindExo, track: bindTrack, coach: bindCoach, src: () => {} })[state.tab]?.();
+  ({ home: bindHome, analyse: bindAnalyse, tactic: bindTactic, exo: bindExo, track: bindTrack, guide: bindGuide, coach: bindCoach, src: () => {} })[state.tab]?.();
 }
 
 document.addEventListener("click", (e) => {
   const t = e.target.closest("[data-tab]");
   if (t) go(t.dataset.tab);
   const g = e.target.closest("[data-go]");
-  if (g) go(g.dataset.go);
+  if (g) {
+    go(g.dataset.go);
+    const ref = g.dataset.ref;
+    if (ref) setTimeout(() => { const el = document.getElementById("ref-" + ref); if (el) { el.scrollIntoView({ block: "center" }); el.classList.add("flash"); } }, 60);
+  }
 });
 
 // =========================== ACCUEIL ===========================================================================
@@ -1880,13 +2616,21 @@ function bindAnalyse() {
   if (state.last) renderResults();
 }
 
-async function handleFiles(files) {
+/**
+ * Ajoute les fichiers choisis à la sélection courante.
+ * Vidéos : plusieurs fichiers possibles (toutes les répétitions seront moyennées). Photos : une série de phases.
+ * @param {File[]} files fichiers sélectionnés
+ * @param {boolean} [append=false] true : ajoute aux vidéos déjà chargées
+ */
+async function handleFiles(files, append = false) {
   const vids = files.filter((f) => f.type.startsWith("video/"));
   const imgs = files.filter((f) => f.type.startsWith("image/"));
   try {
     if (vids.length) {
-      const src = await openVideo(vids[0]);
-      state.media = { kind: "video", src, name: vids[0].name };
+      const opened = [];
+      for (const f of vids) { const src = await openVideo(f); opened.push({ src, name: f.name, t0: 0, t1: src.duration }); }
+      const keep = append && state.media?.kind === "video" ? state.media.videos : [];
+      state.media = { kind: "video", videos: [...keep, ...opened] };
     } else if (imgs.length) {
       state.media = { kind: "images", files: imgs, phases: imgs.map((_, i) => (imgs.length === 1 ? "contact" : i === 0 ? "load" : i === imgs.length - 1 ? "follow" : "contact")) };
       if (imgs.length >= 3) state.media.phases = imgs.map((_, i) => (i === 0 ? "load" : i === Math.floor(imgs.length / 2) ? "contact" : i === imgs.length - 1 ? "follow" : "contact"));
@@ -1895,28 +2639,45 @@ async function handleFiles(files) {
   } catch (err) { toast(err.message); }
 }
 
+/** Mémorise les bornes saisies pour chaque vidéo avant un nouvel affichage de la liste. */
+function readVideoRanges() {
+  const m = state.media;
+  if (!m || m.kind !== "video") return;
+  m.videos.forEach((v, i) => {
+    const a = $(`#t0-${i}`), b = $(`#t1-${i}`);
+    if (a) v.t0 = Math.max(0, +a.value || 0);
+    if (b) v.t1 = Math.min(v.src.duration, +b.value || v.src.duration);
+  });
+}
+
 function showMedia() {
   const z = $("#mediaZone"); if (!z) return;
   const m = state.media;
   if (m.kind === "video") {
-    const dur = m.src.duration;
+    const first = m.videos[0];
+    const rows = m.videos.map((v, i) => `<div class="vrow"><div><b>${esc(v.name)}</b> <span class="muted small">(${v.src.duration.toFixed(1)} s, ${v.src.width}×${v.src.height})</span></div>
+      <div class="row"><label class="small" for="t0-${i}">Début (s)</label><input type="number" id="t0-${i}" min="0" max="${v.src.duration.toFixed(1)}" step="0.1" value="${v.t0.toFixed(1)}" style="width:80px">
+      <label class="small" for="t1-${i}">Fin (s)</label><input type="number" id="t1-${i}" min="0" max="${v.src.duration.toFixed(1)}" step="0.1" value="${v.t1.toFixed(1)}" style="width:80px">
+      ${m.videos.length > 1 ? `<button class="chip" data-del="${i}">Retirer</button>` : ""}</div></div>`).join("");
     z.innerHTML = `
-    <h3>Vidéo : ${esc(m.name)} <span class="muted small">(${dur.toFixed(1)} s, ${m.src.width}×${m.src.height})</span></h3>
-    <video id="prev" src="${m.src.url}" controls playsinline muted style="width:100%;max-height:320px;border-radius:10px;background:#000"></video>
+    <h3>${m.videos.length > 1 ? `${m.videos.length} vidéos` : "Vidéo"} <label class="btn secondary" style="margin-left:8px">➕ Ajouter une vidéo<input id="addvid" type="file" accept="video/*" multiple hidden></label></h3>
+    <div id="vlist">${rows}</div>
+    <video id="prev" src="${first.src.url}" controls playsinline muted style="width:100%;max-height:300px;border-radius:10px;background:#000"></video>
+    <div class="notice">🔁 <b>Répétitions :</b> une vidéo peut contenir plusieurs fois le même geste, et vous pouvez ajouter plusieurs vidéos. Chaque geste est repéré, analysé, puis les résultats sont <b>moyennés (médiane)</b> avec leur dispersion. Visez 5 à 10 gestes pour une mesure fiable.</div>
     <div class="row">
-      <div><label class="field" for="t0">Début (s)</label><input type="number" id="t0" min="0" max="${dur.toFixed(1)}" step="0.1" value="0" style="width:90px"></div>
-      <div><label class="field" for="t1">Fin (s)</label><input type="number" id="t1" min="0" max="${dur.toFixed(1)}" step="0.1" value="${dur.toFixed(1)}" style="width:90px"></div>
       <div><label class="field" for="fps">Précision</label><select id="fps"><option value="12">Rapide (12 i/s)</option><option value="20" selected>Standard (20 i/s)</option><option value="30">Fine (30 i/s)</option></select></div>
       <div><label class="field" for="slow">Cadence de la vidéo</label><select id="slow"><option value="1">Temps réel</option><option value="2">Ralenti ×2</option><option value="4">Ralenti ×4</option><option value="8">Ralenti ×8</option></select></div>
       <div><label class="field" for="rot">Orientation</label><select id="rot"><option value="auto">Automatique</option><option value="0">Normale</option><option value="180">Retournée (180°)</option><option value="90">Rotation 90°</option><option value="270">Rotation 270°</option></select></div>
       <div><label class="field" for="model">Modèle IA</label><select id="model"><option value="full">Standard</option><option value="heavy">Précis (plus lent)</option></select></div>
       <div><label class="field" for="height">Taille du joueur (cm)</label><input type="number" id="height" min="100" max="230" step="1" placeholder="ex. 178" value="${esc(coach.getProfile().heightCm || "")}" style="width:100px"></div>
     </div>
-    <p class="muted small">Séance longue acceptée : les gestes sont repérés automatiquement (pics de vitesse du poignet) et les mesures sont agrégées (médiane). Le joueur est suivi et recadré automatiquement. Plusieurs personnes à l'image ? Touchez le joueur à analyser.</p>
+    <p class="muted small">Le joueur est suivi et recadré automatiquement. Plusieurs personnes à l'image ? Touchez le joueur à analyser (première vidéo).</p>
     <div class="row"><button class="btn secondary" id="pick">👆 Choisir le joueur</button><span id="seedInfo" class="muted small">${state.seed ? "✔ joueur choisi" : "joueur : le plus proche de la caméra"}</span></div>
     <div id="pickZone"></div>
     <div class="row"><button class="btn" id="go">▶ Lancer l'analyse</button><progress id="prog" max="1" value="0" hidden></progress></div><div id="status" class="muted small"></div>`;
     $("#pick").onclick = pickPlayer;
+    $("#addvid").onchange = (e) => { readVideoRanges(); if (e.target.files.length) handleFiles([...e.target.files], true); };
+    $("#vlist").onclick = (e) => { const b = e.target.closest("[data-del]"); if (!b) return; readVideoRanges(); m.videos.splice(+b.dataset.del, 1); state.last = null; showMedia(); };
   } else {
     z.innerHTML = `
     <h3>${m.files.length} photo(s)</h3>
@@ -1936,35 +2697,75 @@ function showMedia() {
   $("#go").onclick = runAnalysis;
 }
 
-/** Segmente la séance, analyse chaque geste et agrège (médiane) ; sinon analyse la séquence entière. */
-function buildLast(proc, kind, opts) {
+/**
+ * Segmente une séquence, analyse chaque geste repéré ; sinon analyse la séquence entière.
+ * @param {object} proc résultat de processVideo/processImages
+ * @param {string} kind "video" | "images"
+ * @param {object} opts options d'analyse (stroke, hand, aspect, slow…)
+ * @param {object|null} src vidéo source (pour recadrer les images clés)
+ * @param {string} name nom du fichier (affichage)
+ * @returns {object} analyse ({res, reps?, …}) ; chaque geste porte sa vidéo (proc, src) pour pouvoir mélanger plusieurs vidéos
+ */
+function buildLast(proc, kind, opts, src = null, name = "") {
   const slow = opts.slow || 1;
   const segs = kind === "video" ? segmentStrokes(proc.frames, { stroke: opts.stroke, hand: opts.hand, aspect: proc.aspect, minGap: 2.5 * slow }) : [];
   const pre = 1.8 * slow + 0.6, post = 0.3 * slow + 0.9;
   const win = (tc) => proc.frames.filter((f) => f.t >= tc - pre && f.t <= tc + post).map((f) => ({ ...f, t: f.t - (tc - pre) }));
   if (segs.length >= 2) {
-    const reps = segs.map((tc) => { const r = analyze(win(tc), opts); return r.error ? null : { tc, t0: tc - pre, res: r }; }).filter(Boolean);
-    if (reps.length >= 2) return { res: reps[0].res, proc, opts, kind: "video", reps, agg: aggregate(opts.stroke, reps.map((r) => r.res)), sel: 0, t0: reps[0].t0 };
+    // Service / smash : un vrai geste dure au moins ~0,2 s entre le point bas du bassin et l'impact ; en dessous, il s'agit
+    // d'un faux départ, d'un lancer sans frappe ou d'un second pic de vitesse (retombée du bras).
+    const overhead = opts.stroke === "serve" || opts.stroke === "smash";
+    const MIN_LOAD_TO_CONTACT = 0.2;
+    const reps = segs.map((tc) => { const r = analyze(win(tc), opts); return r.error ? null : { tc, t0: tc - pre, res: r, proc, src, name }; }).filter(Boolean)
+      .filter((r) => !overhead || r.res.frames[r.res.phases.contact].t - r.res.frames[r.res.phases.load].t >= MIN_LOAD_TO_CONTACT);
+    if (reps.length >= 2) return makeRepsLast(reps, opts);
   }
   if (segs.length === 1) {
     const w = win(segs[0]), res = analyze(w, opts);
-    if (!res.error) return { res, proc, opts, kind, t0: segs[0] - pre, wframes: w };
+    if (!res.error) return { res, proc, src, name, opts, kind, t0: segs[0] - pre, wframes: w };
   }
   const res = analyze(proc.frames, opts);
   if (res.error) throw new Error(res.error);
-  return { res, proc, opts, kind, t0: 0, wframes: proc.frames };
+  return { res, proc, src, name, opts, kind, t0: 0, wframes: proc.frames };
+}
+
+/** Un résultat simple devient une « répétition » pour pouvoir être regroupé avec celles d'autres vidéos. */
+function toRep(l) {
+  return l.reps ? l.reps : [{ tc: l.t0 + l.res.frames[l.res.phases.contact].t, t0: l.t0, res: l.res, proc: l.proc, src: l.src, name: l.name }];
+}
+
+/**
+ * Construit l'analyse regroupée d'un ensemble de répétitions (médiane des gestes retenus + dispersion).
+ * @param {object[]} reps répétitions ({res, proc, src, t0, tc, name})
+ * @param {object} opts options d'analyse
+ * @param {Set<number>} [excluded] indices des répétitions écartées par l'utilisateur
+ * @param {number} [sel] répétition affichée pour les images clés
+ */
+function makeRepsLast(reps, opts, excluded = new Set(), sel = 0) {
+  const kept = reps.filter((_, i) => !excluded.has(i));
+  const agg = kept.length >= 2 ? aggregate(opts.stroke, kept.map((r) => r.res)) : null;
+  const cur = reps[Math.min(sel, reps.length - 1)];
+  return { res: cur.res, proc: cur.proc, src: cur.src, opts, kind: "video", reps, agg, sel: Math.min(sel, reps.length - 1), t0: cur.t0, excluded, wframes: undefined };
+}
+
+/** Fusionne les analyses de plusieurs vidéos en un seul résultat moyenné. */
+function mergeLasts(lasts, opts) {
+  if (lasts.length === 1) return lasts[0];
+  const reps = lasts.flatMap(toRep);
+  return reps.length >= 2 ? makeRepsLast(reps, opts) : lasts[0];
 }
 
 /** Choix du joueur par toucher : affiche l'image de départ, entoure les personnes détectées, mémorise celle touchée. */
 async function pickPlayer() {
   const zone = $("#pickZone"), info = $("#seedInfo"), m = state.media;
   if (!m || m.kind !== "video") return;
+  const v = m.videos[0];
   zone.innerHTML = `<p class="muted small">Chargement de l'IA et détection des personnes…</p>`;
   try {
     await loadPose($("#model")?.value || "full", (t) => (zone.innerHTML = `<p class="muted small">${esc(t)}</p>`));
     const rotSel = $("#rot").value;
-    const t = Math.max(0, Math.min(m.src.duration - 0.1, +$("#t0").value || 0)) + 0.3;
-    const pv = await previewPlayers(m.src, Math.min(t, m.src.duration - 0.05), rotSel === "auto" ? "auto" : +rotSel);
+    const t = Math.max(0, Math.min(v.src.duration - 0.1, +$("#t0-0").value || 0)) + 0.3;
+    const pv = await previewPlayers(v.src, Math.min(t, v.src.duration - 0.05), rotSel === "auto" ? "auto" : +rotSel);
     if (!pv.persons.length) { zone.innerHTML = `<div class="notice">Personne détectée à cet instant : avancez le début (champ « Début ») sur un moment où le joueur est visible.</div>`; return; }
     const cv = document.createElement("canvas"); cv.width = pv.canvas.width; cv.height = pv.canvas.height; cv.className = "pickcv";
     const c = cv.getContext("2d"); c.drawImage(pv.canvas, 0, 0);
@@ -1997,26 +2798,31 @@ async function runAnalysis() {
     const m = state.media;
     const hCm = +$("#height")?.value || 0;
     if (hCm) coach.setProfile({ ...coach.getProfile(), heightCm: hCm });
-    let proc, opts;
+    const slow = +($("#slow")?.value || 1);
+    let last;
     if (m.kind === "video") {
-      const start = Math.max(0, +$("#t0").value || 0), end = Math.min(m.src.duration, +$("#t1").value || m.src.duration);
-      if (end - start < 0.4) throw new Error("Plage trop courte : augmentez la fin ou diminuez le début.");
-      say("Analyse image par image…");
-      const rotSel = $("#rot").value;
-      proc = await processVideo(m.src, { start, end, fps: +$("#fps").value, rot: rotSel === "auto" ? "auto" : +rotSel, seed: state.seed, onProgress: (p) => (prog.value = p), onStatus: say });
-      opts = { stroke: state.stroke, hand: state.hand, aspect: proc.aspect, timed: true };
+      readVideoRanges();
+      const rotSel = $("#rot").value, n = m.videos.length, lasts = [];
+      let opts;
+      for (let vi = 0; vi < n; vi++) {
+        const v = m.videos[vi];
+        if (v.t1 - v.t0 < 0.4) throw new Error(`« ${v.name} » : plage trop courte (augmentez la fin ou diminuez le début).`);
+        say(n > 1 ? `Vidéo ${vi + 1}/${n} : analyse image par image…` : "Analyse image par image…");
+        const proc = await processVideo(v.src, { start: v.t0, end: v.t1, fps: +$("#fps").value, rot: rotSel === "auto" ? "auto" : +rotSel, seed: vi === 0 ? state.seed : null, onProgress: (p) => (prog.value = (vi + p) / n), onStatus: say });
+        opts = { stroke: state.stroke, hand: state.hand, aspect: proc.aspect, timed: true, slow };
+        lasts.push(buildLast(proc, "video", opts, v.src, v.name));
+      }
+      last = mergeLasts(lasts, opts);
     } else {
       say("Analyse des photos…");
-      proc = await processImages(m.files, { onProgress: (p) => (prog.value = p) });
+      const proc = await processImages(m.files, { onProgress: (p) => (prog.value = p) });
       const idx = (ph) => m.phases.map((p, i) => (p === ph ? i : -1)).filter((i) => i >= 0);
       const c = idx("contact"), l = idx("load"), f = idx("follow");
       const cdet = c.filter((i) => proc.frames[i].lm);
-      opts = { stroke: state.stroke, hand: state.hand, aspect: proc.aspect, timed: false, contactIdx: cdet[0] ?? c[0], loadIdx: l[0] ?? cdet[0] ?? 0, followIdx: f[0] ?? cdet[0] ?? 0 };
+      const opts = { stroke: state.stroke, hand: state.hand, aspect: proc.aspect, timed: false, contactIdx: cdet[0] ?? c[0], loadIdx: l[0] ?? cdet[0] ?? 0, followIdx: f[0] ?? cdet[0] ?? 0, slow };
       if (opts.contactIdx == null) throw new Error("Marquez au moins une photo comme « Contact ».");
+      last = buildLast(proc, "images", opts);
     }
-    const slow = +($("#slow")?.value || 1);
-    opts.slow = slow;
-    const last = buildLast(proc, m.kind, opts);
     state.last = last;
     say("Terminé ✔");
     renderResults();
@@ -2036,6 +2842,30 @@ function fmtRange(d) {
 const u = (d) => d.unit;
 
 let stopSlowmo = null;
+
+const CONF_LABEL = { high: "fiable", mid: "indicative", low: "approximative" };
+const VIEW_LABEL = { side: "de côté", behind: "de dos", any: "toute vue" };
+const ATYPICAL_Z = 1.5; // écart à la médiane (en tolérances) au-delà duquel une mesure est jugée atypique
+
+/**
+ * Repère les gestes qui s'écartent de la médiane sur au moins deux mesures.
+ * @param {object} L analyse regroupée ({reps, excluded, agg})
+ * @returns {Set<number>} indices des gestes atypiques
+ */
+function atypicalReps(L) {
+  const out = new Set();
+  L.reps.forEach((r, i) => {
+    if (L.excluded?.has(i)) return;
+    let far = 0;
+    for (const m of L.agg.metrics) {
+      const v = r.res.values[m.id];
+      if (m.value == null || v == null || Number.isNaN(v) || !m.tol) continue;
+      if (Math.abs(v - m.value) / m.tol > ATYPICAL_Z) far++;
+    }
+    if (far >= 2) out.add(i);
+  });
+  return out;
+}
 
 const metricsForAI = (top) => top.metrics.filter((d) => d.value != null).map((d) => ({ critere: d.label, valeur: +(+d.value).toFixed(2), unite: d.unit, statut: { ok: "conforme", warn: "à surveiller", bad: "à corriger" }[d.status], repere: fmtRange(d) }));
 
@@ -2079,14 +2909,24 @@ function renderResults() {
   const L = state.last; if (!L || !$("#results")) return; // onglet quitté pendant l'analyse : résultats affichés au retour
   if (stopSlowmo) { stopSlowmo(); stopSlowmo = null; }
   const { res } = L;
-  const top = L.agg || res; // séance : valeurs médianes ; sinon geste unique
+  const keptReps = L.reps ? L.reps.filter((_, i) => !L.excluded?.has(i)) : null;
+  const top = L.agg || (keptReps && keptReps.length === 1 ? keptReps[0].res : res); // séance : médianes des gestes cochés ; sinon geste unique
   const color = top.score >= 75 ? "var(--ok)" : top.score >= 50 ? "var(--warn)" : "var(--bad)";
   const rows = top.metrics.map((d) => {
     const sp = L.agg && L.agg.spread[d.id];
-    const spread = sp && sp[2] > 1 ? `<br><small class="muted">étendue ${fmt(sp[0], d.unit)} → ${fmt(sp[1], d.unit)} (${sp[2]} gestes)</small>` : "";
-    return `<tr><td>${esc(d.label)}<br><small class="muted">${esc(d.tip || "")}</small></td><td><b>${fmt(d.value, d.unit)}</b>${spread}</td><td class="muted">${d.status === "na" ? "n/a (vidéo requise)" : "cible " + fmtRange(d)}</td><td><span class="tag ${d.status}">${{ ok: "OK", warn: "À surveiller", bad: "À corriger", na: "—" }[d.status]}</span></td></tr>`;
+    const spread = sp && sp.n > 1 ? `<br><small class="muted">${fmt(sp.min, d.unit)} → ${fmt(sp.max, d.unit)} · ${sp.n} gestes · <span class="reg ${sp.regular ? "ok" : "warn"}">${sp.regular ? "régulier" : "variable"}</span></small>` : "";
+    const meta = d.conf ? `<br><small class="muted"><span class="conf ${d.conf}">mesure ${CONF_LABEL[d.conf]}</span> · meilleure vue : ${VIEW_LABEL[d.view]}</small>` : "";
+    return `<tr><td>${esc(d.label)}<br><small class="muted">${esc(d.tip || "")}</small>${meta}</td><td><b>${fmt(d.value, d.unit)}</b>${d.status === "na" ? "" : gaugeSVG(d, d.value, sp && sp.n > 1 ? { min: sp.min, max: sp.max } : null)}${spread}</td><td class="muted">${d.status === "na" ? "n/a (vidéo requise)" : "cible " + fmtRange(d)}</td><td><span class="tag ${d.status}">${{ ok: "OK", warn: "À surveiller", bad: "À corriger", na: "—" }[d.status]}</span></td></tr>`;
   }).join("");
-  const repSel = L.reps ? `<div class="notice">📊 <b>${L.reps.length} ${STROKES[state.stroke].label.toLowerCase()}s détectés</b> dans la séance : les mesures ci-dessous sont les <b>médianes</b>. Images clés du geste : <select id="rep">${L.reps.map((r, i) => `<option value="${i}" ${i === L.sel ? "selected" : ""}>n° ${i + 1} — t = ${(L.proc.offset + r.tc).toFixed(1)} s — score ${r.res.score ?? "—"}</option>`).join("")}</select></div>` : "";
+  const atyp = L.reps && L.agg ? atypicalReps(L) : new Set();
+  const nVideos = L.reps ? new Set(L.reps.map((r) => r.name)).size : 1;
+  const repRows = L.reps ? L.reps.map((r, i) => `<tr class="${atyp.has(i) ? "atyp" : ""}"><td><input type="checkbox" data-inc="${i}" ${L.excluded?.has(i) ? "" : "checked"} aria-label="Inclure le geste ${i + 1}"></td><td>n° ${i + 1} ${atyp.has(i) ? '<span class="tag warn">atypique</span>' : ""}</td><td class="small">${esc(r.name || "")}</td><td>${(r.proc.offset + r.tc).toFixed(1)} s</td><td><b>${r.res.score ?? "—"}</b></td><td><button class="chip" data-show="${i}" ${i === L.sel ? 'aria-pressed="true"' : ""}>Voir</button></td></tr>`).join("") : "";
+  const repsCard = L.reps ? `<section class="card"><h2>🔁 Répétitions : ${L.reps.length} gestes${nVideos > 1 ? ` · ${nVideos} vidéos` : ""}</h2>
+    <p class="muted small">Les mesures ci-dessous sont les <b>médianes</b> des gestes cochés. Décochez un geste raté ou atypique pour le retirer de la moyenne ; « Voir » affiche ses images clés.</p>
+    ${L.agg && L.agg.consistency != null ? `<div class="kpi"><div>Régularité : <b>${L.agg.consistency} %</b> des mesures stables</div><div>Gestes retenus : <b>${keptReps.length}/${L.reps.length}</b></div></div>` : `<div class="notice">Cochez au moins 2 gestes pour obtenir une moyenne.</div>`}
+    <table><thead><tr><th></th><th>Geste</th><th>Vidéo</th><th>Instant</th><th>Score</th><th></th></tr></thead><tbody>${repRows}</tbody></table>
+    <p class="muted small">Régulier = écart-type d'une mesure inférieur à sa tolérance (ex. 10° pour un angle). Un geste régulier est un geste automatisé : c'est un objectif en soi.</p></section>` : "";
+  const repSel = "";
   const issues = top.issues.length ? top.issues.map((it) => {
     const I = ISSUES[it.id]; if (!I) return "";
     return `<div class="issue ${it.sev >= 3 ? "sev2" : ""}"><div class="issue-row"><div class="issue-body"><h3>${esc(I.label)}</h3><p>${esc(I.why)}</p><div class="cue">🎯 <b>Consigne :</b> ${esc(I.cue)}</div>
@@ -2100,12 +2940,16 @@ function renderResults() {
       <div><b>Score technique indicatif /100</b><div class="kpi"><div>Détection : ${Math.round(res.detRate * 100)} %</div><div>Bras frappeur : ${res.hand === "left" ? "gauche" : "droit"}</div><div>Images : ${res.frames.length}</div></div></div></div>
     ${res.notes.map((n) => `<div class="notice">${esc(n)}</div>`).join("")}
     ${repSel}
-    <h3>Images clés</h3><div class="canvases" id="keys"></div>
+    <h3>Images clés</h3>
+    <label class="small"><input type="checkbox" id="tgl" ${state.showTargets ? "checked" : ""}> Afficher les <b>valeurs cibles en pointillés verts</b> sur les images</label>
+    <div class="canvases" id="keys"></div>
+    <p class="muted small">Traits pleins = votre geste mesuré. <span style="color:var(--ok);font-weight:700">Pointillés verts = valeur cible</span> (angle du coude, flexion du genou, hauteur de contact, contact devant, tronc, tête, trajet du poignet). Plus marqué = à corriger ; atténué = déjà conforme.</p>
     ${video && !L.reps ? `<label class="field" for="cslide">Corriger l'instant d'impact (image ${res.phases.contact + 1}/${res.frames.length})</label><input id="cslide" type="range" min="0" max="${res.frames.length - 1}" value="${res.phases.contact}" style="width:100%"><p class="muted small">Si l'image « Contact » n'est pas la bonne, faites glisser puis relâchez : les mesures sont recalculées.</p>` : ""}
     ${video ? `<h3>Courbes</h3><canvas class="chart" id="chart" width="900" height="300"></canvas><p class="muted small">Vert : vitesse du poignet (u. relatives). Orange : flexion moyenne des genoux (°). Traits verticaux : chargement / contact / fin.</p>` : ""}
   </section>
+  ${repsCard}
   <section class="card"><h2>Mesures</h2><table><thead><tr><th>Critère</th><th>Mesuré</th><th>Repère</th><th>Statut</th></tr></thead><tbody>${rows}</tbody></table>
-    <p class="muted small">Les repères sont des plages pédagogiques indicatives issues de la littérature et du coaching ; les valeurs varient selon la morphologie, le style (ex. coup droit semi-ouvert) et l'angle de caméra.</p></section>
+    <p class="muted small">Les repères sont des plages pédagogiques indicatives issues de la littérature et du coaching ; les valeurs varient selon la morphologie, le style (ex. coup droit semi-ouvert) et l'angle de caméra. <button class="chip" data-go="guide">📐 Comprendre chaque mesure</button></p></section>
   <section class="card"><h2>Mesures calibrées (taille du joueur)</h2>${calibratedHTML(L, coach.getProfile().heightCm, state.stroke)}</section>
   <section class="card"><h2>Comparaison côte à côte</h2>
     <h3>Avec le modèle de référence</h3><div id="cmp" class="cmp"></div>
@@ -2119,10 +2963,18 @@ function renderResults() {
     ${aiBlock("analysis")}
     <div class="row"><button class="btn" data-go="exo">📅 Voir mon programme</button><button class="btn secondary" id="print">🖨 Exporter / imprimer</button><button class="btn secondary" id="toCoach">📨 Envoyer à mon coach</button></div></section>`;
   drawKeys();
-  renderCompare(L, state.media.src, $("#cmp"), state.stroke).catch(() => {});
-  if (video) { drawChart(); stopSlowmo = mountSlowmo($("#slowmo"), L, state.media.src); }
+  renderCompare(L, L.src, $("#cmp"), state.stroke).catch(() => {});
+  if (video) { drawChart(); stopSlowmo = mountSlowmo($("#slowmo"), L, L.src); }
   if ($("#cslide")) $("#cslide").onchange = (e) => recompute(+e.target.value);
-  if ($("#rep")) $("#rep").onchange = (e) => { const r = L.reps[+e.target.value]; state.last = { ...L, sel: +e.target.value, res: r.res, t0: r.t0 }; renderResults(); $("#keys").scrollIntoView({ behavior: "smooth" }); };
+  $("#tgl").onchange = (e) => { state.showTargets = e.target.checked; store.set("showTargets", state.showTargets); drawKeys(); };
+  document.querySelectorAll("[data-inc]").forEach((cb) => (cb.onchange = () => {
+    const ex = new Set(L.excluded); const i = +cb.dataset.inc;
+    if (cb.checked) ex.delete(i); else ex.add(i);
+    if (ex.size >= L.reps.length) { toast("Gardez au moins un geste."); renderResults(); return; }
+    state.last = makeRepsLast(L.reps, L.opts, ex, ex.has(L.sel) ? [...L.reps.keys()].find((k) => !ex.has(k)) : L.sel);
+    renderResults();
+  }));
+  document.querySelectorAll("[data-show]").forEach((b) => (b.onclick = () => { state.last = makeRepsLast(L.reps, L.opts, L.excluded, +b.dataset.show); renderResults(); $("#keys")?.scrollIntoView({ behavior: "smooth" }); }));
   $("#print").onclick = () => window.print();
   $("#toCoach").onclick = () => sendToCoach();
   $("#refFile").onchange = (e) => e.target.files[0] && loadReference(e.target.files[0]);
@@ -2132,7 +2984,7 @@ function renderResults() {
 
 async function showRefCompare() {
   const L = state.last, R = state.ref, host = $("#refcmp"); if (!host || !R) return;
-  try { await renderRefCompare(L, state.media.src, R.last, R.src, host, L.agg || L.res, R.last.agg || R.last.res); } catch (e) { host.innerHTML = `<div class="notice">${esc(e.message)}</div>`; }
+  try { await renderRefCompare(L, L.src, R.last, R.src, host, L.agg || L.res, R.last.agg || R.last.res); } catch (e) { host.innerHTML = `<div class="notice">${esc(e.message)}</div>`; }
 }
 
 /** Analyse la vidéo de référence avec la même chaîne que la vidéo du joueur. */
@@ -2147,7 +2999,7 @@ async function loadReference(file) {
     const end = Math.min(src.duration, 90);
     const proc = await processVideo(src, { start: 0, end, fps: 12, rot: "auto", onProgress: (p) => say(`Analyse de la référence… ${Math.round(p * 100)} %`), onStatus: say });
     const opts = { stroke: state.stroke, hand: state.hand, aspect: proc.aspect, timed: true, slow: +($("#slow")?.value || 1) };
-    state.ref = { src, last: buildLast(proc, "video", opts), name: file.name };
+    state.ref = { src, last: buildLast(proc, "video", opts, src, file.name), name: file.name };
     say(`✔ Référence prête (${file.name})`);
     await showRefCompare();
   } catch (e) { console.error("référence:", e); say(e.message || "Erreur d'analyse de la référence"); }
@@ -2168,7 +3020,7 @@ async function drawKeys() {
   const names = [["load", "Chargement"], ["contact", "Contact"], ["follow", "Fin de geste"]];
   host.innerHTML = "";
   for (const [k, name] of names) {
-    const { canvas, i } = await phaseCanvas(L, state.media.src, k);
+    const { canvas, i } = await phaseCanvas(L, L.src, k, { targets: state.showTargets });
     const fig = document.createElement("figure"); fig.append(canvas);
     const cap = document.createElement("figcaption"); cap.textContent = `${name}${L.kind === "video" ? ` (t = ${((L.t0 || 0) + L.proc.offset + L.res.frames[i].t).toFixed(2)} s)` : ""}`; fig.append(cap);
     host.append(fig);
@@ -2260,7 +3112,8 @@ function renderPlan() {
     <section class="card"><h3>🌤 Conditions</h3>${ul(plan.cond)}</section>
     <section class="card"><h3>⏱ Situations clés</h3>${ul(plan.situ)}</section>
     <section class="card"><h3>🚫 À éviter</h3>${ul(plan.avoid)}</section>
-    <section class="card"><h3>✅ Check-list</h3>${ul(plan.check)}</section>
+    <section class="card"><h3>✅ Check-list : avant, pendant, après</h3>${ul(plan.check)}</section>
+    <section class="card"><h3>🌱 Vos axes de progression</h3>${ul(plan.growth)}</section>
   </div>
   <section class="card"><h3>✨ Briefing d'avant-match</h3>${aiBlock("tactic")}</section>
   <div class="row"><button class="btn secondary" onclick="window.print()">🖨 Imprimer le plan</button></div>`;
@@ -2435,11 +3288,31 @@ function bindCoach() {
   };
 }
 
+// =========================== GUIDE DU COACH ===========================================================================
+function viewGuide() {
+  return `<section class="card"><h2>📖 Guide du coach</h2>
+    <p class="muted">Pour comprendre vos résultats et progresser : mesures illustrées, fiches techniques par coup, prévention, préparation physique, mental, tactique, matériel et plan de progression. Les renvois <a href="#src" data-go="src" class="refl">[xxx]</a> ouvrent la source dans l'onglet Sources.</p>
+    <div class="chips"><a class="chip" href="#g-mesures">📐 Comprendre les mesures</a><a class="chip" href="#g-coups">🎾 Fiches par coup</a><a class="chip" href="#g-coaching">📚 Coaching complet</a></div></section>
+  <section class="card" id="g-mesures"><h2>📐 Comprendre les mesures</h2>
+    <p>Chaque mesure de l'application est expliquée ci-dessous avec un schéma : ce qu'on mesure, comment, la cible, les erreurs fréquentes et le conseil d'un coach. La <b>jauge</b> montre les zones cible (vert), à surveiller (orange) et à corriger (rouge).</p>
+    ${glossaryHTML()}</section>
+  <section class="card" id="g-coups"><h2>🎾 Fiches techniques par coup</h2>${Object.keys(STROKE_GUIDE).map(strokeGuideHTML).join("")}</section>
+  <section class="card" id="g-coaching"><h2>📚 Coaching complet</h2>${GUIDE_SECTIONS.map(sectionHTML).join("")}</section>`;
+}
+function bindGuide() {
+  document.querySelectorAll('#app a.chip[href^="#g-"]').forEach((a) => (a.onclick = (e) => { e.preventDefault(); $(a.getAttribute("href"))?.scrollIntoView({ behavior: "smooth" }); }));
+}
+
 // =========================== SOURCES ===================================================================================
 function viewSources() {
   const link = (r) => (r.doi ? ` <a href="https://doi.org/${r.doi}" target="_blank" rel="noopener">DOI</a>` : r.url ? ` <a href="${r.url}" target="_blank" rel="noopener">lien</a>` : "");
+  const item = (r) => `<li id="ref-${r.id}"><span class="tag ok">${esc(r.topic)}</span> <code class="refid">${r.id}</code> ${esc(r.cite)}${link(r)}${r.lu ? ` <span class="muted small">· lu : ${esc(r.lu)}</span>` : ""}</li>`;
+  const base = REFERENCES.filter((r) => !r.lu), fresh = REFERENCES.filter((r) => r.lu);
   return `<section class="card"><h2>Sources scientifiques & pédagogiques</h2><p class="muted">Les repères et consignes de l'application s'appuient sur la littérature de biomécanique du tennis et sur la documentation d'entraîneurs. Les plages cibles sont simplifiées à des fins pédagogiques.</p>
-  <ul class="clean">${REFERENCES.map((r) => `<li><span class="tag ok">${esc(r.topic)}</span> ${esc(r.cite)}${link(r)}</li>`).join("")}</ul></section>
+  <h3>Références de base</h3><ul class="clean">${base.map(item).join("")}</ul></section>
+  <section class="card"><h3>Actualisation du ${esc(REFERENCES_UPDATED)} (${fresh.length} publications)</h3>
+    <p class="muted small">Recherche dans OpenAlex (métadonnées de publications). Pour chaque travail, le « niveau de lecture » indique ce qui a été consulté : <b>résumé</b> ou <b>titre</b> seulement. Aucune valeur chiffrée n'est attribuée à une publication au-delà de ce que son résumé indique ; les cibles de l'application restent des repères pédagogiques à calibrer.</p>
+    <ul class="clean">${fresh.map(item).join("")}</ul></section>
   <section class="card"><h3>Limites & usage responsable</h3><ul class="clean"><li>Estimation de pose monoculaire : les angles dans le plan de la caméra sont plus fiables que la profondeur.</li><li>Les rotations (bassin/épaules) sont des estimations ; filmez de dos ou de face pour les mieux voir.</li><li>Ne remplace pas un entraîneur diplômé ni un avis médical.</li><li>Les données restent sur votre appareil (localStorage) ; le moteur IA et le modèle sont téléchargés une fois depuis des CDN publics.</li></ul></section>`;
 }
 

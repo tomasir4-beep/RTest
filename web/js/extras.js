@@ -1,11 +1,12 @@
 // Fonctions d'affichage avancées : images clés, comparaison à un modèle, lecteur ralenti annoté, mesures calibrées.
 import { grabFrame, cropToPlayer, drawSkeleton, drawAngleLabel } from "./pose.js";
 import { figureSVG, IDEAL } from "./posefig.js";
+import { METRIC_DEFS } from "./metrics.js";
 
 const S_IDX = (hand) => (hand === "left" ? [11, 13, 15] : [12, 14, 16]);
 
 /** Image d'une phase (load / contact / follow) recadrée sur le joueur, squelette et angles dessinés. */
-export async function phaseCanvas(L, src, k, { labels = true } = {}) {
+export async function phaseCanvas(L, src, k, { labels = true, targets = false } = {}) {
   const { res, proc } = L;
   const i = res.phases[k];
   let cv;
@@ -18,7 +19,145 @@ export async function phaseCanvas(L, src, k, { labels = true } = {}) {
     if (k === "contact") drawAngleLabel(crop.canvas, crop.lm, S[0], S[1], S[2], `coude ${Math.round(res.series.elbow[i])}°`);
     if (k === "load") drawAngleLabel(crop.canvas, crop.lm, 23, 25, 27, `genoux ${Math.round(res.series.knee[i])}°`);
   }
+  if (targets && crop.lm) drawTargets(crop.canvas, L, k, i, crop.lm, crop.map);
   return { canvas: crop.canvas, lm: crop.lm, i };
+}
+
+// --- Cibles en pointillés sur l'image de la vidéo ------------------------------------------------------------------------
+const TARGET_COLOR = "#8cff9e";
+const ATTENTION_COLOR = "#ffb4a8";
+
+const mid2 = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+const rotate = (v, a) => ({ x: v.x * Math.cos(a) - v.y * Math.sin(a), y: v.x * Math.sin(a) + v.y * Math.cos(a) });
+const unit = (v) => { const n = Math.hypot(v.x, v.y) || 1; return { x: v.x / n, y: v.y / n }; };
+
+/** Texte contouré, lisible sur n'importe quel fond. */
+function tag(ctx, text, x, y, color, size, align = "left") {
+  ctx.font = `bold ${size}px system-ui,sans-serif`; ctx.textAlign = align;
+  ctx.lineWidth = 4; ctx.strokeStyle = "#0b3d2e"; ctx.lineJoin = "round"; ctx.strokeText(text, x, y);
+  ctx.fillStyle = color; ctx.fillText(text, x, y);
+}
+
+function dashed(ctx, x1, y1, x2, y2, color, width, alpha = 1) {
+  ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = "round"; ctx.setLineDash([width * 2.6, width * 2]);
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore();
+}
+
+/** Direction (±1) de la frappe dans l'image, d'après le déplacement du poignet autour de l'impact. */
+function strokeSign(res, S) {
+  const c = res.phases.contact, n = res.frames.length;
+  const a = res.frames[Math.max(0, c - 2)].lm[S[2]].x, b = res.frames[Math.min(n - 1, c + 2)].lm[S[2]].x;
+  return b >= a ? 1 : -1;
+}
+
+/**
+ * Dessine, en pointillés verts, la position idéale de chaque articulation ou ligne mesurée sur l'image de la phase.
+ * Les mesures déjà conformes sont atténuées ; celles à corriger sont plus marquées et légendées.
+ * @param {HTMLCanvasElement} canvas image recadrée (modifiée en place)
+ * @param {object} L analyse (res, opts)
+ * @param {string} k phase : "load" | "contact" | "follow"
+ * @param {number} i indice de l'image dans res.frames
+ * @param {object[]} lm points recadrés (coordonnées normalisées du canvas)
+ * @param {function} mapPt convertit un point de l'image complète vers le canvas recadré
+ */
+function drawTargets(canvas, L, k, i, lm, mapPt) {
+  const { res } = L, stroke = L.opts?.stroke, defs = METRIC_DEFS[stroke] || [];
+  const ctx = canvas.getContext("2d"), W = canvas.width, H = canvas.height;
+  const px = (j) => ({ x: lm[j].x * W, y: lm[j].y * H });
+  const S = S_IDX(res.hand), O = res.hand === "left" ? [12, 14, 16] : [11, 13, 15];
+  const hip = mid2(px(23), px(24)), sh = mid2(px(11), px(12));
+  const torso = Math.hypot(sh.x - hip.x, sh.y - hip.y) || 1;
+  const lw = Math.max(3, W / 150), fs = Math.max(20, W / 21);
+  const st = Object.fromEntries(res.metrics.map((m) => [m.id, m.status]));
+  const def = (id) => defs.find((d) => d.id === id);
+  const alphaOf = (id) => (st[id] === "ok" ? 0.55 : 1);
+  const colorOf = (id) => (st[id] === "ok" ? TARGET_COLOR : TARGET_COLOR);
+  const overhead = stroke === "serve" || stroke === "smash";
+  const sign = strokeSign(res, S);
+
+  // Angle cible à une articulation : on prolonge le segment proximal et on fait tourner le distal à l'angle voulu
+  const idealLimb = (rootIdx, jointIdx, endIdx, targetDeg, id, text, noLabel = false) => {
+    const root = px(rootIdx), joint = px(jointIdx), end = px(endIdx);
+    const u = unit({ x: root.x - joint.x, y: root.y - joint.y }), len = Math.hypot(end.x - joint.x, end.y - joint.y);
+    const actual = unit({ x: end.x - joint.x, y: end.y - joint.y });
+    const cands = [rotate(u, (targetDeg * Math.PI) / 180), rotate(u, (-targetDeg * Math.PI) / 180)];
+    const v = cands.reduce((a, b) => (a.x * actual.x + a.y * actual.y >= b.x * actual.x + b.y * actual.y ? a : b));
+    const e = { x: joint.x + v.x * len, y: joint.y + v.y * len };
+    dashed(ctx, joint.x, joint.y, e.x, e.y, colorOf(id), lw * 1.4, alphaOf(id));
+    ctx.save(); ctx.globalAlpha = alphaOf(id); ctx.fillStyle = TARGET_COLOR; ctx.beginPath(); ctx.arc(e.x, e.y, lw * 1.8, 0, 7); ctx.fill(); ctx.restore();
+    if (!noLabel) tag(ctx, text, e.x + (v.x >= 0 ? 8 : -8), e.y + (v.y >= 0 ? fs : -4), TARGET_COLOR, fs, v.x >= 0 ? "left" : "right");
+  };
+  const target = (d, fallback) => { const [a, b] = d.ok; return Math.max(a, Math.min(b > 180 ? 180 : b, fallback ?? (a + Math.min(b, 180)) / 2)); };
+
+  if (k === "load") {
+    const d = def("knee_load");
+    if (d) { const t = Math.round(target(d)); idealLimb(23, 25, 27, t, "knee_load", `genou ≈${t}°`); idealLimb(24, 26, 28, t, "knee_load", "", true); }
+    if (overhead) {
+      const e = def("elbow_trophy");
+      if (e) { const y = px(S[0]).y; dashed(ctx, 6, y, W - 6, y, TARGET_COLOR, lw, alphaOf("elbow_trophy")); tag(ctx, "coude ≥ épaules", W - 8, y - 6, TARGET_COLOR, fs * 0.9, "right"); }
+      const t = def("toss_arm");
+      if (t) { const y = px(O[0]).y - t.ok[0] * torso; dashed(ctx, 6, y, W - 6, y, TARGET_COLOR, lw, alphaOf("toss_arm")); tag(ctx, "bras libre haut", W - 8, y - 6, TARGET_COLOR, fs * 0.9, "right"); }
+    }
+  }
+
+  if (k === "contact") {
+    const e = def("elbow_contact");
+    if (e) { const t = Math.round(target(e)); idealLimb(S[0], S[1], S[2], t, "elbow_contact", `coude ≈${t}°`); }
+    const ch = def("contact_height");
+    if (ch) {
+      const ank = Math.max(px(27).y, px(28).y), nose = px(0).y, y = ank - ch.ok[0] * (ank - nose);
+      dashed(ctx, 6, y, W - 6, y, TARGET_COLOR, lw * 1.3, alphaOf("contact_height"));
+      tag(ctx, "contact : hauteur cible", 8, y - 6, TARGET_COLOR, fs * 0.9, "left");
+      const w = px(S[2]);
+      if (w.y > y + 4) { // flèche du poignet vers la hauteur cible
+        ctx.save(); ctx.strokeStyle = ATTENTION_COLOR; ctx.fillStyle = ATTENTION_COLOR; ctx.lineWidth = lw; ctx.beginPath(); ctx.moveTo(w.x + 14, w.y); ctx.lineTo(w.x + 14, y + 6); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(w.x + 14, y); ctx.lineTo(w.x + 8, y + 12); ctx.lineTo(w.x + 20, y + 12); ctx.fill(); ctx.restore();
+      }
+    }
+    const cf = def("contact_front");
+    if (cf) {
+      const x0 = hip.x, x1 = hip.x + sign * cf.ok[0] * torso, w = px(S[2]);
+      dashed(ctx, x0, hip.y - torso * 1.2, x0, hip.y + torso * 0.9, "#ffffff", lw, 0.7);
+      dashed(ctx, x1, w.y - torso * 0.5, x1, w.y + torso * 0.5, TARGET_COLOR, lw * 1.4, alphaOf("contact_front"));
+      tag(ctx, "contact ≥ ici", x1 + (sign > 0 ? 6 : -6), w.y - torso * 0.55, TARGET_COLOR, fs * 0.9, sign > 0 ? "left" : "right");
+    }
+    const tl = def("trunk_lean");
+    if (tl) {
+      const lim = (tl.ok[1] * Math.PI) / 180, side = Math.sign(sh.x - hip.x) || 1, len = torso * 1.15;
+      dashed(ctx, hip.x, hip.y, hip.x, hip.y - len, "#ffffff", lw, 0.7);
+      dashed(ctx, hip.x, hip.y, hip.x + side * Math.sin(lim) * len, hip.y - Math.cos(lim) * len, TARGET_COLOR, lw * 1.3, alphaOf("trunk_lean"));
+      tag(ctx, `tronc ≤ ${tl.ok[1]}°`, hip.x + side * (Math.sin(lim) * len + 8), hip.y - Math.cos(lim) * len, TARGET_COLOR, fs * 0.9, side > 0 ? "left" : "right");
+    }
+    const hd = def("head_stability");
+    if (hd && res.frames.length > 4) { // zone de stabilité de la tête + trajet réel
+      const c = res.phases.contact, slow = res.slow || 1, tc = res.frames[c].t;
+      const idx = res.frames.map((f, j) => j).filter((j) => Math.abs(res.frames[j].t - tc) <= 0.15 * slow);
+      if (idx.length > 1) {
+        const pts = idx.map((j) => mapPt(res.frames[j].lm[0])), p0 = { x: pts[0].x * W, y: pts[0].y * H };
+        ctx.save(); ctx.globalAlpha = alphaOf("head_stability"); ctx.strokeStyle = TARGET_COLOR; ctx.lineWidth = lw; ctx.setLineDash([lw * 2.6, lw * 2]);
+        ctx.beginPath(); ctx.arc(p0.x, p0.y, hd.ok[1] * torso, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+        ctx.strokeStyle = "#ffd23f"; ctx.lineWidth = lw; ctx.beginPath(); pts.forEach((p, n) => (n ? ctx.lineTo(p.x * W, p.y * H) : ctx.moveTo(p.x * W, p.y * H))); ctx.stroke(); ctx.restore();
+        tag(ctx, "tête dans le cercle", p0.x, p0.y - hd.ok[1] * torso - 6, TARGET_COLOR, fs * 0.85, "center");
+      }
+    }
+    const wp = def("wrist_path");
+    if (wp && res.frames.length > 4) { // trajet réel du poignet et direction cible
+      const c = res.phases.contact, slow = res.slow || 1, tc = res.frames[c].t;
+      const idx = res.frames.map((f, j) => j).filter((j) => res.frames[j].t >= tc - 0.25 * slow && res.frames[j].t <= tc);
+      const pts = idx.map((j) => mapPt(res.frames[j].lm[S[2]]));
+      if (pts.length > 1) {
+        ctx.save(); ctx.strokeStyle = "#ffd23f"; ctx.lineWidth = lw * 1.2; ctx.beginPath(); pts.forEach((p, n) => (n ? ctx.lineTo(p.x * W, p.y * H) : ctx.moveTo(p.x * W, p.y * H))); ctx.stroke(); ctx.restore();
+        const p0 = { x: pts[0].x * W, y: pts[0].y * H }, dir = wp.ok[0] < 0 ? -1 : 1, len = Math.max(0.35, Math.abs(wp.ok[0]) * 1.6) * torso;
+        dashed(ctx, p0.x, p0.y, p0.x + sign * torso * 0.2, p0.y + dir * len, TARGET_COLOR, lw * 1.5, alphaOf("wrist_path"));
+        tag(ctx, dir > 0 ? "le poignet doit descendre" : "le poignet doit monter", p0.x + sign * torso * 0.2 + 8, p0.y + dir * len, TARGET_COLOR, fs * 0.85, "left");
+      }
+    }
+  }
+
+  if (k === "follow") {
+    const fh = def("follow_high");
+    if (fh) { const y = sh.y - fh.ok[0] * torso; dashed(ctx, 6, y, W - 6, y, TARGET_COLOR, lw * 1.3, alphaOf("follow_high")); tag(ctx, "finition ≥ ici", W - 8, y - 6, TARGET_COLOR, fs * 0.9, "right"); }
+  }
 }
 
 const PHASES = {

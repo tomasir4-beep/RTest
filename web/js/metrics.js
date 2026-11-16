@@ -133,7 +133,7 @@ const torsoWorld = (f) => norm(sub(mid(f.wl[LM.lSh], f.wl[LM.rSh]), mid(f.wl[LM.
 const GROUND = (opts = {}) => [
   { id: "knee_load", label: "Flexion des jambes au chargement", unit: "°", ok: [110, 160], warn: [100, 168], high: "g_knee_stiff", w: 1.5, tip: "180° = jambes tendues" },
   { id: "shoulder_turn", label: "Rotation des épaules (préparation)", unit: "°", ok: [45, 400], warn: [28, 400], low: "g_turn_small", w: 1.5, video: true, tip: "amplitude de rotation du buste" },
-  { id: "separation", label: "Dissociation bassin–épaules (max)", unit: "°", ok: [15, 120], warn: [8, 120], low: "g_sep_low", w: 1, tip: "écart de rotation épaules / bassin" },
+  { id: "separation", label: "Dissociation bassin–épaules (max)", unit: "°", ok: [15, 120], warn: [8, 120], low: "g_sep_low", w: 0.5, tip: "écart de rotation épaules / bassin" },
   { id: "contact_front", label: "Point de contact devant le corps", unit: "× buste", ok: [0.25, 5], warn: [0.05, 5], low: "g_contact_behind", w: 2, video: true, tip: "distance poignet–hanches dans l'axe du coup" },
   opts.skipElbow ? null : { id: "elbow_contact", label: "Angle du coude au contact", unit: "°", ok: [opts.elbowMin || 135, 181], warn: [110, 181], low: "g_arm_cramped", w: 1, tip: "180° = bras tendu" },
   { id: "head_stability", label: "Stabilité de la tête (± 0,15 s)", unit: "× buste", ok: [0, 0.25], warn: [0, 0.45], high: "g_head_moves", w: 1, video: true, tip: "déplacement de la tête autour de l'impact" },
@@ -145,7 +145,7 @@ export const METRIC_DEFS = {
     { id: "knee_load", label: "Flexion des jambes (position trophée)", unit: "°", ok: [105, 150], warn: [95, 160], high: "s_knee_stiff", w: 2, tip: "180° = jambes tendues" },
     { id: "elbow_trophy", label: "Hauteur du coude / épaule (trophée)", unit: "× buste", ok: [-0.1, 3], warn: [-0.3, 3], low: "s_elbow_low", w: 1, tip: "≥ 0 : coude au niveau des épaules" },
     { id: "toss_arm", label: "Bras lanceur haut (trophée)", unit: "× buste", ok: [0.2, 5], warn: [-0.1, 5], low: "s_toss_arm", w: 1, tip: "poignet lanceur au-dessus de l'épaule" },
-    { id: "separation", label: "Dissociation bassin–épaules (max)", unit: "°", ok: [20, 140], warn: [10, 140], low: "s_sep_low", w: 1, tip: "écart de rotation épaules / bassin" },
+    { id: "separation", label: "Dissociation bassin–épaules (max)", unit: "°", ok: [20, 140], warn: [10, 140], low: "s_sep_low", w: 0.5, tip: "écart de rotation épaules / bassin" },
     { id: "elbow_contact", label: "Angle du coude au contact", unit: "°", ok: [165, 181], warn: [150, 181], low: "s_elbow_bent", w: 2, tip: "180° = bras tendu" },
     { id: "contact_height", label: "Hauteur du point de contact", unit: "× (cheville→nez)", ok: [1.15, 4], warn: [1.05, 4], low: "s_contact_low", w: 2, tip: "poignet frappeur relatif à la taille" },
   ],
@@ -194,6 +194,25 @@ export const METRIC_DEFS = {
   ],
 };
 
+// Métadonnées issues de la revue « expert du domaine » : fiabilité de la mesure (monoculaire), vue de caméra conseillée,
+// tolérance de régularité (écart-type au-delà duquel le geste est jugé variable d'une répétition à l'autre).
+export const METRIC_META = {
+  knee_load: { conf: "high", view: "side", tol: 10 },
+  elbow_contact: { conf: "high", view: "side", tol: 10 },
+  elbow_trophy: { conf: "mid", view: "side", tol: 0.15 },
+  toss_arm: { conf: "mid", view: "side", tol: 0.2 },
+  contact_height: { conf: "mid", view: "side", tol: 0.08 },
+  separation: { conf: "low", view: "behind", tol: 10 },
+  shoulder_turn: { conf: "low", view: "behind", tol: 15 },
+  contact_front: { conf: "mid", view: "side", tol: 0.25 },
+  head_stability: { conf: "mid", view: "any", tol: 0.1 },
+  trunk_lean: { conf: "mid", view: "side", tol: 6 },
+  backswing: { conf: "mid", view: "side", tol: 0.25 },
+  wrist_path: { conf: "mid", view: "side", tol: 0.2 },
+  follow_high: { conf: "mid", view: "side", tol: 0.2 },
+  contact_speed: { conf: "low", view: "side", tol: 1.0 },
+};
+for (const defs of Object.values(METRIC_DEFS)) for (const d of defs) Object.assign(d, METRIC_META[d.id] || {});
 // --- Analyse principale ----------------------------------------------------------------------
 /**
  * @param {Array} rawFrames
@@ -238,6 +257,14 @@ export function analyze(rawFrames, o) {
   }
   // Cadence de la vidéo : 1 = temps réel ; > 1 = ralenti (les durées de référence sont multipliées).
   const slow = o.slow || 1;
+  // Service / smash : l'impact est au point le plus haut du poignet, à ± 0,12 s du pic de vitesse (le pic de vitesse
+  // arrive un peu avant la pleine extension : sans cet affinage, le bras paraît plié et le contact trop bas).
+  if (serveLike && o.timed && o.contactIdx == null) {
+    const lo = idxAt(fr, fr[c].t - 0.12 * slow), hi = idxAt(fr, fr[c].t + 0.12 * slow);
+    let best = c, bestY = Infinity;
+    for (let i = lo; i <= hi; i++) { const y = fr[i].lm[S.wr].y; if (y < fr[i].lm[LM.nose].y && y < bestY) { bestY = y; best = i; } }
+    c = best;
+  }
   const winLo = (sec) => (o.timed ? idxAt(fr, fr[c].t - sec * slow) : Math.max(0, c - 1));
   const kneeSeries = fr.map(kneeAvg);
   let l = o.loadIdx;
@@ -377,13 +404,20 @@ const median = (a) => { const s = [...a].sort((x, y) => x - y); const m = Math.f
 /** Agrège plusieurs gestes de la même séance : médiane de chaque mesure + dispersion. */
 export function aggregate(stroke, reps) {
   const values = {}, spread = {};
+  let regular = 0, counted = 0;
   for (const d of METRIC_DEFS[stroke] || []) {
     const v = reps.map((r) => r.values[d.id]).filter((x) => x != null && !Number.isNaN(x));
-    if (v.length) { values[d.id] = median(v); spread[d.id] = [Math.min(...v), Math.max(...v), v.length]; }
+    if (!v.length) continue;
+    const mean = v.reduce((a, b) => a + b, 0) / v.length;
+    const sd = v.length > 1 ? Math.sqrt(v.reduce((a, b) => a + (b - mean) ** 2, 0) / (v.length - 1)) : 0;
+    const med = median(v);
+    const mad = median(v.map((x) => Math.abs(x - med))) || 0; // dispersion robuste pour repérer un geste aberrant
+    values[d.id] = med;
+    spread[d.id] = { min: Math.min(...v), max: Math.max(...v), n: v.length, mean, sd, regular: v.length < 2 ? null : sd <= (d.tol ?? Infinity), mad, 0: Math.min(...v), 1: Math.max(...v), 2: v.length };
+    if (v.length > 1) { counted++; if (sd <= (d.tol ?? Infinity)) regular++; }
   }
-  return { ...evaluate(stroke, values, true), values, spread };
+  return { ...evaluate(stroke, values, true), values, spread, consistency: counted ? Math.round((regular / counted) * 100) : null };
 }
-
 /**
  * Repère les gestes dans une longue séquence (séance entière) : pics de vitesse du poignet frappeur.
  * Service : poignet au-dessus de la tête et bras tendu. Renvoie des instants de contact (s).

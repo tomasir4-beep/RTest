@@ -2,7 +2,7 @@
 # L'application fonctionne ainsi aussi en double-cliquant sur web/index.html (file://), ou les modules ES sont bloques par le navigateur.
 # A relancer apres toute modification de web/js/*.js :  .\scripts\build-bundle.ps1
 $js = Join-Path $PSScriptRoot "..\web\js"
-$order = "knowledge", "metrics", "posefig", "tactics", "coach", "assistant", "pose", "extras", "app"
+$order = "knowledge", "metrics", "posefig", "guide", "tactics", "coach", "assistant", "pose", "extras", "app"
 $out = New-Object System.Text.StringBuilder
 [void]$out.AppendLine("// FICHIER GENERE par scripts/build-bundle.ps1 - ne pas modifier a la main.")
 foreach ($name in $order) {

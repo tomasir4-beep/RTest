@@ -220,7 +220,7 @@ export async function grabFrame(src, t, rot = 0) {
 
 // Recadre l'image autour du joueur (marge) et recalcule les points : les keyframes restent lisibles même si le joueur est petit.
 export function cropToPlayer(canvas, lm, margin = 0.6) {
-  if (!lm) return { canvas, lm };
+  if (!lm) return { canvas, lm, map: (p) => p };
   const W = canvas.width, H = canvas.height;
   const xs = lm.map((p) => p.x * W), ys = lm.map((p) => p.y * H);
   const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
@@ -229,7 +229,8 @@ export function cropToPlayer(canvas, lm, margin = 0.6) {
   const s = Math.min(side, W, H), out = 520;
   const c = document.createElement("canvas"); c.width = c.height = out;
   c.getContext("2d").drawImage(canvas, x0, y0, s, s, 0, 0, out, out);
-  return { canvas: c, lm: lm.map((p) => ({ ...p, x: (p.x * W - x0) / s, y: (p.y * H - y0) / s })) };
+  const map = (p) => ({ ...p, x: (p.x * W - x0) / s, y: (p.y * H - y0) / s }); // image complète → image recadrée
+  return { canvas: c, lm: lm.map(map), map };
 }
 
 const BONES = [[11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [11, 23], [12, 24], [23, 24], [23, 25], [25, 27], [24, 26], [26, 28], [27, 31], [28, 32]];

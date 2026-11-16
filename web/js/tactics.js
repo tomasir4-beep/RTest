@@ -1,4 +1,4 @@
-﻿// Moteur tactique à règles : questionnaire (joueur / adversaire / conditions) → plan de jeu + schémas.
+// Moteur tactique à règles : questionnaire (joueur / adversaire / conditions) → plan de jeu + schémas.
 // Approche explicable : chaque schéma reçoit un score et des raisons lisibles (pas de boîte noire).
 
 export const STYLES = {
@@ -184,6 +184,84 @@ export const PATTERNS = [
     desc: "Visez le milieu du terrain entre les deux adversaires : crée de l'hésitation (« à toi ! ») et réduit l'angle adverse.",
     steps: [m(0.5, 0, 0.5, 0.9, "Balle au milieu"), o(0.3, 1, 0.5, 0.3, "Hésitation")],
     fit: (P, O, C) => mk(3).add(wk(O, "lateral"), 1).done() },
+  // ===== Actualisation du 16/11/2026 : schémas supplémentaires =====
+  // ----- SERVICE
+  { id: "sv_plus1_bh", phase: "Service", name: "Service sur le revers, puis attaque en long de ligne",
+    desc: "Le service au revers donne souvent un retour faible ou court : prenez la balle tôt et attaquez dans le grand côté ouvert (long de ligne).",
+    steps: [m(0.62, 0, 0.12, 0.66, "1 Service au revers"), o(0.2, 1, 0.55, 0.2, "2 Retour faible"), m(0.55, 0.2, 0.92, 0.92, "3 Attaque long de ligne")],
+    fit: (P, O, C) => mk(2).add(wk(O, "bh"), 3, "Son revers est un point faible.").add(has(P.p_weapon, "fh"), 2, "Votre coup droit finit bien la balle.").add(P.p_serve1 !== "low", 1, "Votre 1re balle est assez régulière pour viser une zone.").done() },
+  { id: "sv_vary", phase: "Service", name: "Varier les zones : jamais deux fois le même service",
+    desc: "Alternez T, extérieur et corps selon un ordre non prévisible : l'adversaire ne peut plus anticiper et son retour perd en précision.",
+    steps: [m(0.62, 0, 0.47, 0.68, "1 T"), m(0.62, 0, 0.06, 0.68, "2 Extérieur"), m(0.62, 0, 0.3, 0.64, "3 Corps")],
+    fit: (P, O, C) => mk(2).add(O.o_style === "attaquant" || like(O, "return"), 3, "Il prend vite le retour : ne le laissez pas anticiper.").add(level(P) >= 2, 1, "À votre niveau, la variation des zones est rentable.").add(P.p_serve1 === "high", 1, "Vous placez bien vos 1res balles.").done() },
+  { id: "sv_second_deep", phase: "Service", name: "2e service profond au corps (sécurité)",
+    desc: "Un 2e service lifté au corps, bien profond, évite les doubles fautes et limite l'attaque du retourneur.",
+    steps: [m(0.38, 0, 0.7, 0.72, "1 2e service profond au corps"), o(0.75, 1, 0.5, 0.2, "2 Retour contraint"), m(0.5, 0.1, 0.4, 0.9, "3 Reprise du point")],
+    fit: (P, O, C) => mk(1).add(P.p_serve2 === "weak" || P.p_weak.includes("serve2"), 4, "Votre 2e service est fragile : sécurité d'abord.").add(O.o_style === "attaquant" || like(O, "return"), 2, "Il attaque les secondes balles.").add(C.c_wind !== "none", 1, "Vent : réduire le risque.").done() },
+  // ----- RETOUR
+  { id: "ret_long_line", phase: "Retour", name: "Retour long de ligne en surprise",
+    desc: "Après plusieurs retours croisés, un retour long de ligne surprend l'adversaire qui s'est déplacé vers le centre ou le filet.",
+    steps: [o(0.55, 0, 0.35, 1, "Service"), m(0.35, 1, 0.05, 0.9, "Retour long de ligne")],
+    fit: (P, O, C) => mk(0).add(O.o_pos === "in", 3, "Il avance après le service : la ligne est ouverte.").add(O.o_net === "high" || like(O, "net"), 3, "Il monte au filet : un retour long de ligne le surprend.").add(level(P) >= 2, 1, "Option rentable à ce niveau.").done() },
+  { id: "ret_slice_low", phase: "Retour", name: "Retour slicé bas sur gros service",
+    desc: "Contre un service puissant, le retour slicé bas et compact absorbe la vitesse et laisse du temps pour se replacer.",
+    steps: [o(0.55, 0, 0.35, 1, "Gros service"), m(0.35, 1, 0.6, 0.72, "Retour slicé bas et compact")],
+    fit: (P, O, C) => mk(1).add(O.o_serve === "big", 4, "Gros service : absorbez la vitesse.").add(["dur_rapide", "indoor", "gazon"].includes(C.c_surface), 2, "Surface rapide : la balle glisse.").add(wk(O, "lowball"), 2, "Il n'aime pas les balles basses.").done() },
+  // ----- ÉCHANGE
+  { id: "ry_triangle", phase: "Échange", name: "Triangle : croisé, croisé, puis long de ligne",
+    desc: "Deux croisés profonds pour fixer l'adversaire, puis un changement de ligne sur une balle courte : le terrain à couvrir est le plus grand.",
+    steps: [m(0.2, 0, 0.8, 0.95, "1 Croisé"), o(0.8, 1, 0.2, 0.05, "2 Retour croisé"), m(0.2, 0.05, 0.8, 0.95, "3 Croisé"), o(0.8, 1, 0.25, 0.1, "4 Balle courte"), m(0.25, 0.1, 0.05, 0.9, "5 Long de ligne")],
+    fit: (P, O, C) => mk(2).add(["limeur", "contreur", "complet", "rameur"].includes(P.p_style), 2, "Jeu régulier adapté à ce schéma.").add(level(P) <= 2, 2, "Croisé = zone la plus sûre.").add(O.o_style === "rameur", 1, "Un joueur qui ramène tout finit par offrir une balle courte.").done() },
+  { id: "ry_defense_lob", phase: "Échange", name: "Défense : lob profond puis reprise du point",
+    desc: "Quand vous êtes poussé hors du terrain, un lob profond au centre redonne le temps de revenir et neutralise l'attaque adverse.",
+    steps: [o(0.15, 1, 0.85, 0.05, "1 Balle qui vous pousse"), m(0.85, 0.05, 0.4, 0.97, "2 Lob défensif profond"), o(0.4, 1, 0.55, 0.15, "3 Retour neutre"), m(0.5, 0.0, 0.5, 0.9, "4 Reprise du point")],
+    fit: (P, O, C) => mk(1).add(O.o_style === "attaquant", 3, "Il dicte le jeu : cassez son attaque.").add(P.p_weak.includes("move"), 2, "Gagne du temps pour se replacer.").add(C.c_wind === "back", -3, "Vent dans le dos : risque de long.").done() },
+  { id: "ry_slice_lob", phase: "Échange", name: "Slice court puis lob",
+    desc: "Un slice court attire l'adversaire vers le filet, puis un lob profond le prend à contre-pied : il doit repartir vers le fond.",
+    steps: [m(0.3, 0, 0.65, 0.6, "1 Slice court"), o(0.6, 1, 0.65, 0.62, "2 Il avance"), m(0.4, 0.05, 0.35, 0.98, "3 Lob profond")],
+    fit: (P, O, C) => mk(0).add(wk(O, "short"), 3, "Il gère mal les balles courtes.").add(O.o_pos === "deep", 3, "Il joue en retrait : il doit avancer puis reculer.").add(C.c_surface === "terre", 1).add(C.c_wind === "face", -2, "Vent de face : le lob est difficile à doser.").done() },
+  { id: "ry_wrongfoot", phase: "Échange", name: "Contre-pied : jouer derrière le joueur",
+    desc: "Quand l'adversaire court d'un côté, renvoyez la balle dans la zone qu'il vient de quitter : il ne peut pas inverser son appui.",
+    steps: [m(0.8, 0, 0.2, 0.95, "1 Croisé à gauche"), o(0.2, 1, 0.4, 0.1, "2 Il est excentré"), m(0.4, 0.1, 0.78, 0.95, "3 Derrière lui")],
+    fit: (P, O, C) => mk(1).add(wk(O, "lateral") || O.o_move !== "good", 3, "Sa mobilité latérale est limitée.").add(like(O, "cross"), 2, "Il s'installe en croisé : jouez derrière lui.").add(level(P) >= 2, 1).done() },
+  { id: "ry_pace_change", phase: "Échange", name: "Changement de rythme : lift lourd puis accélération plate",
+    desc: "Une balle haute et lourde lui fait perdre son rythme, puis une accélération à plat sur la balle suivante le surprend.",
+    steps: [m(0.25, 0, 0.8, 0.95, "1 Lift lourd"), o(0.8, 1, 0.3, 0.1, "2 Balle haute"), m(0.3, 0.1, 0.15, 0.9, "3 Accélération plate")],
+    fit: (P, O, C) => mk(1).add(dislike(O, "pace"), 3, "Il n'aime pas les changements de rythme.").add(O.o_style === "rameur" || O.o_style === "limeur", 3, "À bousculer : il ne prend pas de risque.").add(O.o_react === "passive", 1).done() },
+  { id: "ry_feet", phase: "Échange", name: "Jouer dans les pieds du joueur qui monte",
+    desc: "Contre un joueur de filet, une balle basse et rapide dans ses pieds l'oblige à volleyer vers le haut : le passing devient facile.",
+    steps: [o(0.4, 0.55, 0.5, 0.5, "1 Il monte"), m(0.7, 0, 0.5, 0.52, "2 Balle dans les pieds")],
+    fit: (P, O, C) => mk(0).add(O.o_net === "high" || like(O, "net") || O.o_react === "net", 4, "Il monte souvent au filet.").add(dislike(O, "low"), 2, "Il n'aime pas les balles basses.").done() },
+  // ----- FILET
+  { id: "net_block_short", phase: "Filet", name: "Volée de blocage profonde, puis volée courte",
+    desc: "Une première volée profonde au fond de court, puis une volée courte croisée pour terminer le point.",
+    steps: [m(0.5, 0.5, 0.1, 0.85, "1 Volée profonde croisée"), o(0.1, 1, 0.45, 0.35, "2 Défense adverse"), m(0.4, 0.55, 0.55, 0.62, "3 Volée courte")],
+    fit: (P, O, C) => mk(1).add(P.p_net !== "low", 3, "Vous êtes à l'aise au filet.").add(O.o_style === "limeur" || O.o_style === "rameur", 2, "Il ramène tout : finissez au filet.").add(wk(O, "short"), 1).done() },
+  { id: "net_smash", phase: "Filet", name: "Smash : placement avant puissance",
+    desc: "Contre un lob, placez-vous sous la balle avec des pas chassés, frappez dans le grand côté ouvert et gardez de la marge.",
+    steps: [o(0.5, 1, 0.5, 0.2, "1 Lob adverse"), m(0.5, 0.35, 0.9, 0.9, "2 Smash dans le grand côté")],
+    fit: (P, O, C) => mk(0).add(like(O, "lob") || O.o_style === "limeur", 3, "Il lobe souvent.").add(P.p_net === "high", 2).add(C.c_sun === "yes", -2, "Soleil : lancez-vous tôt sous la balle.").done() },
+  { id: "net_approach_slice", phase: "Filet", name: "Approche slicée long de ligne",
+    desc: "L'approche slicée reste basse : l'adversaire ne peut pas attaquer le passing, et le slice vous laisse le temps de monter.",
+    steps: [m(0.4, 0.3, 0.92, 0.95, "1 Approche slicée"), m(0.92, 0.6, 0.55, 0.5, "2 Montée au filet"), o(0.92, 1, 0.5, 0.2, "3 Passing contraint")],
+    fit: (P, O, C) => mk(0).add(["gazon", "dur_rapide", "indoor"].includes(C.c_surface), 3, "Surface rapide : le slice glisse.").add(P.p_net !== "low", 2).add(wk(O, "passing"), 2, "Son passing est faible.").add(P.p_net === "low", -3).done() },
+  // ----- DOUBLE
+  { id: "db_australian", phase: "Double", dbl: true, name: "Formation australienne",
+    desc: "Le serveur et son partenaire sont du même côté du terrain : cela perturbe le retour croisé habituel et protège un côté faible.",
+    steps: [m(0.62, 0, 0.45, 0.66, "Service T"), m(0.75, 0.5, 0.55, 0.62, "Partenaire du même côté, au filet")],
+    fit: (P, O, C) => mk(2).add(C.c_mode === "double", 1).add(O.o_style === "attaquant" || like(O, "return"), 2, "Le retour croisé est son point fort : changez la donne.").done() },
+  { id: "db_i_formation", phase: "Double", dbl: true, name: "Formation « I » avec signaux",
+    desc: "Le partenaire se place au centre, accroupi, et indique par un signal s'il croise ou reste. Le retourneur ne sait pas d'où viendra la volée.",
+    steps: [m(0.5, 0, 0.45, 0.66, "Service"), m(0.5, 0.5, 0.7, 0.62, "Partenaire au centre : poach ou reste")],
+    fit: (P, O, C) => mk(2).add(P.p_net !== "low", 2).add(C.c_mode === "double", 1).done() },
+  { id: "db_lob_cross", phase: "Double", dbl: true, name: "Retour lobé croisé sur le volleyeur",
+    desc: "Quand le partenaire adverse est au filet, un lob croisé le fait reculer et ouvre le terrain.",
+    steps: [o(0.55, 0, 0.35, 1, "Service"), m(0.35, 1, 0.8, 0.98, "Lob croisé")],
+    fit: (P, O, C) => mk(2).add(O.o_net === "high" || like(O, "net"), 3, "L'adversaire monte souvent.").add(C.c_wind === "face", -2).done() },
+  { id: "db_target_weak", phase: "Double", dbl: true, name: "Cibler l'adversaire le plus faible",
+    desc: "Au double, 2 à 3 balles sur 4 vers le joueur le plus fragile ; il finit par faire la faute ou affaiblit son partenaire.",
+    steps: [m(0.5, 0, 0.8, 0.9, "Balle au plus faible"), o(0.8, 1, 0.5, 0.2, "Retour sous contrainte")],
+    fit: (P, O, C) => mk(3).add(wk(O, "bh") || wk(O, "fh"), 3, "Une faiblesse est repérée.").done() },
 ];
 
 // --- Moteur ------------------------------------------------------------------------------------------------
@@ -194,7 +272,7 @@ export function buildPlan(A) {
   const dbl = A.c_mode === "double";
   const rank = (phase, n, min = 3) => PATTERNS.filter((p) => p.phase === phase && !!p.dbl === dbl)
     .map((p) => ({ p, ...p.fit(P, O, C) })).filter((x) => x.score >= min).sort((a, b) => b.score - a.score).slice(0, n);
-  const patterns = dbl ? rank("Double", 4, 3) : [...rank("Service", 2, 3), ...rank("Retour", 2, 3), ...rank("Échange", 3, 3), ...rank("Filet", 1, 4)];
+  const patterns = dbl ? rank("Double", 6, 3) : [...rank("Service", 3, 3), ...rank("Retour", 2, 3), ...rank("Échange", 4, 3), ...rank("Filet", 2, 4)];
 
   const principles = [], serve = [], ret = [], rally = [], cond = [], situ = [], avoid = [], check = [];
   const surf = A.c_surface;
@@ -297,10 +375,21 @@ export function buildPlan(A) {
   avoid.push("Changer complètement de tactique après 2 points perdus.");
 
   check.push("Avant le match : 1 plan A (arme principale), 1 plan B (variation), 1 plan C (urgence).");
-  check.push("Après 6 jeux : bilan flash (ce qui marche / ce que j'abandonne).");
+  check.push("Échauffement de 15 minutes : mobilité, déplacements, puis frappes progressives ; testez les balles, le rebond et le vent (ou le soleil) avant le premier jeu.");
+  check.push("Pendant le match : après 6 jeux, bilan flash (ce qui marche / ce que j'abandonne) ; à chaque changement de côté, boire, respirer, rappeler le plan.");
   check.push("Entre les points : respirer, choisir zone + hauteur, jouer le point suivant.");
+  check.push("Après le match : notez 1res balles en jeu, points gagnés sur 1re/2e balle, fautes directes / coups gagnants, 2 choses réussies et 1 axe de progrès.");
+  const growthByStyle = {
+    attaquant: ["Ajoutez de la variation de hauteur et de rythme (slice, balle haute) pour ne pas dépendre de votre seule vitesse.", "Fabriquez un coup de sécurité (croisé profond) pour les moments difficiles.", "Patience sur 3 balles : l'attaque vient quand la balle est courte."],
+    contreur: ["Ajoutez une arme pour finir (coup droit inside-in, passing) afin de ne pas attendre la faute.", "Travaillez l'anticipation et la transition défense → attaque.", "Apprenez à jouer plus fort sur les balles courtes."],
+    limeur: ["Gagnez en profondeur : balles près de la ligne de fond pour repousser l'adversaire.", "Développez la montée au filet sur balle courte.", "Ajoutez un deuxième rythme (lift lourd) pour ne pas être prévisible."],
+    rameur: ["Ajoutez une accélération contrôlée sur la première balle faible.", "Travaillez un jeu de filet minimal (volée de blocage, smash).", "Gérez l'énergie : points courts quand c'est possible."],
+    sv: ["Retour solide et profond avant tout : le service seul ne suffit pas.", "Volée basse et placement en 2 temps (profondeur puis angle).", "Passing défensif pour les jours où la montée ne passe pas."],
+    complet: ["Choisissez une signature (service + 1, coup droit inside-out…) pour décider les points importants.", "Entraînez les variations jusqu'à ce qu'elles soient réflexes.", "Évitez de tout changer à chaque jeu : un seul changement à la fois."],
+  };
+  const growth = growthByStyle[A.p_style] || growthByStyle.complet;
 
-  return { principles, serve, ret, cond, situ, avoid, check, patterns, headline: `Plan de jeu — ${label(QUESTIONS[0].items[0].options, A.p_style)} vs ${label(QUESTIONS[1].items[0].options, A.o_style)} (${label(QUESTIONS[2].items[1].options, A.c_surface)})` };
+  return { principles, serve, ret, cond, situ, avoid, check, growth, patterns, headline: `Plan de jeu — ${label(QUESTIONS[0].items[0].options, A.p_style)} vs ${label(QUESTIONS[1].items[0].options, A.o_style)} (${label(QUESTIONS[2].items[1].options, A.c_surface)})` };
 }
 
 // --- Schéma SVG d'un court -----------------------------------------------------------------------------------

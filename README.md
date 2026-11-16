@@ -85,3 +85,18 @@ Export PDF, compte en ligne + synchronisation joueur/coach, stats de match (1res
 
 ### Coups ajoutés (v0.3) - seuils PROVISOIRES
 Coup coupé (chop/slice), amortie, smash, lob, retour de service. Seuils non calibrés sur des vidéos réelles : validés uniquement par tests de logique sur des séquences synthétiques (bon geste vs mauvais geste). À calibrer avec des vidéos réelles de chaque coup.
+
+## Nouveautés (v0.4)
+
+| Fonction | Où | Remarques |
+|---|---|---|
+| Plusieurs vidéos / plusieurs gestes moyennés | Analyse | Les gestes de toutes les vidéos sont repérés, analysés, puis moyennés (médiane) ; tableau des répétitions avec cases à cocher, geste « atypique », régularité en % |
+| Schémas « À éviter / Cible » | Analyse › Priorités | Deux panneaux avec l'angle mesuré, la zone à regarder et une légende, pour 27 défauts |
+| Cibles en pointillés sur les images de la vidéo | Analyse › Images clés | Position idéale du coude, du genou, hauteur de contact, contact devant, tronc, tête, trajet du poignet ; case à cocher |
+| Jauges dans le tableau des mesures | Analyse › Mesures | Zone cible / à surveiller / à corriger, valeur mesurée, étendue des répétitions, fiabilité de la mesure, meilleure vue de caméra |
+| Onglet Guide | Guide | Glossaire illustré (14 mesures), fiches techniques de 10 coups, filmage, prévention, physique, mental, tactique, matériel, plan de progression |
+| 18 schémas tactiques en plus (43 au total) | Tactique | Service, retour, échange, filet, double ; axes de progression par style ; check-list avant / pendant / après |
+| 39 nouvelles publications | Sources | Recherche OpenAlex du 16/11/2026, niveau de lecture indiqué ; voir `docs/BIBLIOGRAPHIE.md` |
+| Affinage du contact au service | Analyse | L'impact est placé au point le plus haut du poignet (pic de vitesse trop précoce) |
+
+**Documentation** : `docs/MANUEL.md` (tâches), `docs/NOTE-TECHNIQUE.md` (hypothèses, limites, cas de test), `docs/BIBLIOGRAPHIE.md`, `docs/CALIBRATION.md`, `docs/design-tokens.md`, `docs/design-brief.md`.

@@ -1,7 +1,8 @@
-import { STROKES, ISSUES, EXERCISES, REFERENCES, LEVELS } from "./knowledge.js";
+import { STROKES, ISSUES, EXERCISES, REFERENCES, REFERENCES_UPDATED, LEVELS } from "./knowledge.js";
+import { glossaryHTML, strokeGuideHTML, GUIDE_SECTIONS, sectionHTML, STROKE_GUIDE } from "./guide.js";
 import { analyze, segmentStrokes, aggregate } from "./metrics.js";
 import { loadPose, openVideo, processVideo, processImages, previewPlayers } from "./pose.js";
-import { issueFigure } from "./posefig.js";
+import { issueFigure, gaugeSVG } from "./posefig.js";
 import { phaseCanvas, renderCompare, renderRefCompare, calibratedHTML, mountSlowmo } from "./extras.js";
 import { askClaude, buildAnalysisPrompt, buildTacticsPrompt, getSystemPrompt, MODELS } from "./assistant.js";
 import * as coach from "./coach.js";
@@ -22,13 +23,14 @@ const state = {
   answers: { ...defaultAnswers(), ...store.get("answers", {}) },
   last: null, // dernière analyse
   seed: null, // joueur désigné par toucher
+  showTargets: store.get("showTargets", true), // cibles en pointillés sur les images clés
   ref: null, // analyse de référence (comparaison)
   media: null, // { kind, src|files, ... }
   busy: false,
 };
 
 window.__tca = state; // aide au débogage (console du navigateur)
-const TABS = [["home", "Accueil"], ["analyse", "Analyse"], ["tactic", "Tactique"], ["exo", "Exercices"], ["track", "Suivi"], ["coach", "Coach"], ["src", "Sources"]];
+const TABS = [["home", "Accueil"], ["analyse", "Analyse"], ["tactic", "Tactique"], ["exo", "Exercices"], ["track", "Suivi"], ["guide", "Guide"], ["coach", "Coach"], ["src", "Sources"]];
 
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("show"), 3500); }
 
@@ -36,16 +38,20 @@ function go(tab) { state.tab = tab; history.replaceState(null, "", "#" + tab); r
 
 function render() {
   $("#nav").innerHTML = TABS.map(([id, l]) => `<button data-tab="${id}" ${state.tab === id ? 'aria-current="page"' : ""}>${l}</button>`).join("");
-  const view = { home: viewHome, analyse: viewAnalyse, tactic: viewTactic, exo: viewExo, track: viewTrack, coach: viewCoach, src: viewSources }[state.tab];
+  const view = { home: viewHome, analyse: viewAnalyse, tactic: viewTactic, exo: viewExo, track: viewTrack, guide: viewGuide, coach: viewCoach, src: viewSources }[state.tab];
   $("#app").innerHTML = view();
-  ({ home: bindHome, analyse: bindAnalyse, tactic: bindTactic, exo: bindExo, track: bindTrack, coach: bindCoach, src: () => {} })[state.tab]?.();
+  ({ home: bindHome, analyse: bindAnalyse, tactic: bindTactic, exo: bindExo, track: bindTrack, guide: bindGuide, coach: bindCoach, src: () => {} })[state.tab]?.();
 }
 
 document.addEventListener("click", (e) => {
   const t = e.target.closest("[data-tab]");
   if (t) go(t.dataset.tab);
   const g = e.target.closest("[data-go]");
-  if (g) go(g.dataset.go);
+  if (g) {
+    go(g.dataset.go);
+    const ref = g.dataset.ref;
+    if (ref) setTimeout(() => { const el = document.getElementById("ref-" + ref); if (el) { el.scrollIntoView({ block: "center" }); el.classList.add("flash"); } }, 60);
+  }
 });
 
 // =========================== ACCUEIL ===========================================================================
@@ -110,13 +116,21 @@ function bindAnalyse() {
   if (state.last) renderResults();
 }
 
-async function handleFiles(files) {
+/**
+ * Ajoute les fichiers choisis à la sélection courante.
+ * Vidéos : plusieurs fichiers possibles (toutes les répétitions seront moyennées). Photos : une série de phases.
+ * @param {File[]} files fichiers sélectionnés
+ * @param {boolean} [append=false] true : ajoute aux vidéos déjà chargées
+ */
+async function handleFiles(files, append = false) {
   const vids = files.filter((f) => f.type.startsWith("video/"));
   const imgs = files.filter((f) => f.type.startsWith("image/"));
   try {
     if (vids.length) {
-      const src = await openVideo(vids[0]);
-      state.media = { kind: "video", src, name: vids[0].name };
+      const opened = [];
+      for (const f of vids) { const src = await openVideo(f); opened.push({ src, name: f.name, t0: 0, t1: src.duration }); }
+      const keep = append && state.media?.kind === "video" ? state.media.videos : [];
+      state.media = { kind: "video", videos: [...keep, ...opened] };
     } else if (imgs.length) {
       state.media = { kind: "images", files: imgs, phases: imgs.map((_, i) => (imgs.length === 1 ? "contact" : i === 0 ? "load" : i === imgs.length - 1 ? "follow" : "contact")) };
       if (imgs.length >= 3) state.media.phases = imgs.map((_, i) => (i === 0 ? "load" : i === Math.floor(imgs.length / 2) ? "contact" : i === imgs.length - 1 ? "follow" : "contact"));
@@ -125,28 +139,45 @@ async function handleFiles(files) {
   } catch (err) { toast(err.message); }
 }
 
+/** Mémorise les bornes saisies pour chaque vidéo avant un nouvel affichage de la liste. */
+function readVideoRanges() {
+  const m = state.media;
+  if (!m || m.kind !== "video") return;
+  m.videos.forEach((v, i) => {
+    const a = $(`#t0-${i}`), b = $(`#t1-${i}`);
+    if (a) v.t0 = Math.max(0, +a.value || 0);
+    if (b) v.t1 = Math.min(v.src.duration, +b.value || v.src.duration);
+  });
+}
+
 function showMedia() {
   const z = $("#mediaZone"); if (!z) return;
   const m = state.media;
   if (m.kind === "video") {
-    const dur = m.src.duration;
+    const first = m.videos[0];
+    const rows = m.videos.map((v, i) => `<div class="vrow"><div><b>${esc(v.name)}</b> <span class="muted small">(${v.src.duration.toFixed(1)} s, ${v.src.width}×${v.src.height})</span></div>
+      <div class="row"><label class="small" for="t0-${i}">Début (s)</label><input type="number" id="t0-${i}" min="0" max="${v.src.duration.toFixed(1)}" step="0.1" value="${v.t0.toFixed(1)}" style="width:80px">
+      <label class="small" for="t1-${i}">Fin (s)</label><input type="number" id="t1-${i}" min="0" max="${v.src.duration.toFixed(1)}" step="0.1" value="${v.t1.toFixed(1)}" style="width:80px">
+      ${m.videos.length > 1 ? `<button class="chip" data-del="${i}">Retirer</button>` : ""}</div></div>`).join("");
     z.innerHTML = `
-    <h3>Vidéo : ${esc(m.name)} <span class="muted small">(${dur.toFixed(1)} s, ${m.src.width}×${m.src.height})</span></h3>
-    <video id="prev" src="${m.src.url}" controls playsinline muted style="width:100%;max-height:320px;border-radius:10px;background:#000"></video>
+    <h3>${m.videos.length > 1 ? `${m.videos.length} vidéos` : "Vidéo"} <label class="btn secondary" style="margin-left:8px">➕ Ajouter une vidéo<input id="addvid" type="file" accept="video/*" multiple hidden></label></h3>
+    <div id="vlist">${rows}</div>
+    <video id="prev" src="${first.src.url}" controls playsinline muted style="width:100%;max-height:300px;border-radius:10px;background:#000"></video>
+    <div class="notice">🔁 <b>Répétitions :</b> une vidéo peut contenir plusieurs fois le même geste, et vous pouvez ajouter plusieurs vidéos. Chaque geste est repéré, analysé, puis les résultats sont <b>moyennés (médiane)</b> avec leur dispersion. Visez 5 à 10 gestes pour une mesure fiable.</div>
     <div class="row">
-      <div><label class="field" for="t0">Début (s)</label><input type="number" id="t0" min="0" max="${dur.toFixed(1)}" step="0.1" value="0" style="width:90px"></div>
-      <div><label class="field" for="t1">Fin (s)</label><input type="number" id="t1" min="0" max="${dur.toFixed(1)}" step="0.1" value="${dur.toFixed(1)}" style="width:90px"></div>
       <div><label class="field" for="fps">Précision</label><select id="fps"><option value="12">Rapide (12 i/s)</option><option value="20" selected>Standard (20 i/s)</option><option value="30">Fine (30 i/s)</option></select></div>
       <div><label class="field" for="slow">Cadence de la vidéo</label><select id="slow"><option value="1">Temps réel</option><option value="2">Ralenti ×2</option><option value="4">Ralenti ×4</option><option value="8">Ralenti ×8</option></select></div>
       <div><label class="field" for="rot">Orientation</label><select id="rot"><option value="auto">Automatique</option><option value="0">Normale</option><option value="180">Retournée (180°)</option><option value="90">Rotation 90°</option><option value="270">Rotation 270°</option></select></div>
       <div><label class="field" for="model">Modèle IA</label><select id="model"><option value="full">Standard</option><option value="heavy">Précis (plus lent)</option></select></div>
       <div><label class="field" for="height">Taille du joueur (cm)</label><input type="number" id="height" min="100" max="230" step="1" placeholder="ex. 178" value="${esc(coach.getProfile().heightCm || "")}" style="width:100px"></div>
     </div>
-    <p class="muted small">Séance longue acceptée : les gestes sont repérés automatiquement (pics de vitesse du poignet) et les mesures sont agrégées (médiane). Le joueur est suivi et recadré automatiquement. Plusieurs personnes à l'image ? Touchez le joueur à analyser.</p>
+    <p class="muted small">Le joueur est suivi et recadré automatiquement. Plusieurs personnes à l'image ? Touchez le joueur à analyser (première vidéo).</p>
     <div class="row"><button class="btn secondary" id="pick">👆 Choisir le joueur</button><span id="seedInfo" class="muted small">${state.seed ? "✔ joueur choisi" : "joueur : le plus proche de la caméra"}</span></div>
     <div id="pickZone"></div>
     <div class="row"><button class="btn" id="go">▶ Lancer l'analyse</button><progress id="prog" max="1" value="0" hidden></progress></div><div id="status" class="muted small"></div>`;
     $("#pick").onclick = pickPlayer;
+    $("#addvid").onchange = (e) => { readVideoRanges(); if (e.target.files.length) handleFiles([...e.target.files], true); };
+    $("#vlist").onclick = (e) => { const b = e.target.closest("[data-del]"); if (!b) return; readVideoRanges(); m.videos.splice(+b.dataset.del, 1); state.last = null; showMedia(); };
   } else {
     z.innerHTML = `
     <h3>${m.files.length} photo(s)</h3>
@@ -166,35 +197,75 @@ function showMedia() {
   $("#go").onclick = runAnalysis;
 }
 
-/** Segmente la séance, analyse chaque geste et agrège (médiane) ; sinon analyse la séquence entière. */
-function buildLast(proc, kind, opts) {
+/**
+ * Segmente une séquence, analyse chaque geste repéré ; sinon analyse la séquence entière.
+ * @param {object} proc résultat de processVideo/processImages
+ * @param {string} kind "video" | "images"
+ * @param {object} opts options d'analyse (stroke, hand, aspect, slow…)
+ * @param {object|null} src vidéo source (pour recadrer les images clés)
+ * @param {string} name nom du fichier (affichage)
+ * @returns {object} analyse ({res, reps?, …}) ; chaque geste porte sa vidéo (proc, src) pour pouvoir mélanger plusieurs vidéos
+ */
+function buildLast(proc, kind, opts, src = null, name = "") {
   const slow = opts.slow || 1;
   const segs = kind === "video" ? segmentStrokes(proc.frames, { stroke: opts.stroke, hand: opts.hand, aspect: proc.aspect, minGap: 2.5 * slow }) : [];
   const pre = 1.8 * slow + 0.6, post = 0.3 * slow + 0.9;
   const win = (tc) => proc.frames.filter((f) => f.t >= tc - pre && f.t <= tc + post).map((f) => ({ ...f, t: f.t - (tc - pre) }));
   if (segs.length >= 2) {
-    const reps = segs.map((tc) => { const r = analyze(win(tc), opts); return r.error ? null : { tc, t0: tc - pre, res: r }; }).filter(Boolean);
-    if (reps.length >= 2) return { res: reps[0].res, proc, opts, kind: "video", reps, agg: aggregate(opts.stroke, reps.map((r) => r.res)), sel: 0, t0: reps[0].t0 };
+    // Service / smash : un vrai geste dure au moins ~0,2 s entre le point bas du bassin et l'impact ; en dessous, il s'agit
+    // d'un faux départ, d'un lancer sans frappe ou d'un second pic de vitesse (retombée du bras).
+    const overhead = opts.stroke === "serve" || opts.stroke === "smash";
+    const MIN_LOAD_TO_CONTACT = 0.2;
+    const reps = segs.map((tc) => { const r = analyze(win(tc), opts); return r.error ? null : { tc, t0: tc - pre, res: r, proc, src, name }; }).filter(Boolean)
+      .filter((r) => !overhead || r.res.frames[r.res.phases.contact].t - r.res.frames[r.res.phases.load].t >= MIN_LOAD_TO_CONTACT);
+    if (reps.length >= 2) return makeRepsLast(reps, opts);
   }
   if (segs.length === 1) {
     const w = win(segs[0]), res = analyze(w, opts);
-    if (!res.error) return { res, proc, opts, kind, t0: segs[0] - pre, wframes: w };
+    if (!res.error) return { res, proc, src, name, opts, kind, t0: segs[0] - pre, wframes: w };
   }
   const res = analyze(proc.frames, opts);
   if (res.error) throw new Error(res.error);
-  return { res, proc, opts, kind, t0: 0, wframes: proc.frames };
+  return { res, proc, src, name, opts, kind, t0: 0, wframes: proc.frames };
+}
+
+/** Un résultat simple devient une « répétition » pour pouvoir être regroupé avec celles d'autres vidéos. */
+function toRep(l) {
+  return l.reps ? l.reps : [{ tc: l.t0 + l.res.frames[l.res.phases.contact].t, t0: l.t0, res: l.res, proc: l.proc, src: l.src, name: l.name }];
+}
+
+/**
+ * Construit l'analyse regroupée d'un ensemble de répétitions (médiane des gestes retenus + dispersion).
+ * @param {object[]} reps répétitions ({res, proc, src, t0, tc, name})
+ * @param {object} opts options d'analyse
+ * @param {Set<number>} [excluded] indices des répétitions écartées par l'utilisateur
+ * @param {number} [sel] répétition affichée pour les images clés
+ */
+function makeRepsLast(reps, opts, excluded = new Set(), sel = 0) {
+  const kept = reps.filter((_, i) => !excluded.has(i));
+  const agg = kept.length >= 2 ? aggregate(opts.stroke, kept.map((r) => r.res)) : null;
+  const cur = reps[Math.min(sel, reps.length - 1)];
+  return { res: cur.res, proc: cur.proc, src: cur.src, opts, kind: "video", reps, agg, sel: Math.min(sel, reps.length - 1), t0: cur.t0, excluded, wframes: undefined };
+}
+
+/** Fusionne les analyses de plusieurs vidéos en un seul résultat moyenné. */
+function mergeLasts(lasts, opts) {
+  if (lasts.length === 1) return lasts[0];
+  const reps = lasts.flatMap(toRep);
+  return reps.length >= 2 ? makeRepsLast(reps, opts) : lasts[0];
 }
 
 /** Choix du joueur par toucher : affiche l'image de départ, entoure les personnes détectées, mémorise celle touchée. */
 async function pickPlayer() {
   const zone = $("#pickZone"), info = $("#seedInfo"), m = state.media;
   if (!m || m.kind !== "video") return;
+  const v = m.videos[0];
   zone.innerHTML = `<p class="muted small">Chargement de l'IA et détection des personnes…</p>`;
   try {
     await loadPose($("#model")?.value || "full", (t) => (zone.innerHTML = `<p class="muted small">${esc(t)}</p>`));
     const rotSel = $("#rot").value;
-    const t = Math.max(0, Math.min(m.src.duration - 0.1, +$("#t0").value || 0)) + 0.3;
-    const pv = await previewPlayers(m.src, Math.min(t, m.src.duration - 0.05), rotSel === "auto" ? "auto" : +rotSel);
+    const t = Math.max(0, Math.min(v.src.duration - 0.1, +$("#t0-0").value || 0)) + 0.3;
+    const pv = await previewPlayers(v.src, Math.min(t, v.src.duration - 0.05), rotSel === "auto" ? "auto" : +rotSel);
     if (!pv.persons.length) { zone.innerHTML = `<div class="notice">Personne détectée à cet instant : avancez le début (champ « Début ») sur un moment où le joueur est visible.</div>`; return; }
     const cv = document.createElement("canvas"); cv.width = pv.canvas.width; cv.height = pv.canvas.height; cv.className = "pickcv";
     const c = cv.getContext("2d"); c.drawImage(pv.canvas, 0, 0);
@@ -227,26 +298,31 @@ async function runAnalysis() {
     const m = state.media;
     const hCm = +$("#height")?.value || 0;
     if (hCm) coach.setProfile({ ...coach.getProfile(), heightCm: hCm });
-    let proc, opts;
+    const slow = +($("#slow")?.value || 1);
+    let last;
     if (m.kind === "video") {
-      const start = Math.max(0, +$("#t0").value || 0), end = Math.min(m.src.duration, +$("#t1").value || m.src.duration);
-      if (end - start < 0.4) throw new Error("Plage trop courte : augmentez la fin ou diminuez le début.");
-      say("Analyse image par image…");
-      const rotSel = $("#rot").value;
-      proc = await processVideo(m.src, { start, end, fps: +$("#fps").value, rot: rotSel === "auto" ? "auto" : +rotSel, seed: state.seed, onProgress: (p) => (prog.value = p), onStatus: say });
-      opts = { stroke: state.stroke, hand: state.hand, aspect: proc.aspect, timed: true };
+      readVideoRanges();
+      const rotSel = $("#rot").value, n = m.videos.length, lasts = [];
+      let opts;
+      for (let vi = 0; vi < n; vi++) {
+        const v = m.videos[vi];
+        if (v.t1 - v.t0 < 0.4) throw new Error(`« ${v.name} » : plage trop courte (augmentez la fin ou diminuez le début).`);
+        say(n > 1 ? `Vidéo ${vi + 1}/${n} : analyse image par image…` : "Analyse image par image…");
+        const proc = await processVideo(v.src, { start: v.t0, end: v.t1, fps: +$("#fps").value, rot: rotSel === "auto" ? "auto" : +rotSel, seed: vi === 0 ? state.seed : null, onProgress: (p) => (prog.value = (vi + p) / n), onStatus: say });
+        opts = { stroke: state.stroke, hand: state.hand, aspect: proc.aspect, timed: true, slow };
+        lasts.push(buildLast(proc, "video", opts, v.src, v.name));
+      }
+      last = mergeLasts(lasts, opts);
     } else {
       say("Analyse des photos…");
-      proc = await processImages(m.files, { onProgress: (p) => (prog.value = p) });
+      const proc = await processImages(m.files, { onProgress: (p) => (prog.value = p) });
       const idx = (ph) => m.phases.map((p, i) => (p === ph ? i : -1)).filter((i) => i >= 0);
       const c = idx("contact"), l = idx("load"), f = idx("follow");
       const cdet = c.filter((i) => proc.frames[i].lm);
-      opts = { stroke: state.stroke, hand: state.hand, aspect: proc.aspect, timed: false, contactIdx: cdet[0] ?? c[0], loadIdx: l[0] ?? cdet[0] ?? 0, followIdx: f[0] ?? cdet[0] ?? 0 };
+      const opts = { stroke: state.stroke, hand: state.hand, aspect: proc.aspect, timed: false, contactIdx: cdet[0] ?? c[0], loadIdx: l[0] ?? cdet[0] ?? 0, followIdx: f[0] ?? cdet[0] ?? 0, slow };
       if (opts.contactIdx == null) throw new Error("Marquez au moins une photo comme « Contact ».");
+      last = buildLast(proc, "images", opts);
     }
-    const slow = +($("#slow")?.value || 1);
-    opts.slow = slow;
-    const last = buildLast(proc, m.kind, opts);
     state.last = last;
     say("Terminé ✔");
     renderResults();
@@ -266,6 +342,30 @@ function fmtRange(d) {
 const u = (d) => d.unit;
 
 let stopSlowmo = null;
+
+const CONF_LABEL = { high: "fiable", mid: "indicative", low: "approximative" };
+const VIEW_LABEL = { side: "de côté", behind: "de dos", any: "toute vue" };
+const ATYPICAL_Z = 1.5; // écart à la médiane (en tolérances) au-delà duquel une mesure est jugée atypique
+
+/**
+ * Repère les gestes qui s'écartent de la médiane sur au moins deux mesures.
+ * @param {object} L analyse regroupée ({reps, excluded, agg})
+ * @returns {Set<number>} indices des gestes atypiques
+ */
+function atypicalReps(L) {
+  const out = new Set();
+  L.reps.forEach((r, i) => {
+    if (L.excluded?.has(i)) return;
+    let far = 0;
+    for (const m of L.agg.metrics) {
+      const v = r.res.values[m.id];
+      if (m.value == null || v == null || Number.isNaN(v) || !m.tol) continue;
+      if (Math.abs(v - m.value) / m.tol > ATYPICAL_Z) far++;
+    }
+    if (far >= 2) out.add(i);
+  });
+  return out;
+}
 
 const metricsForAI = (top) => top.metrics.filter((d) => d.value != null).map((d) => ({ critere: d.label, valeur: +(+d.value).toFixed(2), unite: d.unit, statut: { ok: "conforme", warn: "à surveiller", bad: "à corriger" }[d.status], repere: fmtRange(d) }));
 
@@ -309,14 +409,24 @@ function renderResults() {
   const L = state.last; if (!L || !$("#results")) return; // onglet quitté pendant l'analyse : résultats affichés au retour
   if (stopSlowmo) { stopSlowmo(); stopSlowmo = null; }
   const { res } = L;
-  const top = L.agg || res; // séance : valeurs médianes ; sinon geste unique
+  const keptReps = L.reps ? L.reps.filter((_, i) => !L.excluded?.has(i)) : null;
+  const top = L.agg || (keptReps && keptReps.length === 1 ? keptReps[0].res : res); // séance : médianes des gestes cochés ; sinon geste unique
   const color = top.score >= 75 ? "var(--ok)" : top.score >= 50 ? "var(--warn)" : "var(--bad)";
   const rows = top.metrics.map((d) => {
     const sp = L.agg && L.agg.spread[d.id];
-    const spread = sp && sp[2] > 1 ? `<br><small class="muted">étendue ${fmt(sp[0], d.unit)} → ${fmt(sp[1], d.unit)} (${sp[2]} gestes)</small>` : "";
-    return `<tr><td>${esc(d.label)}<br><small class="muted">${esc(d.tip || "")}</small></td><td><b>${fmt(d.value, d.unit)}</b>${spread}</td><td class="muted">${d.status === "na" ? "n/a (vidéo requise)" : "cible " + fmtRange(d)}</td><td><span class="tag ${d.status}">${{ ok: "OK", warn: "À surveiller", bad: "À corriger", na: "—" }[d.status]}</span></td></tr>`;
+    const spread = sp && sp.n > 1 ? `<br><small class="muted">${fmt(sp.min, d.unit)} → ${fmt(sp.max, d.unit)} · ${sp.n} gestes · <span class="reg ${sp.regular ? "ok" : "warn"}">${sp.regular ? "régulier" : "variable"}</span></small>` : "";
+    const meta = d.conf ? `<br><small class="muted"><span class="conf ${d.conf}">mesure ${CONF_LABEL[d.conf]}</span> · meilleure vue : ${VIEW_LABEL[d.view]}</small>` : "";
+    return `<tr><td>${esc(d.label)}<br><small class="muted">${esc(d.tip || "")}</small>${meta}</td><td><b>${fmt(d.value, d.unit)}</b>${d.status === "na" ? "" : gaugeSVG(d, d.value, sp && sp.n > 1 ? { min: sp.min, max: sp.max } : null)}${spread}</td><td class="muted">${d.status === "na" ? "n/a (vidéo requise)" : "cible " + fmtRange(d)}</td><td><span class="tag ${d.status}">${{ ok: "OK", warn: "À surveiller", bad: "À corriger", na: "—" }[d.status]}</span></td></tr>`;
   }).join("");
-  const repSel = L.reps ? `<div class="notice">📊 <b>${L.reps.length} ${STROKES[state.stroke].label.toLowerCase()}s détectés</b> dans la séance : les mesures ci-dessous sont les <b>médianes</b>. Images clés du geste : <select id="rep">${L.reps.map((r, i) => `<option value="${i}" ${i === L.sel ? "selected" : ""}>n° ${i + 1} — t = ${(L.proc.offset + r.tc).toFixed(1)} s — score ${r.res.score ?? "—"}</option>`).join("")}</select></div>` : "";
+  const atyp = L.reps && L.agg ? atypicalReps(L) : new Set();
+  const nVideos = L.reps ? new Set(L.reps.map((r) => r.name)).size : 1;
+  const repRows = L.reps ? L.reps.map((r, i) => `<tr class="${atyp.has(i) ? "atyp" : ""}"><td><input type="checkbox" data-inc="${i}" ${L.excluded?.has(i) ? "" : "checked"} aria-label="Inclure le geste ${i + 1}"></td><td>n° ${i + 1} ${atyp.has(i) ? '<span class="tag warn">atypique</span>' : ""}</td><td class="small">${esc(r.name || "")}</td><td>${(r.proc.offset + r.tc).toFixed(1)} s</td><td><b>${r.res.score ?? "—"}</b></td><td><button class="chip" data-show="${i}" ${i === L.sel ? 'aria-pressed="true"' : ""}>Voir</button></td></tr>`).join("") : "";
+  const repsCard = L.reps ? `<section class="card"><h2>🔁 Répétitions : ${L.reps.length} gestes${nVideos > 1 ? ` · ${nVideos} vidéos` : ""}</h2>
+    <p class="muted small">Les mesures ci-dessous sont les <b>médianes</b> des gestes cochés. Décochez un geste raté ou atypique pour le retirer de la moyenne ; « Voir » affiche ses images clés.</p>
+    ${L.agg && L.agg.consistency != null ? `<div class="kpi"><div>Régularité : <b>${L.agg.consistency} %</b> des mesures stables</div><div>Gestes retenus : <b>${keptReps.length}/${L.reps.length}</b></div></div>` : `<div class="notice">Cochez au moins 2 gestes pour obtenir une moyenne.</div>`}
+    <table><thead><tr><th></th><th>Geste</th><th>Vidéo</th><th>Instant</th><th>Score</th><th></th></tr></thead><tbody>${repRows}</tbody></table>
+    <p class="muted small">Régulier = écart-type d'une mesure inférieur à sa tolérance (ex. 10° pour un angle). Un geste régulier est un geste automatisé : c'est un objectif en soi.</p></section>` : "";
+  const repSel = "";
   const issues = top.issues.length ? top.issues.map((it) => {
     const I = ISSUES[it.id]; if (!I) return "";
     return `<div class="issue ${it.sev >= 3 ? "sev2" : ""}"><div class="issue-row"><div class="issue-body"><h3>${esc(I.label)}</h3><p>${esc(I.why)}</p><div class="cue">🎯 <b>Consigne :</b> ${esc(I.cue)}</div>
@@ -330,12 +440,16 @@ function renderResults() {
       <div><b>Score technique indicatif /100</b><div class="kpi"><div>Détection : ${Math.round(res.detRate * 100)} %</div><div>Bras frappeur : ${res.hand === "left" ? "gauche" : "droit"}</div><div>Images : ${res.frames.length}</div></div></div></div>
     ${res.notes.map((n) => `<div class="notice">${esc(n)}</div>`).join("")}
     ${repSel}
-    <h3>Images clés</h3><div class="canvases" id="keys"></div>
+    <h3>Images clés</h3>
+    <label class="small"><input type="checkbox" id="tgl" ${state.showTargets ? "checked" : ""}> Afficher les <b>valeurs cibles en pointillés verts</b> sur les images</label>
+    <div class="canvases" id="keys"></div>
+    <p class="muted small">Traits pleins = votre geste mesuré. <span style="color:var(--ok);font-weight:700">Pointillés verts = valeur cible</span> (angle du coude, flexion du genou, hauteur de contact, contact devant, tronc, tête, trajet du poignet). Plus marqué = à corriger ; atténué = déjà conforme.</p>
     ${video && !L.reps ? `<label class="field" for="cslide">Corriger l'instant d'impact (image ${res.phases.contact + 1}/${res.frames.length})</label><input id="cslide" type="range" min="0" max="${res.frames.length - 1}" value="${res.phases.contact}" style="width:100%"><p class="muted small">Si l'image « Contact » n'est pas la bonne, faites glisser puis relâchez : les mesures sont recalculées.</p>` : ""}
     ${video ? `<h3>Courbes</h3><canvas class="chart" id="chart" width="900" height="300"></canvas><p class="muted small">Vert : vitesse du poignet (u. relatives). Orange : flexion moyenne des genoux (°). Traits verticaux : chargement / contact / fin.</p>` : ""}
   </section>
+  ${repsCard}
   <section class="card"><h2>Mesures</h2><table><thead><tr><th>Critère</th><th>Mesuré</th><th>Repère</th><th>Statut</th></tr></thead><tbody>${rows}</tbody></table>
-    <p class="muted small">Les repères sont des plages pédagogiques indicatives issues de la littérature et du coaching ; les valeurs varient selon la morphologie, le style (ex. coup droit semi-ouvert) et l'angle de caméra.</p></section>
+    <p class="muted small">Les repères sont des plages pédagogiques indicatives issues de la littérature et du coaching ; les valeurs varient selon la morphologie, le style (ex. coup droit semi-ouvert) et l'angle de caméra. <button class="chip" data-go="guide">📐 Comprendre chaque mesure</button></p></section>
   <section class="card"><h2>Mesures calibrées (taille du joueur)</h2>${calibratedHTML(L, coach.getProfile().heightCm, state.stroke)}</section>
   <section class="card"><h2>Comparaison côte à côte</h2>
     <h3>Avec le modèle de référence</h3><div id="cmp" class="cmp"></div>
@@ -349,10 +463,18 @@ function renderResults() {
     ${aiBlock("analysis")}
     <div class="row"><button class="btn" data-go="exo">📅 Voir mon programme</button><button class="btn secondary" id="print">🖨 Exporter / imprimer</button><button class="btn secondary" id="toCoach">📨 Envoyer à mon coach</button></div></section>`;
   drawKeys();
-  renderCompare(L, state.media.src, $("#cmp"), state.stroke).catch(() => {});
-  if (video) { drawChart(); stopSlowmo = mountSlowmo($("#slowmo"), L, state.media.src); }
+  renderCompare(L, L.src, $("#cmp"), state.stroke).catch(() => {});
+  if (video) { drawChart(); stopSlowmo = mountSlowmo($("#slowmo"), L, L.src); }
   if ($("#cslide")) $("#cslide").onchange = (e) => recompute(+e.target.value);
-  if ($("#rep")) $("#rep").onchange = (e) => { const r = L.reps[+e.target.value]; state.last = { ...L, sel: +e.target.value, res: r.res, t0: r.t0 }; renderResults(); $("#keys").scrollIntoView({ behavior: "smooth" }); };
+  $("#tgl").onchange = (e) => { state.showTargets = e.target.checked; store.set("showTargets", state.showTargets); drawKeys(); };
+  document.querySelectorAll("[data-inc]").forEach((cb) => (cb.onchange = () => {
+    const ex = new Set(L.excluded); const i = +cb.dataset.inc;
+    if (cb.checked) ex.delete(i); else ex.add(i);
+    if (ex.size >= L.reps.length) { toast("Gardez au moins un geste."); renderResults(); return; }
+    state.last = makeRepsLast(L.reps, L.opts, ex, ex.has(L.sel) ? [...L.reps.keys()].find((k) => !ex.has(k)) : L.sel);
+    renderResults();
+  }));
+  document.querySelectorAll("[data-show]").forEach((b) => (b.onclick = () => { state.last = makeRepsLast(L.reps, L.opts, L.excluded, +b.dataset.show); renderResults(); $("#keys")?.scrollIntoView({ behavior: "smooth" }); }));
   $("#print").onclick = () => window.print();
   $("#toCoach").onclick = () => sendToCoach();
   $("#refFile").onchange = (e) => e.target.files[0] && loadReference(e.target.files[0]);
@@ -362,7 +484,7 @@ function renderResults() {
 
 async function showRefCompare() {
   const L = state.last, R = state.ref, host = $("#refcmp"); if (!host || !R) return;
-  try { await renderRefCompare(L, state.media.src, R.last, R.src, host, L.agg || L.res, R.last.agg || R.last.res); } catch (e) { host.innerHTML = `<div class="notice">${esc(e.message)}</div>`; }
+  try { await renderRefCompare(L, L.src, R.last, R.src, host, L.agg || L.res, R.last.agg || R.last.res); } catch (e) { host.innerHTML = `<div class="notice">${esc(e.message)}</div>`; }
 }
 
 /** Analyse la vidéo de référence avec la même chaîne que la vidéo du joueur. */
@@ -377,7 +499,7 @@ async function loadReference(file) {
     const end = Math.min(src.duration, 90);
     const proc = await processVideo(src, { start: 0, end, fps: 12, rot: "auto", onProgress: (p) => say(`Analyse de la référence… ${Math.round(p * 100)} %`), onStatus: say });
     const opts = { stroke: state.stroke, hand: state.hand, aspect: proc.aspect, timed: true, slow: +($("#slow")?.value || 1) };
-    state.ref = { src, last: buildLast(proc, "video", opts), name: file.name };
+    state.ref = { src, last: buildLast(proc, "video", opts, src, file.name), name: file.name };
     say(`✔ Référence prête (${file.name})`);
     await showRefCompare();
   } catch (e) { console.error("référence:", e); say(e.message || "Erreur d'analyse de la référence"); }
@@ -398,7 +520,7 @@ async function drawKeys() {
   const names = [["load", "Chargement"], ["contact", "Contact"], ["follow", "Fin de geste"]];
   host.innerHTML = "";
   for (const [k, name] of names) {
-    const { canvas, i } = await phaseCanvas(L, state.media.src, k);
+    const { canvas, i } = await phaseCanvas(L, L.src, k, { targets: state.showTargets });
     const fig = document.createElement("figure"); fig.append(canvas);
     const cap = document.createElement("figcaption"); cap.textContent = `${name}${L.kind === "video" ? ` (t = ${((L.t0 || 0) + L.proc.offset + L.res.frames[i].t).toFixed(2)} s)` : ""}`; fig.append(cap);
     host.append(fig);
@@ -490,7 +612,8 @@ function renderPlan() {
     <section class="card"><h3>🌤 Conditions</h3>${ul(plan.cond)}</section>
     <section class="card"><h3>⏱ Situations clés</h3>${ul(plan.situ)}</section>
     <section class="card"><h3>🚫 À éviter</h3>${ul(plan.avoid)}</section>
-    <section class="card"><h3>✅ Check-list</h3>${ul(plan.check)}</section>
+    <section class="card"><h3>✅ Check-list : avant, pendant, après</h3>${ul(plan.check)}</section>
+    <section class="card"><h3>🌱 Vos axes de progression</h3>${ul(plan.growth)}</section>
   </div>
   <section class="card"><h3>✨ Briefing d'avant-match</h3>${aiBlock("tactic")}</section>
   <div class="row"><button class="btn secondary" onclick="window.print()">🖨 Imprimer le plan</button></div>`;
@@ -665,11 +788,31 @@ function bindCoach() {
   };
 }
 
+// =========================== GUIDE DU COACH ===========================================================================
+function viewGuide() {
+  return `<section class="card"><h2>📖 Guide du coach</h2>
+    <p class="muted">Pour comprendre vos résultats et progresser : mesures illustrées, fiches techniques par coup, prévention, préparation physique, mental, tactique, matériel et plan de progression. Les renvois <a href="#src" data-go="src" class="refl">[xxx]</a> ouvrent la source dans l'onglet Sources.</p>
+    <div class="chips"><a class="chip" href="#g-mesures">📐 Comprendre les mesures</a><a class="chip" href="#g-coups">🎾 Fiches par coup</a><a class="chip" href="#g-coaching">📚 Coaching complet</a></div></section>
+  <section class="card" id="g-mesures"><h2>📐 Comprendre les mesures</h2>
+    <p>Chaque mesure de l'application est expliquée ci-dessous avec un schéma : ce qu'on mesure, comment, la cible, les erreurs fréquentes et le conseil d'un coach. La <b>jauge</b> montre les zones cible (vert), à surveiller (orange) et à corriger (rouge).</p>
+    ${glossaryHTML()}</section>
+  <section class="card" id="g-coups"><h2>🎾 Fiches techniques par coup</h2>${Object.keys(STROKE_GUIDE).map(strokeGuideHTML).join("")}</section>
+  <section class="card" id="g-coaching"><h2>📚 Coaching complet</h2>${GUIDE_SECTIONS.map(sectionHTML).join("")}</section>`;
+}
+function bindGuide() {
+  document.querySelectorAll('#app a.chip[href^="#g-"]').forEach((a) => (a.onclick = (e) => { e.preventDefault(); $(a.getAttribute("href"))?.scrollIntoView({ behavior: "smooth" }); }));
+}
+
 // =========================== SOURCES ===================================================================================
 function viewSources() {
   const link = (r) => (r.doi ? ` <a href="https://doi.org/${r.doi}" target="_blank" rel="noopener">DOI</a>` : r.url ? ` <a href="${r.url}" target="_blank" rel="noopener">lien</a>` : "");
+  const item = (r) => `<li id="ref-${r.id}"><span class="tag ok">${esc(r.topic)}</span> <code class="refid">${r.id}</code> ${esc(r.cite)}${link(r)}${r.lu ? ` <span class="muted small">· lu : ${esc(r.lu)}</span>` : ""}</li>`;
+  const base = REFERENCES.filter((r) => !r.lu), fresh = REFERENCES.filter((r) => r.lu);
   return `<section class="card"><h2>Sources scientifiques & pédagogiques</h2><p class="muted">Les repères et consignes de l'application s'appuient sur la littérature de biomécanique du tennis et sur la documentation d'entraîneurs. Les plages cibles sont simplifiées à des fins pédagogiques.</p>
-  <ul class="clean">${REFERENCES.map((r) => `<li><span class="tag ok">${esc(r.topic)}</span> ${esc(r.cite)}${link(r)}</li>`).join("")}</ul></section>
+  <h3>Références de base</h3><ul class="clean">${base.map(item).join("")}</ul></section>
+  <section class="card"><h3>Actualisation du ${esc(REFERENCES_UPDATED)} (${fresh.length} publications)</h3>
+    <p class="muted small">Recherche dans OpenAlex (métadonnées de publications). Pour chaque travail, le « niveau de lecture » indique ce qui a été consulté : <b>résumé</b> ou <b>titre</b> seulement. Aucune valeur chiffrée n'est attribuée à une publication au-delà de ce que son résumé indique ; les cibles de l'application restent des repères pédagogiques à calibrer.</p>
+    <ul class="clean">${fresh.map(item).join("")}</ul></section>
   <section class="card"><h3>Limites & usage responsable</h3><ul class="clean"><li>Estimation de pose monoculaire : les angles dans le plan de la caméra sont plus fiables que la profondeur.</li><li>Les rotations (bassin/épaules) sont des estimations ; filmez de dos ou de face pour les mieux voir.</li><li>Ne remplace pas un entraîneur diplômé ni un avis médical.</li><li>Les données restent sur votre appareil (localStorage) ; le moteur IA et le modèle sont téléchargés une fois depuis des CDN publics.</li></ul></section>`;
 }
 
